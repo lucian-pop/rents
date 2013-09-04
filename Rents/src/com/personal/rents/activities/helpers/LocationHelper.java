@@ -3,6 +3,7 @@ package com.personal.rents.activities.helpers;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
+import com.personal.rents.utils.Constants;
 
 import android.content.Context;
 import android.graphics.Point;
@@ -13,9 +14,6 @@ import android.location.LocationManager;
 public final class LocationHelper {
 
 	private static LocationManager locationManager;
-	
-	// This value should be moved in resources.
-	private static final int ZOOM_FACTOR = 15;
 	
 	public LocationHelper(Context context) {
 		locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
@@ -41,8 +39,7 @@ public final class LocationHelper {
 		LatLng latLng = new LatLng(latitude, longitude);
 
 		map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-		map.animateCamera(CameraUpdateFactory.zoomTo(ZOOM_FACTOR));
-		
+		map.animateCamera(CameraUpdateFactory.zoomTo(Constants.DEFAULT_ZOOM_FACTOR));
 	}
 	
 	public LatLng getBottomLeftMapPosition(GoogleMap map, int mapHeight) {
@@ -60,17 +57,4 @@ public final class LocationHelper {
 	public LatLng getUpperLeftMapPosition(GoogleMap map) {
 		return map.getProjection().fromScreenLocation(new Point(5, 5));
 	}
-	
-//	public List<LatLng> getMapBoundariesPoints(GoogleMap map, int mapWidth, int mapHeight) {
-//		List<LatLng> rectPoints = new ArrayList<LatLng>(4);
-//		rectPoints.add(getBottomLeftMapPosition(map, mapHeight));
-//		rectPoints.add(getUpperLeftMapPosition(map));
-//		rectPoints.add(getUpperRigthMapPosition(map, mapWidth));
-//		rectPoints.add(getBottomRightMapPosition(map, mapHeight, mapWidth));
-//		return rectPoints;
-//	}
-//	
-//	public void addRentsMarkersToMap(GoogleMap map, List<Marker> rentsMarkers) {
-//		
-//	}
 }

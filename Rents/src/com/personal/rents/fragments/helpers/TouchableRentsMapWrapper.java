@@ -10,6 +10,7 @@ public class TouchableRentsMapWrapper extends FrameLayout {
 
 	public TouchableRentsMapWrapper(Context context) {
 		super(context);
+
 		try {
 			panningListener = (PanningListener) context;
 		} catch (ClassCastException e) {

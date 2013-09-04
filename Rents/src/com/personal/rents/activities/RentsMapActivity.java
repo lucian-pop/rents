@@ -31,7 +31,9 @@ public class RentsMapActivity extends ActionBarActivity implements OnMyLocationB
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.map_rents_layout);
+        setContentView(R.layout.rents_map_layout);
+
+        locationHelper = new LocationHelper(getApplicationContext());
         rentsMapFragment = (SupportMapFragment) getSupportFragmentManager()
         		.findFragmentById(R.id.rents_map);
         if (savedInstanceState == null) {
@@ -39,11 +41,11 @@ public class RentsMapActivity extends ActionBarActivity implements OnMyLocationB
         } else {
         	rentsMap = rentsMapFragment.getMap();
         }
-        locationHelper = new LocationHelper(getApplicationContext());
+  
         setUpMapIfNeeded();
         
         // Add code in onSaveInstanceState() to save user location and use it at activity recreation
-        // (create, onRestoreInstanceState). Use this location if no other one id available.
+        // (create, onRestoreInstanceState). Use this location if no other one is available.
     }
 
 	@Override
@@ -68,11 +70,6 @@ public class RentsMapActivity extends ActionBarActivity implements OnMyLocationB
 	private void setUpMap() {
 		rentsMap.setMyLocationEnabled(true);
         rentsMap.setOnMyLocationButtonClickListener(this);
-
-        Location location = locationHelper.getLastKnownLocation();
-        if(location != null) {
-        	locationHelper.moveToLocation(location, rentsMap);
-        }
         rentsMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {			
 			@Override
 			public void onCameraChange(CameraPosition cameraPosition) {
@@ -84,15 +81,11 @@ public class RentsMapActivity extends ActionBarActivity implements OnMyLocationB
 				}
 			}
 		});
-	}
-	
-	private void addMarkers() {
-		rentsMap.clear();
-		VisibleRegion visibleRegion = rentsMap.getProjection().getVisibleRegion();
-		AddMarkersWorker addMarkersWorker = new AddMarkersWorker(rentsMap);
-		addMarkersWorker.execute(visibleRegion);
-		rentsMap.addMarker(new MarkerOptions().position(rentsMap.getCameraPosition().target)
-				.title("Center"));
+
+        Location location = locationHelper.getLastKnownLocation();
+        if(location != null) {
+        	locationHelper.moveToLocation(location, rentsMap);
+        }
 	}
 
 	@Override
@@ -114,6 +107,16 @@ public class RentsMapActivity extends ActionBarActivity implements OnMyLocationB
 	public boolean onMyLocationButtonClick() {
 		panningFinished = true;
 		cameraChangedPosition = false;
+
 		return false;
+	}
+	
+	private void addMarkers() {
+		rentsMap.clear();
+		VisibleRegion visibleRegion = rentsMap.getProjection().getVisibleRegion();
+		AddMarkersWorker addMarkersWorker = new AddMarkersWorker(rentsMap, this);
+		addMarkersWorker.execute(visibleRegion);
+		rentsMap.addMarker(new MarkerOptions().position(rentsMap.getCameraPosition().target)
+				.title("Center"));
 	}
 }

@@ -5,10 +5,15 @@ import java.util.List;
 import java.util.Random;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.personal.rents.model.Rent;
 
 public class RentsRESTClient {
 	
-	public static List<LatLng> getRentsPositions(LatLng position0, LatLng position1) {
+	private static final int minPrice = 100;
+	
+	private static final int maxPrice = 501;
+	
+	public static List<Rent> getRentsPositions(LatLng position0, LatLng position1) {
 		double x0 = position0.longitude;
 		double x1 = position1.longitude;
 		double y0 = position0.latitude;
@@ -22,16 +27,18 @@ public class RentsRESTClient {
 		y1 = Math.max(temp, y1);
 		
 		int size = 5;
-		double x[] = new double[size];
-		double y[] = new double[size];
-		List<LatLng> rentsPositions = new ArrayList<LatLng>(size);
+		double x = 0;
+		double y = 0;
+		int price = 0;
+		List<Rent> rents = new ArrayList<Rent>(size);
 		Random random = new Random();
 		for(int i = 0; i < size; i++) {
-			x[i] = x0 + (x1 - x0) * random.nextDouble();
-			y[i] = y0 + (y1 - y0) * random.nextDouble();
-			rentsPositions.add(new LatLng(y[i], x[i]));
+			x = x0 + (x1 - x0) * random.nextDouble();
+			y = y0 + (y1 - y0) * random.nextDouble();
+			price = minPrice + random.nextInt(maxPrice - minPrice);
+			rents.add(new Rent(new LatLng(y, x), price));
 		}
 		
-		return rentsPositions;
+		return rents;
 	}
 }

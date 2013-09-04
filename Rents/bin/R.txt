@@ -130,7 +130,7 @@ int bool abc_config_actionMenuItemAllCaps 0x7f080005
 int bool abc_config_allowActionMenuItemTextWithIcon 0x7f080004
 int bool abc_config_showMenuShortcutsWhenKeyboardPresent 0x7f080003
 int bool abc_split_action_bar_is_narrow 0x7f080002
-int color abc_search_url_text_holo 0x7f05000d
+int color abc_search_url_text_holo 0x7f05000e
 int color abc_search_url_text_normal 0x7f05000a
 int color abc_search_url_text_pressed 0x7f05000c
 int color abc_search_url_text_selected 0x7f05000b
@@ -144,8 +144,9 @@ int color common_signin_btn_light_text_default 0x7f050004
 int color common_signin_btn_light_text_disabled 0x7f050006
 int color common_signin_btn_light_text_focused 0x7f050007
 int color common_signin_btn_light_text_pressed 0x7f050005
-int color common_signin_btn_text_dark 0x7f05000e
-int color common_signin_btn_text_light 0x7f05000f
+int color common_signin_btn_text_dark 0x7f05000f
+int color common_signin_btn_text_light 0x7f050010
+int color general_blue 0x7f05000d
 int dimen abc_action_bar_default_height 0x7f090002
 int dimen abc_action_bar_icon_vertical_padding 0x7f090003
 int dimen abc_action_bar_stacked_max_height 0x7f090009
@@ -277,6 +278,7 @@ int drawable common_signin_btn_text_normal_light 0x7f02006d
 int drawable common_signin_btn_text_pressed_dark 0x7f02006e
 int drawable common_signin_btn_text_pressed_light 0x7f02006f
 int drawable ic_launcher 0x7f020070
+int drawable ic_rent_marker 0x7f020071
 int id action_bar 0x7f06001d
 int id action_bar_activity_content 0x7f060018
 int id action_bar_container 0x7f06001c
@@ -290,7 +292,7 @@ int id action_menu_presenter 0x7f06001a
 int id action_mode_bar 0x7f060032
 int id action_mode_bar_stub 0x7f060031
 int id action_mode_close_button 0x7f060025
-int id action_settings 0x7f060046
+int id action_settings 0x7f060048
 int id activity_chooser_view_content 0x7f060026
 int id always 0x7f06000f
 int id beginning 0x7f060014
@@ -320,7 +322,9 @@ int id normal 0x7f060001
 int id progress_circular 0x7f060037
 int id progress_horizontal 0x7f060038
 int id radio 0x7f060030
-int id rents_map 0x7f060045
+int id rent_marker_icon_image 0x7f060045
+int id rent_marker_price 0x7f060046
+int id rents_map 0x7f060047
 int id right_container 0x7f060035
 int id right_icon 0x7f060036
 int id satellite 0x7f060002
@@ -373,8 +377,9 @@ int layout abc_popup_menu_item_layout 0x7f030014
 int layout abc_screen 0x7f030015
 int layout abc_search_dropdown_item_icons_2line 0x7f030016
 int layout abc_search_view 0x7f030017
-int layout map_rents_layout 0x7f030018
-int layout support_simple_spinner_dropdown_item 0x7f030019
+int layout rent_marker_icon_layout 0x7f030018
+int layout rents_map_layout 0x7f030019
+int layout support_simple_spinner_dropdown_item 0x7f03001a
 int menu map_rents 0x7f0c0000
 int string abc_action_bar_home_description 0x7f070016
 int string abc_action_bar_up_description 0x7f070017
@@ -412,7 +417,7 @@ int string common_google_play_services_update_text 0x7f070008
 int string common_google_play_services_update_title 0x7f070007
 int string common_signin_button_text 0x7f07000d
 int string common_signin_button_text_long 0x7f07000e
-int string hello_world 0x7f070024
+int string rent_marker_icon_desc 0x7f070024
 int style AppBaseTheme 0x7f0b0081
 int style AppTheme 0x7f0b007f
 int style CustomActionBar 0x7f0b0080
