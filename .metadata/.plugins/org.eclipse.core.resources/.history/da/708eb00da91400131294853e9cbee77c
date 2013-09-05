@@ -1,0 +1,5 @@
+package com.personal.rents.model;
+
+public class Rent {
+	private position
+}

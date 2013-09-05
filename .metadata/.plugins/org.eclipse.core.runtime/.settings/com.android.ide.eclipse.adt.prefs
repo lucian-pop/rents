@@ -1,0 +1,6 @@
+com.android.ide.eclipse.adt.fixLegacyEditors=1
+com.android.ide.eclipse.adt.previews=default
+com.android.ide.eclipse.adt.sdk=C\:\\android_dev_kit\\sdk
+com.android.ide.eclipse.adt.xmlEditor=true
+design.structure.flyout.width=426
+eclipse.preferences.version=1

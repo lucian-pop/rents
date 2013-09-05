@@ -1,0 +1,27 @@
+package com.personal.rents.activities.helpers;
+
+import com.personal.rents.R;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.view.View;
+import android.widget.TextView;
+
+public class RentMarkerBuilder {
+	
+	public static Bitmap createRentMarkerIcon(Context context, View rentMarkerView, int rentPrice) {
+		View v = rentMarkerView;
+		TextView priceText = (TextView) v.findViewById(R.id.rent_marker_price);
+		priceText.setText(String.valueOf(rentPrice));
+		
+		Bitmap b = null;
+		if (v.getMeasuredHeight() <= 0) {
+		    v.measure(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		    Bitmap b = Bitmap.createBitmap(v.getMeasuredWidth(), v.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+		    Canvas c = new Canvas(b);
+		    v.layout(0, 0, v.getMeasuredWidth(), v.getMeasuredHeight());
+		    v.draw(c);
+		    return b;
+		}
+	}
+}

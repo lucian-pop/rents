@@ -1,0 +1,6 @@
+package com.personal.rents.utils;
+
+public final class Currencies {
+
+	private Currencies() {}
+}

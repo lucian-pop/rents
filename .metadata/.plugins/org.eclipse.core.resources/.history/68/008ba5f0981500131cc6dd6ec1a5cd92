@@ -1,0 +1,27 @@
+package com.personal.rents.activities.components;
+
+import android.view.View;
+
+import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
+import com.google.android.gms.maps.model.Marker;
+
+public class RentMarkerInfoWindowAdapter implements InfoWindowAdapter {
+	
+	private final View window;
+	
+	public RentMarkerInfoWindowAdapter() {
+		
+	}
+
+	@Override
+	public View getInfoContents(Marker arg0) {
+		return null;
+	}
+
+	@Override
+	public View getInfoWindow(Marker arg0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+}
