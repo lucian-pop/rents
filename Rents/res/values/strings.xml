@@ -3,5 +3,6 @@
 
     <string name="app_name">Rents</string>
     <string name="action_settings">Settings</string>
-	<string name="rent_marker_icon_desc">Rent marker icon image</string>
+	<string name="rent_marker_icon_image_desc">Rent marker icon image</string>
+	<string name="rent_marker_info_image_desc">Rent marker info window image</string>
 </resources>

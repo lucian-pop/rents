@@ -1,12 +1,15 @@
 package com.personal.rents.activities;
 
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.VisibleRegion;
 import com.personal.rents.R;
+import com.personal.rents.activities.components.RentMarkerInfoWindowAdapter;
 import com.personal.rents.activities.helpers.LocationHelper;
 import com.personal.rents.activities.workers.AddMarkersWorker;
 import com.personal.rents.fragments.helpers.TouchableRentsMapWrapper.PanningListener;
@@ -16,7 +19,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 
 public class RentsMapActivity extends ActionBarActivity implements OnMyLocationButtonClickListener,
-		PanningListener {
+		PanningListener, OnMarkerClickListener {
 
     private SupportMapFragment rentsMapFragment;
 	
@@ -70,6 +73,7 @@ public class RentsMapActivity extends ActionBarActivity implements OnMyLocationB
 	private void setUpMap() {
 		rentsMap.setMyLocationEnabled(true);
         rentsMap.setOnMyLocationButtonClickListener(this);
+        rentsMap.setInfoWindowAdapter(new RentMarkerInfoWindowAdapter(this));
         rentsMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {			
 			@Override
 			public void onCameraChange(CameraPosition cameraPosition) {
@@ -111,12 +115,16 @@ public class RentsMapActivity extends ActionBarActivity implements OnMyLocationB
 		return false;
 	}
 	
+	@Override
+	public boolean onMarkerClick(Marker marker) {
+		locationHelper.moveToLocation(marker.getPosition(), rentsMap);
+		return false;
+	}
+	
 	private void addMarkers() {
 		rentsMap.clear();
 		VisibleRegion visibleRegion = rentsMap.getProjection().getVisibleRegion();
 		AddMarkersWorker addMarkersWorker = new AddMarkersWorker(rentsMap, this);
 		addMarkersWorker.execute(visibleRegion);
-		rentsMap.addMarker(new MarkerOptions().position(rentsMap.getCameraPosition().target)
-				.title("Center"));
 	}
 }

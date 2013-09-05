@@ -1136,6 +1136,7 @@ containing a value of this type.
         public static final int common_signin_btn_text_pressed_light=0x7f02006f;
         public static final int ic_launcher=0x7f020070;
         public static final int ic_rent_marker=0x7f020071;
+        public static final int rent_marker_info_window=0x7f020072;
     }
     public static final class id {
         public static final int action_bar=0x7f06001d;
@@ -1151,7 +1152,7 @@ containing a value of this type.
         public static final int action_mode_bar=0x7f060032;
         public static final int action_mode_bar_stub=0x7f060031;
         public static final int action_mode_close_button=0x7f060025;
-        public static final int action_settings=0x7f060048;
+        public static final int action_settings=0x7f060049;
         public static final int activity_chooser_view_content=0x7f060026;
         public static final int always=0x7f06000f;
         public static final int beginning=0x7f060014;
@@ -1182,8 +1183,9 @@ containing a value of this type.
         public static final int progress_horizontal=0x7f060038;
         public static final int radio=0x7f060030;
         public static final int rent_marker_icon_image=0x7f060045;
+        public static final int rent_marker_info_image=0x7f060047;
         public static final int rent_marker_price=0x7f060046;
-        public static final int rents_map=0x7f060047;
+        public static final int rents_map=0x7f060048;
         public static final int right_container=0x7f060035;
         public static final int right_icon=0x7f060036;
         public static final int satellite=0x7f060002;
@@ -1263,8 +1265,9 @@ containing a value of this type.
         public static final int abc_search_dropdown_item_icons_2line=0x7f030016;
         public static final int abc_search_view=0x7f030017;
         public static final int rent_marker_icon_layout=0x7f030018;
-        public static final int rents_map_layout=0x7f030019;
-        public static final int support_simple_spinner_dropdown_item=0x7f03001a;
+        public static final int rent_marker_info_window_layout=0x7f030019;
+        public static final int rents_map_layout=0x7f03001a;
+        public static final int support_simple_spinner_dropdown_item=0x7f03001b;
     }
     public static final class menu {
         public static final int map_rents=0x7f0c0000;
@@ -1390,7 +1393,8 @@ containing a value of this type.
         /**  Long form sign-in button text [CHAR LIMIT=30] 
          */
         public static final int common_signin_button_text_long=0x7f07000e;
-        public static final int rent_marker_icon_desc=0x7f070024;
+        public static final int rent_marker_icon_image_desc=0x7f070024;
+        public static final int rent_marker_info_image_desc=0x7f070025;
     }
     public static final class style {
         /** 

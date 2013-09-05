@@ -279,6 +279,7 @@ int drawable common_signin_btn_text_pressed_dark 0x7f02006e
 int drawable common_signin_btn_text_pressed_light 0x7f02006f
 int drawable ic_launcher 0x7f020070
 int drawable ic_rent_marker 0x7f020071
+int drawable rent_marker_info_window 0x7f020072
 int id action_bar 0x7f06001d
 int id action_bar_activity_content 0x7f060018
 int id action_bar_container 0x7f06001c
@@ -292,7 +293,7 @@ int id action_menu_presenter 0x7f06001a
 int id action_mode_bar 0x7f060032
 int id action_mode_bar_stub 0x7f060031
 int id action_mode_close_button 0x7f060025
-int id action_settings 0x7f060048
+int id action_settings 0x7f060049
 int id activity_chooser_view_content 0x7f060026
 int id always 0x7f06000f
 int id beginning 0x7f060014
@@ -323,8 +324,9 @@ int id progress_circular 0x7f060037
 int id progress_horizontal 0x7f060038
 int id radio 0x7f060030
 int id rent_marker_icon_image 0x7f060045
+int id rent_marker_info_image 0x7f060047
 int id rent_marker_price 0x7f060046
-int id rents_map 0x7f060047
+int id rents_map 0x7f060048
 int id right_container 0x7f060035
 int id right_icon 0x7f060036
 int id satellite 0x7f060002
@@ -378,8 +380,9 @@ int layout abc_screen 0x7f030015
 int layout abc_search_dropdown_item_icons_2line 0x7f030016
 int layout abc_search_view 0x7f030017
 int layout rent_marker_icon_layout 0x7f030018
-int layout rents_map_layout 0x7f030019
-int layout support_simple_spinner_dropdown_item 0x7f03001a
+int layout rent_marker_info_window_layout 0x7f030019
+int layout rents_map_layout 0x7f03001a
+int layout support_simple_spinner_dropdown_item 0x7f03001b
 int menu map_rents 0x7f0c0000
 int string abc_action_bar_home_description 0x7f070016
 int string abc_action_bar_up_description 0x7f070017
@@ -417,7 +420,8 @@ int string common_google_play_services_update_text 0x7f070008
 int string common_google_play_services_update_title 0x7f070007
 int string common_signin_button_text 0x7f07000d
 int string common_signin_button_text_long 0x7f07000e
-int string rent_marker_icon_desc 0x7f070024
+int string rent_marker_icon_image_desc 0x7f070024
+int string rent_marker_info_image_desc 0x7f070025
 int style AppBaseTheme 0x7f0b0081
 int style AppTheme 0x7f0b007f
 int style CustomActionBar 0x7f0b0080

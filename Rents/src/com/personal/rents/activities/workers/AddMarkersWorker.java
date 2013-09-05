@@ -49,5 +49,8 @@ public class AddMarkersWorker extends AsyncTask<VisibleRegion, Void, List<Rent>>
 			rentsMap.addMarker(new MarkerOptions().position(rent.position)
 					.icon(BitmapDescriptorFactory.fromBitmap(rentMarkerIcon)));
 		}
+		rentMarkerIcon = RentMarkerBuilder.createRentMarkerIcon(context, rentMarkerView, 500);
+		rentsMap.addMarker(new MarkerOptions().position(rentsMap.getCameraPosition().target)
+				.icon(BitmapDescriptorFactory.fromBitmap(rentMarkerIcon)));
 	}
 }
