@@ -1,7 +1,0 @@
-package com.personal.rents.activities.components;
-
-import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
-
-public class RentMarkerInfoWindowAdapter implements InfoWindowAdapter{
-	
-}
