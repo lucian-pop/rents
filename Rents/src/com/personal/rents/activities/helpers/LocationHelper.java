@@ -42,11 +42,6 @@ public final class LocationHelper {
 		map.animateCamera(CameraUpdateFactory.zoomTo(Constants.DEFAULT_ZOOM_FACTOR));
 	}
 	
-	public void moveToLocation(LatLng location, GoogleMap map) {
-		map.moveCamera(CameraUpdateFactory.newLatLng(location));
-		map.animateCamera(CameraUpdateFactory.zoomTo(Constants.DEFAULT_ZOOM_FACTOR));
-	}
-	
 	public LatLng getBottomLeftMapPosition(GoogleMap map, int mapHeight) {
 		return map.getProjection().fromScreenLocation(new Point(0, mapHeight));
 	}

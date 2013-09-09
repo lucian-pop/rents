@@ -4,7 +4,6 @@ import com.personal.rents.R;
 import com.personal.rents.utils.Constants;
 import com.personal.rents.utils.Currencies;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.view.View;
@@ -13,7 +12,7 @@ import android.widget.TextView;
 
 public class RentMarkerBuilder {
 	
-	public static Bitmap createRentMarkerIcon(Context context, View v, int rentPrice) {
+	public static Bitmap createRentMarkerIcon(View v, int rentPrice) {
 		TextView priceText = (TextView) v.findViewById(R.id.rent_marker_price);
 		priceText.setText(String.valueOf(rentPrice) + Constants.SPACE + Currencies.EURO);
 
