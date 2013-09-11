@@ -1,12 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content" >
-    
-    <ImageView android:id="@+id/rent_marker_info_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/rent_marker_info_window"
-        android:contentDescription="@string/rent_marker_info_image_desc"/>
+	android:layout_height="wrap_content"
+	android:orientation="vertical">
 
-</FrameLayout>
+	<RelativeLayout 
+		android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:background="@drawable/rent_marker_info_window">
+	
+	    <ImageView android:id="@+id/rent_marker_img"
+	        android:layout_width="100dp"
+	        android:layout_height="66dp"
+	        android:layout_gravity="clip_vertical"
+	        android:layout_marginTop="14dp"
+	        android:layout_marginLeft="14dp"
+	        android:src="@drawable/rent_default_img"
+	        android:contentDescription="@string/rent_default_img_desc">
+		</ImageView>
+		
+		<TextView android:id="@+id/rent_price"
+		    style="@style/MarkerInfoWindowTextView"
+	    	android:layout_toRightOf="@id/rent_marker_img"
+	    	android:layout_marginTop="12dp"
+	    	android:textSize="14sp"
+	       	android:textStyle="bold"
+	       	android:text="1250 €"/>
+		
+		<TextView android:id="@+id/rent_street"
+	       	style="@style/MarkerInfoWindowTextView"
+	    	android:layout_toRightOf="@id/rent_marker_img"
+	    	android:layout_below="@id/rent_price"
+	       	android:text="@string/rent_street_default_text"/>
+		
+		<TextView android:id="@+id/rent_short_desc"
+			style="@style/MarkerInfoWindowTextView"
+	    	android:layout_toRightOf="@id/rent_marker_img"
+	    	android:layout_below="@id/rent_street"
+	       	android:text="@string/rent_short_desc_default_text"/>
+		
+		<TextView android:id="@+id/rent_type"
+	       	style="@style/MarkerInfoWindowTextView"
+	    	android:layout_toRightOf="@id/rent_marker_img"
+	    	android:layout_below="@id/rent_short_desc"
+	       	android:text="@string/rent_type_default_text"/>
+	</RelativeLayout>
+
+	<ImageView android:id="@+id/rent_marker_info_window_tails"
+		android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_gravity="center"
+	    android:layout_marginLeft="15dp"
+	    android:src="@drawable/rent_marker_info_window_tail"
+	    android:contentDescription="@string/rent_default_img_desc">
+	</ImageView>
+</LinearLayout>

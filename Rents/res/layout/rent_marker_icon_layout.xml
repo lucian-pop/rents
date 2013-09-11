@@ -3,18 +3,18 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
     
-    <ImageView android:id="@+id/rent_marker_icon_image"
+    <ImageView android:id="@+id/rent_marker_icon_img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_rent_marker"
-        android:contentDescription="@string/rent_marker_icon_image_desc"/>
+        android:contentDescription="@string/rent_marker_icon_img_desc"/>
     
      <TextView
         android:id="@+id/rent_marker_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center|bottom"
-        android:textColor="@color/general_blue"
-        android:textSize="12sp"
-        android:textStyle="bold"/>
+        android:paddingBottom="5dp"
+        android:textColor="@color/white"
+        android:textSize="12sp"/>
 </FrameLayout>

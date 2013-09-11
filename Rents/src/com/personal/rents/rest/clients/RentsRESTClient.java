@@ -11,7 +11,7 @@ public class RentsRESTClient {
 	
 	private static final int minPrice = 100;
 	
-	private static final int maxPrice = 501;
+	private static final int maxPrice = 20000;
 	
 	public static List<Rent> getRentsPositions(LatLng position0, LatLng position1) {
 		double x0 = position0.longitude;
