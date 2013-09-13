@@ -27,11 +27,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.widget.Toast;
 
-public class RentsMapActivity extends ActionBarActivity implements OnMyLocationButtonClickListener,
-		OnMarkerClickListener {
+public class RentsMapActivity extends ActionBarActivity implements OnMyLocationButtonClickListener {
 
 	private static final long EVENTS_DELAY = 250L;
 	
@@ -44,6 +44,8 @@ public class RentsMapActivity extends ActionBarActivity implements OnMyLocationB
     private LatLng lastCenterPosition;
     
     private float lastZoomLevel;
+    
+    private Marker lastClickedMarker;
     
     private boolean isTouched = false;
     
@@ -67,13 +69,22 @@ public class RentsMapActivity extends ActionBarActivity implements OnMyLocationB
         locationHelper = new LocationHelper(getApplicationContext());
         rentsMapFragment = (RentsMapFragment) getSupportFragmentManager()
         		.findFragmentById(R.id.rents_map);
-  
+        
         setUpMapIfNeeded();
         
         // Add code in onSaveInstanceState() to save user location and use it at activity recreation
         // (create, onRestoreInstanceState). Use this location if no other one is available.
     }
     
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.rents_map_menu, menu);
+
+		return true;
+	}
+
+
+
 	private void setUpMapIfNeeded() {
 		if (rentsMap == null) {
 			rentsMap = rentsMapFragment.getMap();
@@ -84,16 +95,23 @@ public class RentsMapActivity extends ActionBarActivity implements OnMyLocationB
 	}
 	
 	private void setUpMap() {
+		View myLocationButton = rentsMapFragment.getView().findViewById(0x2);
+        myLocationButton.setBackgroundResource(R.drawable.custom_my_location_btn);
+		
 		rentsMap.setMyLocationEnabled(true);
+		rentsMap.getUiSettings().setMyLocationButtonEnabled(true);
+		rentsMap.getUiSettings().setCompassEnabled(true);
+		rentsMap.getUiSettings().setZoomControlsEnabled(false);
         rentsMap.setOnMyLocationButtonClickListener(this);
         rentsMap.setInfoWindowAdapter(new RentMarkerInfoWindowAdapter(this));
         rentsMap.setOnCameraChangeListener(new RentsMapOnCameraChangeListener());
-
+        rentsMap.setOnMarkerClickListener(new RentsMapOnMarkerClickListener());
+        
         Location location = locationHelper.getLastKnownLocation();
         if(location != null) {
         	locationHelper.moveToLocation(location, rentsMap);
         }
-        
+
         ((RentsMapView)rentsMapFragment.getView())
         		.setOnMapTouchListener(new RentsMapOnTouchListener());
         lastCenterPosition = rentsMap.getCameraPosition().target;
@@ -101,12 +119,7 @@ public class RentsMapActivity extends ActionBarActivity implements OnMyLocationB
 	}
 
 	@Override
-	public boolean onMyLocationButtonClick() {
-		return false;
-	}
-	
-	@Override
-	public boolean onMarkerClick(Marker marker) {
+	public boolean onMyLocationButtonClick() {		
 		return false;
 	}
 	
@@ -190,5 +203,22 @@ public class RentsMapActivity extends ActionBarActivity implements OnMyLocationB
 		public void onMapTouch(boolean touched) {
 			isTouched = touched;
 		}
+    }
+    
+    private class RentsMapOnMarkerClickListener implements OnMarkerClickListener {
+
+    	@Override
+    	public boolean onMarkerClick(final Marker marker) {
+    		if (lastClickedMarker != null && lastClickedMarker.equals(marker)) {
+                lastClickedMarker = null;
+                marker.hideInfoWindow();
+
+                return true;
+            } else {
+                lastClickedMarker = marker;
+
+                return false;
+            }
+    	}
     }
 }

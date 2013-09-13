@@ -1,0 +1,19 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+	<item android:id="@+id/search_action"
+		android:icon="@drawable/ic_search"
+	    android:title="Cauta"
+	    app:showAsAction="always"/>
+	
+	<item android:id="@+id/new_homes_action"
+		android:icon="@drawable/ic_new_rents"
+	    android:title="Cele mai noi"
+	    app:showAsAction="always"/>
+	
+	<item android:id="@+id/user_account_action"
+		android:icon="@drawable/ic_user_account"
+	    android:title="Contul tau"
+	    app:showAsAction="always"/>
+	
+</menu>

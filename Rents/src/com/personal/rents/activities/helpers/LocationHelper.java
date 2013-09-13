@@ -6,9 +6,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.personal.rents.utils.Constants;
 
 import android.content.Context;
-import android.graphics.Point;
 import android.location.Criteria;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 
 public final class LocationHelper {
@@ -30,6 +30,7 @@ public final class LocationHelper {
 	public Location getLastKnownLocation() {
 		Criteria criteria = new Criteria();
 		String locationProvider = locationManager.getBestProvider(criteria, true);
+
 		return locationManager.getLastKnownLocation(locationProvider);
 	}
 	
@@ -42,19 +43,7 @@ public final class LocationHelper {
 		map.animateCamera(CameraUpdateFactory.zoomTo(Constants.DEFAULT_ZOOM_FACTOR));
 	}
 	
-	public LatLng getBottomLeftMapPosition(GoogleMap map, int mapHeight) {
-		return map.getProjection().fromScreenLocation(new Point(0, mapHeight));
-	}
-
-	public LatLng getUpperRigthMapPosition(GoogleMap map, int mapWidth) {
-		return map.getProjection().fromScreenLocation(new Point(mapWidth, 0));
-	}
-	
-	public LatLng getBottomRightMapPosition(GoogleMap map, int mapHeight, int mapWidth) {
-		return map.getProjection().fromScreenLocation(new Point(mapWidth, mapHeight));
-	}
-	
-	public LatLng getUpperLeftMapPosition(GoogleMap map) {
-		return map.getProjection().fromScreenLocation(new Point(5, 5));
+	public Location getCurrentLocation() {
+		return null;
 	}
 }
