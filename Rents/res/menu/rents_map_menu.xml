@@ -3,17 +3,17 @@
 
 	<item android:id="@+id/search_action"
 		android:icon="@drawable/ic_search"
-	    android:title="Cauta"
+	    android:title="@string/search_action_title"
 	    app:showAsAction="always"/>
 	
 	<item android:id="@+id/new_homes_action"
 		android:icon="@drawable/ic_new_rents"
-	    android:title="Cele mai noi"
+	    android:title="@string/new_homes_action_title"
 	    app:showAsAction="always"/>
 	
 	<item android:id="@+id/user_account_action"
 		android:icon="@drawable/ic_user_account"
-	    android:title="Contul tau"
+	    android:title="@string/user_account_action_title"
 	    app:showAsAction="always"/>
 	
 </menu>

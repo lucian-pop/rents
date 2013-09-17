@@ -3,6 +3,7 @@ package com.personal.rents.activities;
 import java.util.List;
 
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -21,6 +22,7 @@ import com.personal.rents.model.Rent;
 import com.personal.rents.rest.clients.RentsRESTClient;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.AsyncTask;
@@ -28,10 +30,12 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-public class RentsMapActivity extends ActionBarActivity implements OnMyLocationButtonClickListener {
+public class RentsMapActivity extends ActionBarActivity implements OnMyLocationButtonClickListener,
+	OnInfoWindowClickListener {
 
 	private static final long EVENTS_DELAY = 250L;
 	
@@ -64,7 +68,7 @@ public class RentsMapActivity extends ActionBarActivity implements OnMyLocationB
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.rents_map_layout);
+        setContentView(R.layout.rents_map_activity_layout);
 
         locationHelper = new LocationHelper(getApplicationContext());
         rentsMapFragment = (RentsMapFragment) getSupportFragmentManager()
@@ -83,7 +87,19 @@ public class RentsMapActivity extends ActionBarActivity implements OnMyLocationB
 		return true;
 	}
 
-
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch(item.getItemId()) {
+			case R.id.search_action:
+				Intent intent = new Intent(this, FilterSearchActivity.class);
+				startActivity(intent);
+				return true;
+			default:
+				break;
+			}
+		
+		return false;
+	}
 
 	private void setUpMapIfNeeded() {
 		if (rentsMap == null) {
@@ -96,7 +112,7 @@ public class RentsMapActivity extends ActionBarActivity implements OnMyLocationB
 	
 	private void setUpMap() {
 		View myLocationButton = rentsMapFragment.getView().findViewById(0x2);
-        myLocationButton.setBackgroundResource(R.drawable.custom_my_location_btn);
+        myLocationButton.setBackgroundResource(R.drawable.my_location_btn_selector);
 		
 		rentsMap.setMyLocationEnabled(true);
 		rentsMap.getUiSettings().setMyLocationButtonEnabled(true);
@@ -106,6 +122,7 @@ public class RentsMapActivity extends ActionBarActivity implements OnMyLocationB
         rentsMap.setInfoWindowAdapter(new RentMarkerInfoWindowAdapter(this));
         rentsMap.setOnCameraChangeListener(new RentsMapOnCameraChangeListener());
         rentsMap.setOnMarkerClickListener(new RentsMapOnMarkerClickListener());
+        rentsMap.setOnInfoWindowClickListener(this);
         
         Location location = locationHelper.getLastKnownLocation();
         if(location != null) {
@@ -121,6 +138,12 @@ public class RentsMapActivity extends ActionBarActivity implements OnMyLocationB
 	@Override
 	public boolean onMyLocationButtonClick() {		
 		return false;
+	}
+	
+	@Override
+	public void onInfoWindowClick(Marker arg0) {
+		Intent intent = new Intent(this, RentDetailsActivity.class);
+		startActivity(intent);
 	}
 	
 	private void resetMapChangeTimer() {
@@ -149,7 +172,6 @@ public class RentsMapActivity extends ActionBarActivity implements OnMyLocationB
 	}
 	
     private class AddMarkersTask extends AsyncTask<VisibleRegion, Void, List<Rent>> {
-
     	@Override
     	protected List<Rent> doInBackground(VisibleRegion... visibleRegions) {
     		VisibleRegion visibleRegion = visibleRegions[0];
@@ -180,7 +202,6 @@ public class RentsMapActivity extends ActionBarActivity implements OnMyLocationB
     }
     
     private class RentsMapOnCameraChangeListener implements GoogleMap.OnCameraChangeListener {
-    	
 		@Override
 		public void onCameraChange(CameraPosition center) {
 			if(isSpanChange(center.target) || isZoomChange(center.zoom)) {
@@ -198,7 +219,6 @@ public class RentsMapActivity extends ActionBarActivity implements OnMyLocationB
     }
     
     private class RentsMapOnTouchListener implements RentsMapView.OnMapTouchListener {
-
 		@Override
 		public void onMapTouch(boolean touched) {
 			isTouched = touched;
@@ -206,7 +226,6 @@ public class RentsMapActivity extends ActionBarActivity implements OnMyLocationB
     }
     
     private class RentsMapOnMarkerClickListener implements OnMarkerClickListener {
-
     	@Override
     	public boolean onMarkerClick(final Marker marker) {
     		if (lastClickedMarker != null && lastClickedMarker.equals(marker)) {

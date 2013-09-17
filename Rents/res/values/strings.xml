@@ -8,8 +8,15 @@
 	<string name="rent_marker_info_img_desc">Rent marker info window background image</string>
 	<string name="rent_default_img_desc">Rent marker info window background image</string>
 	<string name="share_app_img_desc">Background image for share app button</string>
+	<string name="rent_sticky_note_img_desc">Rent sticky note image</string>
 	
 	<string name="rent_street_default_text">Str. Simion Barnutiu, Nr. 31, Ap. 18</string>
 	<string name="rent_short_desc_default_text">3 cam., 2 bai, 1008 mp</string>
 	<string name="rent_type_default_text">Apartament, constr. veche</string>
+	
+	<string name="search_action_title">Cauta</string>
+	<string name="new_homes_action_title">Cele mai noi</string>
+	<string name="user_account_action_title">Contul tau</string>
+	<string name="add_to_favorites_action_title">Salveaza</string>
+
 </resources>

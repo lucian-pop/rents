@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+	<RelativeLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content">
+	    
+	    <FrameLayout android:id="@+id/rent_clipboard"
+	        android:layout_width="match_parent"
+	        android:layout_height="180dp">
+	        
+			<ImageView android:id="@+id/rent_img"
+	            android:layout_width="match_parent"
+	            android:layout_height="160dp"
+	            android:layout_margin="10dp"
+	            android:layout_gravity="top|center"
+	            android:src="@drawable/rent_img"
+	            android:contentDescription="@string/rent_default_img_desc"/>
+			
+			<ImageButton android:id="@+id/left_arrow"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_gravity="left|center_vertical"
+			    android:layout_marginLeft="10dp"
+			    android:background="@drawable/left_arrow_selector"/>
+			
+			<ImageButton android:id="@+id/right_arrow"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_gravity="right|center_vertical"
+			    android:layout_marginRight="10dp"
+			    android:background="@drawable/right_arrow_selector"/>
+			
+			<ImageView android:id="@+id/rent_sticky_note"
+	            android:layout_width="70dp"
+	            android:layout_height="65dp"
+	            android:src="@drawable/rent_sticky_note"
+	            android:contentDescription="@string/rent_sticky_note_img_desc"/>
+	        
+	         <TextView android:id="@+id/rent_post_date"
+	                android:layout_width="70dp"
+	                android:layout_height="wrap_content"
+	                android:layout_gravity="top|left"
+	                android:layout_marginTop="15dp"
+	                android:gravity="center"
+					android:textSize="12sp"
+	                android:text="14 Sep '13"/>
+	         
+	          <TextView android:id="@+id/rent_price"
+	                android:layout_width="70dp"
+	                android:layout_height="wrap_content"
+	                android:layout_gravity="top|left"
+	                android:layout_marginTop="35dp"
+	                android:gravity="center"
+					android:textSize="12sp"
+					android:textStyle="bold"
+					android:textColor="@color/red"
+	                android:text="15000 RON"/>
+	        
+	        <ImageButton android:id="@+id/rent_share_btn"
+		   		android:layout_width="wrap_content"
+		    	android:layout_height="wrap_content"
+		    	android:layout_marginTop="5dp"
+		    	android:layout_gravity="top|right"
+		    	android:background="@drawable/rent_share_btn_selector"
+		    	android:contentDescription="@string/share_app_img_desc" />
+	
+		</FrameLayout>
+		
+	    <TextView android:id="@+id/rent_type_desc"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@id/rent_clipboard"
+	        android:paddingLeft="20dp"
+	        android:paddingRight="20dp"
+	        android:textAppearance="?android:attr/textAppearanceMedium"
+	        android:textColor="@color/dark_grey"
+	        android:text="Ap., decomadat, c-tie. noua"/>
+	    
+	    <TextView android:id="@+id/rent_specs"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@id/rent_type_desc"
+	        android:paddingLeft="20dp"
+	        android:paddingRight="20dp"
+	        android:textAppearance="?android:attr/textAppearanceMedium"
+	        android:textColor="@color/dark_grey"
+	        android:text="3 cam., 2 bai, 1000 mp"/>
+	     
+	    <TextView android:id="@+id/rent_party"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@id/rent_specs"
+	        android:paddingLeft="20dp"
+	        android:paddingRight="20dp"
+	        android:textAppearance="?android:attr/textAppearanceMedium"
+	        android:textColor="@color/light_grey"
+	        android:text="Persoana fizica"/>
+	      
+		<TextView android:id="@+id/rent_call_btn"
+	  		android:layout_width="wrap_content"
+	 		android:layout_height="wrap_content"
+	 		android:layout_below="@id/rent_party"
+	 		android:layout_marginTop="2dp"
+			android:layout_marginLeft="20dp"
+			android:drawableLeft="@drawable/call_btn"
+			android:drawablePadding="5dp"
+			android:background="@drawable/text_btn_selector"
+			android:textAppearance="?android:attr/textAppearanceMedium"
+			android:textColor="@color/blue_link"
+	 		android:text="0741 060 776"
+	 		android:clickable="true"/>
+		
+		 <TextView android:id="@+id/rent_location_section"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@id/rent_call_btn"
+	        android:layout_marginTop="15dp"
+	        android:paddingLeft="20dp"
+	        android:paddingRight="20dp"
+	        android:textAppearance="?android:attr/textAppearanceLarge"
+	        android:textColor="@color/light_grey"
+	        android:text="Locatie"/>
+		 
+		 <View android:id="@+id/rent_location_underline"
+		     android:layout_below="@id/rent_location_section"
+		     style="@style/SectionUnderline"/>
+		 
+		 
+		 <TextView android:id="@+id/rent_location_adress"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@id/rent_location_underline"
+	        android:layout_marginTop="4dp"
+	        android:paddingLeft="20dp"
+	        android:paddingRight="20dp"
+	        android:textAppearance="?android:attr/textAppearanceMedium"
+	        android:textColor="@color/dark_grey"
+	        android:text="Str. Mihail Kogalniceanu, Nr. 31, Bl H10, Sc. A, Ap. 215, Cart. Zorilor"/>
+		 
+		 <TextView android:id="@+id/rent_location"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@id/rent_location_adress"
+	        android:paddingLeft="20dp"
+	        android:paddingRight="20dp"
+	        android:textAppearance="?android:attr/textAppearanceMedium"
+	        android:textColor="@color/light_grey"
+	        android:text="Cluj-Napoca, Cluj"/>
+	
+		 <TextView android:id="@+id/rent_directions_btn"
+	  		android:layout_width="wrap_content"
+	 		android:layout_height="wrap_content"
+	 		android:layout_below="@id/rent_location"
+	 		android:layout_marginTop="2dp"
+			android:layout_marginLeft="20dp"
+			android:paddingRight="5dp"
+			android:background="@drawable/text_btn_selector"
+			android:textAppearance="?android:attr/textAppearanceMedium"
+			android:textColor="@color/blue_link"
+	 		android:text="Directionare"
+	 		android:clickable="true"/>
+		 
+		 <TextView android:id="@+id/rent_location_links_separator"
+	  		android:layout_width="wrap_content"
+	 		android:layout_height="wrap_content"
+	 		android:layout_below="@id/rent_location"
+	 		android:layout_toRightOf="@id/rent_directions_btn"
+	 		android:layout_marginTop="2dp"
+			android:paddingLeft="5dp"
+			android:paddingRight="5dp"
+			android:textAppearance="?android:attr/textAppearanceMedium"
+			android:textColor="@color/blue_link"
+	 		android:text="|"/>
+		 
+		 <TextView android:id="@+id/rent_nearby_places_btn"
+	  		android:layout_width="wrap_content"
+	 		android:layout_height="wrap_content"
+	 		android:layout_below="@id/rent_location"
+	 		android:layout_toRightOf="@id/rent_location_links_separator"
+	 		android:layout_marginTop="2dp"
+			android:paddingLeft="5dp"
+			android:paddingRight="20dp"
+			android:background="@drawable/text_btn_selector"
+			android:textAppearance="?android:attr/textAppearanceMedium"
+			android:textColor="@color/blue_link"
+	 		android:text="Imprejurimi"
+	 		android:clickable="true"/>
+		 
+		 <TextView android:id="@+id/rent_desc_section"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@id/rent_directions_btn"
+	        android:layout_marginTop="15dp"
+	        android:paddingLeft="20dp"
+	        android:paddingRight="20dp"
+	        android:textAppearance="?android:attr/textAppearanceLarge"
+	        android:textColor="@color/light_grey"
+	        android:text="Descriere"/>
+		 
+		 <View android:id="@+id/rent_desc_underline"
+		     android:layout_below="@id/rent_desc_section"
+		     style="@style/SectionUnderline"/>
+		 
+		 <TextView android:id="@+id/rent_desc"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@id/rent_desc_underline"
+	        android:layout_marginTop="4dp"
+	        android:paddingLeft="20dp"
+	        android:paddingRight="20dp"
+	        android:textAppearance="?android:attr/textAppearanceMedium"
+	        android:textColor="@color/dark_grey"
+	        android:text="Apartamentul are o vedere panoramica asupra Clujului, prezinta un design minimal si este uniform luminat"
+			android:ellipsize="none"
+			android:maxLines="2"/>
+		 
+		 <ImageButton android:id="@+id/more_desc"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_below="@id/rent_desc"
+			android:layout_alignParentRight="true"
+			android:layout_marginRight="20dp"
+			android:background="@drawable/down_arrow"
+			android:clickable="true"/>
+			
+		 <ImageButton android:id="@+id/less_desc"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_below="@id/rent_desc"
+			android:layout_alignParentRight="true"
+			android:layout_marginRight="20dp"
+		    android:background="@drawable/up_arrow"
+		    android:clickable="true"
+		    android:visibility="invisible"/>
+		 
+		 <TextView android:id="@+id/rent_animals_allowed"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@id/rent_desc"
+	        android:layout_marginTop="15dp"
+			android:drawableLeft="@drawable/check_btn"
+			android:drawablePadding="5dp"
+	        android:paddingLeft="20dp"
+	        android:paddingRight="20dp"
+	        android:paddingBottom ="15dp"
+	        android:textAppearance="?android:attr/textAppearanceLarge"
+	        android:textColor="@color/green"
+	        android:text="Cu animale"/>
+	</RelativeLayout>
+</ScrollView>

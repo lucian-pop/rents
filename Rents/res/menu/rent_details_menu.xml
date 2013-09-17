@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    
+    <item android:id="@+id/add_to_favorites_action" 
+        android:icon="@drawable/ic_favorites"
+        android:title="@string/add_to_favorites_action_title"
+        app:showAsAction="always"/>
+    
+	<item android:id="@+id/user_account_action"
+		android:icon="@drawable/ic_user_account"
+	    android:title="@string/user_account_action_title"
+	    app:showAsAction="always"/>
+
+</menu>
