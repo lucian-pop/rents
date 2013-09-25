@@ -17,9 +17,10 @@ import com.personal.rents.activities.components.RentMarkerInfoWindowAdapter;
 import com.personal.rents.activities.helpers.LocationHelper;
 import com.personal.rents.activities.helpers.RentMarkerBuilder;
 import com.personal.rents.fragments.RentsMapFragment;
-import com.personal.rents.fragments.components.RentsMapView;
 import com.personal.rents.model.Rent;
 import com.personal.rents.rest.clients.RentsRESTClient;
+import com.personal.rents.utils.ActivitiesContract;
+import com.personal.rents.views.TouchableMapView;
 
 import android.content.Context;
 import android.content.Intent;
@@ -89,15 +90,15 @@ public class RentsMapActivity extends ActionBarActivity implements OnMyLocationB
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch(item.getItemId()) {
-			case R.id.search_action:
-				Intent intent = new Intent(this, FilterSearchActivity.class);
-				startActivity(intent);
-				return true;
-			default:
-				break;
-			}
-		
+		if(item.getItemId() == R.id.search_action) {
+			Intent intent = new Intent(this, FilterSearchActivity.class);
+			intent.putExtra(ActivitiesContract.LATITUDE, lastCenterPosition.latitude);
+			intent.putExtra(ActivitiesContract.LONGITUDE, lastCenterPosition.longitude);
+			startActivity(intent);
+
+			return true;
+		}
+
 		return false;
 	}
 
@@ -115,10 +116,11 @@ public class RentsMapActivity extends ActionBarActivity implements OnMyLocationB
         myLocationButton.setBackgroundResource(R.drawable.my_location_btn_selector);
 		
 		rentsMap.setMyLocationEnabled(true);
+		rentsMap.setOnMyLocationButtonClickListener(this);
 		rentsMap.getUiSettings().setMyLocationButtonEnabled(true);
 		rentsMap.getUiSettings().setCompassEnabled(true);
 		rentsMap.getUiSettings().setZoomControlsEnabled(false);
-        rentsMap.setOnMyLocationButtonClickListener(this);
+        
         rentsMap.setInfoWindowAdapter(new RentMarkerInfoWindowAdapter(this));
         rentsMap.setOnCameraChangeListener(new RentsMapOnCameraChangeListener());
         rentsMap.setOnMarkerClickListener(new RentsMapOnMarkerClickListener());
@@ -129,7 +131,7 @@ public class RentsMapActivity extends ActionBarActivity implements OnMyLocationB
         	locationHelper.moveToLocation(location, rentsMap);
         }
 
-        ((RentsMapView)rentsMapFragment.getView())
+        ((TouchableMapView)rentsMapFragment.getView())
         		.setOnMapTouchListener(new RentsMapOnTouchListener());
         lastCenterPosition = rentsMap.getCameraPosition().target;
         lastZoomLevel = rentsMap.getCameraPosition().zoom;
@@ -172,6 +174,7 @@ public class RentsMapActivity extends ActionBarActivity implements OnMyLocationB
 	}
 	
     private class AddMarkersTask extends AsyncTask<VisibleRegion, Void, List<Rent>> {
+
     	@Override
     	protected List<Rent> doInBackground(VisibleRegion... visibleRegions) {
     		VisibleRegion visibleRegion = visibleRegions[0];
@@ -218,7 +221,7 @@ public class RentsMapActivity extends ActionBarActivity implements OnMyLocationB
     	}
     }
     
-    private class RentsMapOnTouchListener implements RentsMapView.OnMapTouchListener {
+    private class RentsMapOnTouchListener implements TouchableMapView.OnMapTouchListener {
 		@Override
 		public void onMapTouch(boolean touched) {
 			isTouched = touched;

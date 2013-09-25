@@ -18,5 +18,47 @@
 	<string name="new_homes_action_title">Cele mai noi</string>
 	<string name="user_account_action_title">Contul tau</string>
 	<string name="add_to_favorites_action_title">Salveaza</string>
+	
+	<!-- Filter search activity -->
+	<string name="last_location">Ultima locatie</string>
+	<string name="current_location">Locatia curenta</string>
+	<string name="search_reset_btn_text">Reseteaza</string>
+	<string name="search_submit_btn_text">Cauta</string>
+	<string name="autocomplete_places_input_text">Locatie...</string>
+	<string name="rent_price_range_text">Alegeti pretul</string>
+	<string name="rent_surface_range_text">Alegeti pretul</string>
+	<string name="pets_allowed_text">Cu animale</string>
+	
+	<string-array name="rent_parties">
+        <item>Agentie</item>
+        <item>Persoana fizica</item>
+    </string-array>
+    
+	<string-array name="rent_types">
+        <item>Apartament</item>
+        <item>Casa/Vila</item>
+    </string-array>
+    
+	<string-array name="rent_structures">
+        <item>Decomadat</item>
+        <item>Nedecomadat</item>
+    </string-array>
+    
+	<string-array name="rent_ages">
+        <item>C-tie. noua</item>
+        <item>C-tie. veche</item>
+    </string-array>
+    
+	<string-array name="rent_rooms">
+        <item>1 camera</item>
+        <item>2 camere</item>
+        <item>3 camere</item>
+        <item>4+ camere</item>
+    </string-array>
 
+	<string-array name="rent_baths">
+        <item>1 baie</item>
+        <item>2 bai</item>
+        <item>3+ bai</item>
+    </string-array>
 </resources>

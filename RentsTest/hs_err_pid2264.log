@@ -1,0 +1,87 @@
+#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  Internal Error (classFileParser.cpp:3494), pid=2264, tid=932
+#  Error: ShouldNotReachHere()
+#
+# JRE version: 6.0_45-b06
+# Java VM: Java HotSpot(TM) 64-Bit Server VM (20.45-b01 mixed mode windows-amd64 compressed oops)
+# If you would like to submit a bug report, please visit:
+#   http://java.sun.com/webapps/bugreport/crash.jsp
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x000000000052c000):  JavaThread "Unknown thread" [_thread_in_vm, id=932, stack(0x00000000024b0000,0x00000000025b0000)]
+
+Stack: [0x00000000024b0000,0x00000000025b0000]
+[error occurred during error reporting (printing stack bounds), id 0xc0000005]
+
+
+---------------  P R O C E S S  ---------------
+
+Java Threads: ( => current thread )
+
+Other Threads:
+
+=>0x000000000052c000 (exited) JavaThread "Unknown thread" [_thread_in_vm, id=932, stack(0x00000000024b0000,0x00000000025b0000)]
+
+VM state:not at safepoint (not fully initialized)
+
+VM Mutex/Monitor currently owned by a thread: None
+
+Dynamic libraries:
+0x0000000000400000 - 0x000000000042f000 	C:\Java\jre6\bin\javaw.exe
+0x000007fac9da0000 - 0x000007fac9f60000 	C:\Windows\SYSTEM32\ntdll.dll
+0x000007fac7390000 - 0x000007fac74c6000 	C:\Windows\system32\KERNEL32.DLL
+0x000007fac7090000 - 0x000007fac7183000 	C:\Windows\system32\KERNELBASE.dll
+0x000007fac7690000 - 0x000007fac776e000 	C:\Windows\system32\ADVAPI32.dll
+0x000007fac8a50000 - 0x000007fac8b9c000 	C:\Windows\system32\USER32.dll
+0x000007fac9cf0000 - 0x000007fac9d95000 	C:\Windows\system32\msvcrt.dll
+0x000007fac9b50000 - 0x000007fac9b98000 	C:\Windows\SYSTEM32\sechost.dll
+0x000007fac9ba0000 - 0x000007fac9ce5000 	C:\Windows\system32\RPCRT4.dll
+0x000007fac8ef0000 - 0x000007fac9031000 	C:\Windows\system32\GDI32.dll
+0x000007fac9b10000 - 0x000007fac9b49000 	C:\Windows\system32\IMM32.DLL
+0x000007fac9290000 - 0x000007fac93a5000 	C:\Windows\system32\MSCTF.dll
+0x000007fac6bf0000 - 0x000007fac6c36000 	C:\Windows\system32\nvinitx.dll
+0x000000000f000000 - 0x000000000f006000 	C:\Program Files\NVIDIA Corporation\CoProcManager\detoured.dll
+0x000007fac4620000 - 0x000007fac4675000 	C:\Program Files\NVIDIA Corporation\CoProcManager\nvd3d9wrapx.dll
+0x000007fac8bc0000 - 0x000007fac8d90000 	C:\Windows\system32\SETUPAPI.dll
+0x000007fac6fe0000 - 0x000007fac702f000 	C:\Windows\system32\CFGMGR32.dll
+0x000007fac6f00000 - 0x000007fac6f22000 	C:\Windows\system32\DEVOBJ.dll
+0x000007fac46f0000 - 0x000007fac472d000 	C:\Program Files\NVIDIA Corporation\CoProcManager\nvdxgiwrapx.dll
+0x000000006d830000 - 0x000000006dfec000 	C:\Java\jre6\bin\server\jvm.dll
+0x000007fac46c0000 - 0x000007fac46e0000 	C:\Windows\SYSTEM32\WINMM.dll
+0x000007fac4030000 - 0x000007fac4063000 	C:\Windows\SYSTEM32\WINMMBASE.dll
+0x000000006d7a0000 - 0x000000006d7ae000 	C:\Java\jre6\bin\verify.dll
+0x000000006d3c0000 - 0x000000006d3e7000 	C:\Java\jre6\bin\java.dll
+0x000000006d7f0000 - 0x000000006d802000 	C:\Java\jre6\bin\zip.dll
+0x000007fac7680000 - 0x000007fac7687000 	C:\Windows\system32\PSAPI.DLL
+
+VM Arguments:
+jvm_args: -Dfile.encoding=Cp1252 -Xbootclasspath:C:\android_dev_kit\sdk\platforms\android-18\android.jar;C:\android_dev_kit\sdk\add-ons\addon-google_apis-google-18\libs\effects.jar;C:\android_dev_kit\sdk\add-ons\addon-google_apis-google-18\libs\usb.jar;C:\android_dev_kit\sdk\add-ons\addon-google_apis-google-18\libs\maps.jar 
+java_command: org.eclipse.jdt.internal.junit.runner.RemoteTestRunner -version 3 -port 62402 -testLoaderClass org.eclipse.jdt.internal.junit.runner.junit3.JUnit3TestLoader -loaderpluginname org.eclipse.jdt.junit.runtime -classNames com.personal.rents.rest.clients.LocationSuggestionsRESTClientTest
+Launcher Type: SUN_STANDARD
+
+Environment Variables:
+JAVA_HOME=C:\Java\jdk1.6
+PATH=C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\Intel\OpenCL SDK\2.0\bin\x86;C:\Program Files (x86)\Intel\OpenCL SDK\2.0\bin\x64;C:\Program Files\Intel\WiFi\bin\;C:\Program Files\Common Files\Intel\WirelessCommon\;JAVA_HOME\bin;C:\android_dev_kit\sdk\tools;C:\Program Files (x86)\MySQL\MySQL Utilities 1.3.4\;C:\Program Files\Intel\WiFi\bin\;C:\Program Files\Common Files\Intel\WirelessCommon\;C:\Program Files (x86)\Git\bin;C:\Program Files (x86)\MySQL\MySQL Workbench CE 6.0.6;.;;.;
+USERNAME=AMEU
+OS=Windows_NT
+PROCESSOR_IDENTIFIER=Intel64 Family 6 Model 58 Stepping 9, GenuineIntel
+
+
+
+---------------  S Y S T E M  ---------------
+
+OS: Windows 8 , 64 bit Build 9200 
+
+CPU:total 8 (4 cores per cpu, 2 threads per core) family 6 model 58 stepping 9, cmov, cx8, fxsr, mmx, sse, sse2, sse3, ssse3, sse4.1, sse4.2, popcnt, ht
+
+Memory: 4k page, physical 8271408k(4353560k free), swap 9516592k(3611656k free)
+
+vm_info: Java HotSpot(TM) 64-Bit Server VM (20.45-b01) for windows-amd64 JRE (1.6.0_45-b06), built on Apr  1 2013 12:31:37 by "java_re" with MS VC++ 8.0 (VS2005)
+
+time: Tue Sep 17 23:28:24 2013
+elapsed time: 0 seconds
+

@@ -1,10 +1,10 @@
-package com.personal.rents.fragments.components;
+package com.personal.rents.views;
 
 import android.content.Context;
 import android.view.MotionEvent;
 import android.widget.FrameLayout;
 
-public class RentsMapView extends FrameLayout {
+public class TouchableMapView extends FrameLayout {
 
 	public interface OnMapTouchListener {
 		public void onMapTouch(boolean touched);
@@ -12,7 +12,7 @@ public class RentsMapView extends FrameLayout {
 	
 	private OnMapTouchListener onMapTouchListener;
 
-	public RentsMapView(Context context) {
+	public TouchableMapView(Context context) {
 		super(context);
 	}
 

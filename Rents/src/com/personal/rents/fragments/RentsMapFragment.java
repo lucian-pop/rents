@@ -6,17 +6,17 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.gms.maps.SupportMapFragment;
-import com.personal.rents.fragments.components.RentsMapView;
+import com.personal.rents.views.TouchableMapView;
 
 public class RentsMapFragment extends SupportMapFragment {
 	
-	private RentsMapView rentsMapView;
+	private TouchableMapView rentsMapView;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View originalMapView = super.onCreateView(inflater, container, savedInstanceState);
-		rentsMapView = new RentsMapView(getActivity());
+		rentsMapView = new TouchableMapView(getActivity());
 		rentsMapView.addView(originalMapView);
 		
 		return rentsMapView;
