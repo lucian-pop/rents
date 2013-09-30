@@ -1,4 +1,4 @@
-package com.personal.rents.activities.components;
+package com.personal.rents.activities.adapters;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +34,7 @@ public class PlacesSuggestionsAdapter extends ArrayAdapter<String> implements Fi
 	
 	private final String currentLocation;
 	
-	static class PlaceViewHolder {
+	private static class PlaceViewHolder {
 		TextView placeName;
 		TextView placeAddress;
 	}

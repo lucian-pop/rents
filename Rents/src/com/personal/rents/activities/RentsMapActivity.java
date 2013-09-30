@@ -13,7 +13,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.VisibleRegion;
 import com.personal.rents.R;
-import com.personal.rents.activities.components.RentMarkerInfoWindowAdapter;
+import com.personal.rents.activities.adapters.RentMarkerInfoWindowAdapter;
 import com.personal.rents.activities.helpers.LocationHelper;
 import com.personal.rents.activities.helpers.RentMarkerBuilder;
 import com.personal.rents.fragments.RentsMapFragment;
@@ -96,6 +96,13 @@ public class RentsMapActivity extends ActionBarActivity implements OnMyLocationB
 			intent.putExtra(ActivitiesContract.LONGITUDE, lastCenterPosition.longitude);
 			startActivity(intent);
 
+			return true;
+		} else if(item.getItemId() == R.id.list_rents_action) {
+			Intent intent = new Intent(this, RentsListActivity.class);
+			intent.putExtra(ActivitiesContract.LATITUDE, lastCenterPosition.latitude);
+			intent.putExtra(ActivitiesContract.LONGITUDE, lastCenterPosition.longitude);
+			startActivity(intent);
+			
 			return true;
 		}
 

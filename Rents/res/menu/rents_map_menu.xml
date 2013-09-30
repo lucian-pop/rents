@@ -6,9 +6,9 @@
 	    android:title="@string/search_action_title"
 	    app:showAsAction="always"/>
 	
-	<item android:id="@+id/new_homes_action"
+	<item android:id="@+id/list_rents_action"
 		android:icon="@drawable/ic_new_rents"
-	    android:title="@string/new_homes_action_title"
+	    android:title="@string/list_rents_action_title"
 	    app:showAsAction="always"/>
 	
 	<item android:id="@+id/user_account_action"

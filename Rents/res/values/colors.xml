@@ -4,7 +4,7 @@
 
     <color name="blue">#33B5E5</color>
 	<color name="blue_pressed">#456F82</color>
-	<color name="blue_link">#3181c3</color>
+	<color name="blue_link">#FF3181c3</color>
 
     <color name="red">#e3325e</color>
 

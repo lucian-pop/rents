@@ -1,4 +1,4 @@
-package com.personal.rents.activities.components;
+package com.personal.rents.activities.adapters;
 
 import android.app.Activity;
 import android.view.View;

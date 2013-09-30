@@ -4,7 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.personal.rents.R;
-import com.personal.rents.activities.components.PlacesSuggestionsAdapter;
+import com.personal.rents.activities.adapters.PlacesSuggestionsAdapter;
 import com.personal.rents.rest.clients.PlacesRESTClient;
 import com.personal.rents.utils.ActivitiesContract;
 import com.personal.rents.utils.Constants;
@@ -80,6 +80,7 @@ public class FilterSearchActivity extends ActionBarActivity {
 				if(position==0) {
 					queryLatitude = mapCenterLatitude;
 					queryLongitude = mapCenterLongitude;
+
 					return;
 				} else if(position==1) {
 					// Get user current location.

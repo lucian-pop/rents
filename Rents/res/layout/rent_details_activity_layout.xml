@@ -46,7 +46,7 @@
 	                android:layout_marginTop="15dp"
 	                android:gravity="center"
 					android:textSize="12sp"
-	                android:text="14 Sep '13"/>
+	                android:text="@string/rent_date_default_text"/>
 	         
 	          <TextView android:id="@+id/rent_price"
 	                android:layout_width="70dp"
@@ -57,7 +57,7 @@
 					android:textSize="12sp"
 					android:textStyle="bold"
 					android:textColor="@color/red"
-	                android:text="15000 RON"/>
+	                android:text="@string/rent_price_default_text"/>
 	        
 	        <ImageButton android:id="@+id/rent_share_btn"
 		   		android:layout_width="wrap_content"
@@ -85,7 +85,7 @@
 	        android:paddingLeft="20dp"
 	        android:paddingRight="20dp"
 	        android:textAppearance="?android:attr/textAppearanceMedium"
-	        android:text="3 cam., 2 bai, 1000 mp"/>
+	        android:text="@string/rent_short_desc_default_text"/>
 	     
 	    <TextView android:id="@+id/rent_party"
 	        android:layout_width="wrap_content"
@@ -127,7 +127,7 @@
 		     style="@style/SectionUnderline"/>
 		 
 		 
-		 <TextView android:id="@+id/rent_location_adress"
+		 <TextView android:id="@+id/rent_location_address"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
 	        android:layout_below="@id/rent_location_underline"
@@ -140,7 +140,7 @@
 		 <TextView android:id="@+id/rent_location"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
-	        android:layout_below="@id/rent_location_adress"
+	        android:layout_below="@id/rent_location_address"
 	        android:paddingLeft="20dp"
 	        android:paddingRight="20dp"
 	        android:textAppearance="?android:attr/textAppearanceMedium"
