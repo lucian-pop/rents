@@ -104,6 +104,11 @@ public class RentsMapActivity extends ActionBarActivity implements OnMyLocationB
 			startActivity(intent);
 			
 			return true;
+		} else if(item.getItemId() == R.id.user_account_action) {
+			Intent intent = new Intent(this, UserRentsActivity.class);
+			startActivity(intent);
+			
+			return true;
 		}
 
 		return false;

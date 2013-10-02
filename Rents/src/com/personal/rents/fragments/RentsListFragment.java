@@ -3,9 +3,11 @@ package com.personal.rents.fragments;
 import java.util.List;
 
 import com.personal.rents.R;
+import com.personal.rents.activities.RentDetailsActivity;
 import com.personal.rents.fragments.adapters.RentsListFragmentAdapter;
 import com.personal.rents.model.Rent;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.View;
@@ -35,6 +37,7 @@ public class RentsListFragment extends ListFragment {
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-		super.onListItemClick(l, v, position, id);
+		Intent intent = new Intent(getActivity(), RentDetailsActivity.class);
+		startActivity(intent);
 	}
 }

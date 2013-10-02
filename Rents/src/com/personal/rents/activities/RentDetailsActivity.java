@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -28,6 +29,18 @@ public class RentDetailsActivity extends ActionBarActivity {
 		getMenuInflater().inflate(R.menu.rent_details_menu, menu);
 
 		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if(item.getItemId() == R.id.user_account_action) {
+			Intent intent = new Intent(this, LoginActivity.class);
+			startActivity(intent);
+			
+			return true;
+		}
+		
+		return false;
 	}
 
 	private void init() {

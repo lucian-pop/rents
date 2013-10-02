@@ -60,6 +60,11 @@ public class RentsListActivity extends ActionBarActivity {
 			startActivity(intent);
 
 			return true;
+		} else if(item.getItemId() == R.id.user_account_action) {
+			Intent intent = new Intent(this, LoginActivity.class);
+			startActivity(intent);
+			
+			return true;
 		}
 		
 		return false;

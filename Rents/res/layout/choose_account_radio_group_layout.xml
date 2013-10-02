@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+    <RadioGroup android:id="@+id/choose_acc_radio_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_margin="10dp"
+        android:orientation="horizontal">
+	        
+		<RadioButton android:id="@+id/tenant_acc_btn"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginRight="10dp"
+	        android:textAppearance="?android:attr/textAppearanceMedium"
+	        android:textColor="@color/black"
+	        android:text="Caut chirie"
+	        android:checked="true" />
+		
+		 <RadioButton android:id="@+id/offerer_acc_btn"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginLeft="10dp"
+	        android:textAppearance="?android:attr/textAppearanceMedium"
+	        android:textColor="@color/black"
+	        android:text="Ofer chirie" />
+	</RadioGroup>
+</merge>

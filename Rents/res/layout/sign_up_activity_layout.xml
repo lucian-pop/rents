@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+	<RelativeLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content" >
+
+	    <include
+	        android:id="@+id/include1"
+	        layout="@layout/choose_account_radio_group_layout" />
+
+	    <EditText
+	        android:id="@+id/username"
+	        style="@style/CreateAccountInputStyle"
+	        android:layout_below="@id/choose_acc_radio_group"
+	        android:hint="Email"
+	        android:inputType="textEmailAddress" />
+
+	    <EditText
+	        android:id="@+id/password"
+	        style="@style/CreateAccountInputStyle"
+	        android:layout_below="@+id/username"
+	        android:hint="Parola"
+	        android:inputType="textPassword" />
+
+	    <EditText
+	        android:id="@+id/repeated_password"
+	        style="@style/CreateAccountInputStyle"
+	        android:layout_below="@+id/password"
+	        android:hint="Repeta parola"
+	        android:inputType="textPassword" />
+
+	    <EditText
+	        android:id="@+id/phonenumber"
+	        style="@style/CreateAccountInputStyle"
+	        android:layout_below="@+id/repeated_password"
+	        android:layout_marginBottom="10dp"
+	        android:inputType="phone"
+	        android:hint="Telefon"/>
+
+	    <Button
+	        android:id="@+id/create_acc_btn"
+	        android:layout_width="match_parent"
+	        android:layout_height="48dp"
+	        android:layout_below="@+id/phonenumber"
+	        android:layout_margin="10dp"
+	        android:background="@drawable/blue_btn_selector"
+	        android:text="Creeaza cont"
+	        android:textAppearance="?android:attr/textAppearanceMedium"
+	        android:textColor="@color/white"
+	        android:textStyle="bold" />
+	</RelativeLayout>
+
+</ScrollView>

@@ -12,11 +12,13 @@ import com.personal.rents.utils.RangeMessageBuilder;
 import com.personal.rents.views.DelayAutocompleteTextView;
 import com.personal.rents.views.RangeSeekBar;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -59,6 +61,18 @@ public class FilterSearchActivity extends ActionBarActivity {
 		return true;
 	}
 	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if(item.getItemId() == R.id.user_account_action) {
+			Intent intent = new Intent(this, LoginActivity.class);
+			startActivity(intent);
+			
+			return true;
+		}
+		
+		return false;
+	}
+
 	private void init() {
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		
