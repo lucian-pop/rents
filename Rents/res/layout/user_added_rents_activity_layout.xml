@@ -32,7 +32,7 @@
 	        android:textAppearance="?android:attr/textAppearanceMedium"
 	        android:textStyle="bold"
             android:textColor="@color/white"
-	        android:text="Anuleaza"
+	        android:text="@string/reset_btn_text"
 	        android:onClick="onUndoDelBtnClick"/>
 	    
 	     <Button android:id="@+id/confirm_del_btn"

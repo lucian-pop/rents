@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    
+    <LinearLayout android:id="@+id/edit_confirmation_btns"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentBottom="true"
+	    android:orientation="horizontal">
+	    
+	    <Button android:id="@+id/undo_edit_btn"
+	        android:layout_width="0dp"
+	        android:layout_height="48dp"
+	        android:layout_weight="1"
+	        android:background="@drawable/blue_btn_selector"
+	        android:textAppearance="?android:attr/textAppearanceMedium"
+	        android:textStyle="bold"
+	        android:textColor="@color/white"
+	        android:text="@string/reset_btn_text"
+	        android:onClick="onUndoBtnClick"/>
+	    
+	    <Button android:id="@+id/confirm_edit_btn"
+	        android:layout_width="0dp"
+	        android:layout_height="48dp"
+	        android:layout_weight="1"
+	        android:layout_marginLeft="1dp"
+	        android:background="@drawable/blue_btn_selector"
+	        android:textAppearance="?android:attr/textAppearanceMedium"
+	        android:textStyle="bold"
+	        android:textColor="@color/white"
+	        android:text="Salveaza"
+	        android:onClick="onConfirmBtnClick"/>
+	</LinearLayout>
+    
+	<ScrollView  android:id="@+id/user_editable_details"
+	  	android:layout_width="match_parent"
+	   	android:layout_height="wrap_content"
+	    android:layout_above="@id/edit_confirmation_btns"
+        android:layout_alignParentTop="true">
+
+	    <LinearLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="vertical">
+	        
+		    <EditText android:id="@+id/user_email"
+			    android:layout_width="match_parent"
+			    android:layout_height="wrap_content"
+			    android:layout_marginTop="10dp"
+			    android:layout_marginLeft="10dp"
+			    android:layout_marginRight="10dp"
+			    android:textAppearance="?android:attr/textAppearanceMedium"
+			    android:text="Email"
+			    android:inputType="textEmailAddress"/>
+			
+			<EditText android:id="@+id/user_phone"
+			    android:layout_width="match_parent"
+			    android:layout_height="wrap_content"
+			    android:layout_marginTop="10dp"
+			    android:layout_marginLeft="10dp"
+			    android:layout_marginRight="10dp"
+			    android:textAppearance="?android:attr/textAppearanceMedium"
+			    android:text="Telefon"
+			    android:inputType="phone"/>
+			
+			<EditText android:id="@+id/user_password"
+			    android:layout_width="match_parent"
+			    android:layout_height="wrap_content"
+			    android:layout_marginTop="10dp"
+			    android:layout_marginLeft="10dp"
+			    android:layout_marginRight="10dp"
+			    android:textAppearance="?android:attr/textAppearanceMedium"
+			    android:hint="Parola"
+			    android:inputType="textPassword"/>
+			
+			<EditText android:id="@+id/user_repeated_password"
+			    android:layout_width="match_parent"
+			    android:layout_height="wrap_content"
+			    android:layout_margin="10dp"
+			    android:textAppearance="?android:attr/textAppearanceMedium"
+			    android:hint="Repeta parola"
+			    android:inputType="textPassword"/>"
+	    </LinearLayout>
+    </ScrollView>"
+</RelativeLayout>

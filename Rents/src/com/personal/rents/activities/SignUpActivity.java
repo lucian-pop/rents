@@ -18,6 +18,8 @@ public class SignUpActivity extends ActionBarActivity{
 
 	private void init() {
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setTitle("Creare cont");
+
 		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 	}
 }

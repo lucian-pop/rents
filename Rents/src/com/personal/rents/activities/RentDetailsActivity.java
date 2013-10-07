@@ -45,6 +45,7 @@ public class RentDetailsActivity extends ActionBarActivity {
 
 	private void init() {
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setTitle("Detalii chirie");
 		
 		final TextView phoneNumberTextView = (TextView)findViewById(R.id.rent_call_btn);
 		phoneNumberTextView.setOnClickListener(new View.OnClickListener() {

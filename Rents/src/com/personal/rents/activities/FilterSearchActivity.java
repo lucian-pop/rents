@@ -21,6 +21,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
@@ -75,7 +76,9 @@ public class FilterSearchActivity extends ActionBarActivity {
 
 	private void init() {
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		
+		getSupportActionBar().setTitle("Cautare chirii");
+		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
 			mapCenterLatitude = extras.getDouble(ActivitiesContract.LATITUDE);

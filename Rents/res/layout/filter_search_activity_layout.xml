@@ -11,7 +11,7 @@
 	
 		<Button android:id="@+id/search_reset_btn"
 			style="@style/BottomButtonsStyle"
-			android:text="@string/search_reset_btn_text"/>
+			android:text="@string/reset_btn_text"/>
 		
 		<Button android:id="@+id/search_submit_btn"
 			style="@style/BottomButtonsStyle"
@@ -22,6 +22,7 @@
 	<ScrollView android:id="@+id/search_scrollable_part"
 	  	android:layout_width="match_parent"
 	   	android:layout_height="wrap_content"
+	   	android:layout_alignParentTop="true"
 	   	android:layout_above="@id/search_fixed_part">
 	    	
 	    <LinearLayout

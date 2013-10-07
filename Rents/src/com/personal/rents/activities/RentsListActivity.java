@@ -71,7 +71,8 @@ public class RentsListActivity extends ActionBarActivity {
 
 	private void init() {
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		
+		getSupportActionBar().setTitle("Lista chirii");
+
 		rents = new ArrayList<Rent>(6);
 		Rent rent = new Rent(new LatLng(10, 10), 160);
 		for(int i=0; i < 6; i++) {

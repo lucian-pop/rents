@@ -22,10 +22,11 @@
 	<string name="add_to_favorites_action_title">Salveaza</string>
 	<string name="signout_action_title">Iesire cont</string>
 	
+	<string name="reset_btn_text">Anuleaza</string>
+	
 	<!-- Filter search activity -->
 	<string name="last_location">Ultima locatie</string>
 	<string name="current_location">Locatia curenta</string>
-	<string name="search_reset_btn_text">Reseteaza</string>
 	<string name="search_submit_btn_text">Cauta</string>
 	<string name="autocomplete_places_input_text">Locatie...</string>
 	<string name="rent_price_range_text">Alegeti pretul</string>

@@ -8,9 +8,11 @@ import com.personal.rents.R;
 import com.personal.rents.fragments.SwipeDismissRentsListFragment;
 import com.personal.rents.model.Rent;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -50,6 +52,18 @@ public class UserAddedRentsActivity extends ActionBarActivity {
 		return true;
 	}
 	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if(item.getItemId() == R.id.edit_account_action) {
+			Intent intent = new Intent(this, EditUserAccountActivity.class);
+			startActivity(intent);
+			
+			return true;
+		}
+		
+		return false;
+	}
+
 	public void onUndoDelBtnClick(View view) {
 		dismissedCounter = 0;
 		delConfirmationBtnsViewGroup.setVisibility(View.GONE);

@@ -36,6 +36,7 @@ public class SwipeDismissRentsListFragment extends ListFragment {
 		rentsListAdapter = new RentsListFragmentAdapter(getActivity(), 
 				R.layout.rents_list_item_layout, rents);
 		setListAdapter(rentsListAdapter);
+
 		ListView rentsListView = getListView();
 		SwipeDismissListViewTouchListener touchListener = 
 				new SwipeDismissListViewTouchListener(rentsListView, 
@@ -44,9 +45,10 @@ public class SwipeDismissRentsListFragment extends ListFragment {
 					@Override
 					public void onDismiss(ListView listView, int[] reverseSortedPositions) {
 						for (int position : reverseSortedPositions) {
-                            rentsListAdapter.remove(rentsListAdapter.getItem(position));
-                            rentsListAdapter.notifyDataSetChanged();
-                            onListItemDismissListener.onDismiss();
+							if(position < rentsListAdapter.getCount()) {
+	                            rentsListAdapter.remove(rentsListAdapter.getItem(position));
+	                            onListItemDismissListener.onDismiss();
+							}
                         }
 					}
 					

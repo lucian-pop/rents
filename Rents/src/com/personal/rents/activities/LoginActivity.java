@@ -20,6 +20,7 @@ public class LoginActivity extends ActionBarActivity {
 	
 	private void init() {
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setTitle("Autentificare");
 		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 	}
 	
