@@ -20,6 +20,7 @@
 	<string name="list_rents_action_title">Cele mai noi</string>
 	<string name="user_account_action_title">Contul tau</string>
 	<string name="add_to_favorites_action_title">Salveaza</string>
+	<string name="signout_action_title">Iesire cont</string>
 	
 	<!-- Filter search activity -->
 	<string name="last_location">Ultima locatie</string>
@@ -63,4 +64,8 @@
         <item>2 bai</item>
         <item>3+ bai</item>
     </string-array>
+    
+	<!-- User added rents activity -->
+	<string name="add_rent_action_title">Adauga chirie</string>
+	<string name="edit_account_action_title">Editeaza cont</string>
 </resources>

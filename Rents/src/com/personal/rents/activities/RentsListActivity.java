@@ -31,16 +31,15 @@ public class RentsListActivity extends ActionBarActivity {
 		Bundle bundle;
 		if(savedInstanceState != null) {
 			bundle = savedInstanceState;
-			
-			// get rents from the fragment saved state.
 		} else {
+			// get bundle from the intent (send by search activity or map activity).
 			bundle = getIntent().getExtras();
-			mapCenterLatitude = bundle.getDouble(ActivitiesContract.LATITUDE);
-			mapCenterLongitude = bundle.getDouble(ActivitiesContract.LONGITUDE);
-
-			// get rents from the intent.
 		}
 		
+		mapCenterLatitude = bundle.getDouble(ActivitiesContract.LATITUDE);
+		mapCenterLongitude = bundle.getDouble(ActivitiesContract.LONGITUDE);
+		// populate rents from the bundle
+
 		init();
 	}
 	
@@ -78,7 +77,6 @@ public class RentsListActivity extends ActionBarActivity {
 		for(int i=0; i < 6; i++) {
 			rents.add(rent);
 		}
-		
 		RentsListFragment rentsListFragment = (RentsListFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.rents_list_fragment);
 		rentsListFragment.setRents(rents);

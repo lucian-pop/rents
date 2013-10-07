@@ -30,7 +30,7 @@ import android.widget.ImageView;
  *            or BigDecimal.
  */
 @SuppressLint("ViewConstructor")
-public class RangeSeekBar<T extends Number> extends ImageView {
+public class RangeSeekBarView<T extends Number> extends ImageView {
         private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
         private final Bitmap thumbImage = BitmapFactory.decodeResource(getResources(), 
@@ -66,7 +66,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
         private OnRangeSeekBarChangeListener<T> listener;
 
         /**
-         * Default color of a {@link RangeSeekBar}, #FF33B5E5. This is also known as "Ice Cream
+         * Default color of a {@link RangeSeekBarView}, #FF33B5E5. This is also known as "Ice Cream
          * Sandwich" blue.
          */
         public static final int DEFAULT_COLOR = Color.argb(0xFF, 0x33, 0xB5, 0xE5);
@@ -108,7 +108,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
          *             Will be thrown if min/max value type is not one of Long, Double, Integer, 
          *             Float, Short, Byte or BigDecimal.
          */
-        public RangeSeekBar(T absoluteMinValue, T absoluteMaxValue, Context context) 
+        public RangeSeekBarView(T absoluteMinValue, T absoluteMaxValue, Context context) 
         		throws IllegalArgumentException {
             super(context);
             this.absoluteMinValue = absoluteMinValue;
@@ -597,7 +597,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
          *            The Number type the RangeSeekBar has been declared with.
          */
         public interface OnRangeSeekBarChangeListener<T> {
-        	public void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar, T minValue, T maxValue);
+        	public void onRangeSeekBarValuesChanged(RangeSeekBarView<?> bar, T minValue, T maxValue);
         }
 
         /**

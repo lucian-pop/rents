@@ -1,5 +1,6 @@
 package com.personal.rents.fragments.adapters;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.personal.rents.R;
@@ -12,9 +13,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 
-public class RentsListFragmentAdapter extends ArrayAdapter<Rent> {
+public class RentsListFragmentAdapter extends ArrayAdapter<Rent> implements ListAdapter {
 
 	private LayoutInflater inflater;
 	
@@ -47,7 +49,7 @@ public class RentsListFragmentAdapter extends ArrayAdapter<Rent> {
 	
 	@Override
 	public int getCount() {
-		return 6;
+		return rents.size();
 	}
 
 	@Override

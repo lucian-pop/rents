@@ -12,7 +12,7 @@
 	    app:showAsAction="always"/>
 	
 	<item android:id="@+id/user_account_action"
-		android:icon="@drawable/ic_user_account"
+		android:icon="@drawable/ic_user_rents"
 	    android:title="@string/user_account_action_title"
 	    app:showAsAction="always"/>
 	

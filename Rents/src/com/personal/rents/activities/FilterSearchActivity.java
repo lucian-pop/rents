@@ -10,7 +10,7 @@ import com.personal.rents.utils.ActivitiesContract;
 import com.personal.rents.utils.Constants;
 import com.personal.rents.utils.RangeMessageBuilder;
 import com.personal.rents.views.DelayAutocompleteTextView;
-import com.personal.rents.views.RangeSeekBar;
+import com.personal.rents.views.RangeSeekBarView;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -133,12 +133,12 @@ public class FilterSearchActivity extends ActionBarActivity {
 		
 		ViewGroup priceChooserWrapper = (ViewGroup) findViewById(R.id.rent_price_chooser);
 		final TextView selectedPriceRange = (TextView) findViewById(R.id.rent_price_range);
-		RangeSeekBar<Integer> priceChooser = new RangeSeekBar<Integer>(MIN_PRICE, MAX_PRICE, this);
+		RangeSeekBarView<Integer> priceChooser = new RangeSeekBarView<Integer>(MIN_PRICE, MAX_PRICE, this);
 		priceChooser.setNotifyWhileDragging(true);
 		priceChooser.setOnRangeSeekBarChangeListener(
-				new RangeSeekBar.OnRangeSeekBarChangeListener<Integer>() {
+				new RangeSeekBarView.OnRangeSeekBarChangeListener<Integer>() {
 			@Override
-			public void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar, Integer minValue, 
+			public void onRangeSeekBarValuesChanged(RangeSeekBarView<?> bar, Integer minValue, 
 					Integer maxValue) {
 				selectedPriceRange.setText(RangeMessageBuilder.priceRangeMessageBuilder(minValue,
 						maxValue, MIN_PRICE, MAX_PRICE));
@@ -148,12 +148,12 @@ public class FilterSearchActivity extends ActionBarActivity {
 		
 		ViewGroup surfaceChooserWrapper = (ViewGroup) findViewById(R.id.rent_surface_chooser);
 		final TextView selectedSurfaceRange = (TextView) findViewById(R.id.rent_surface_range);
-		RangeSeekBar<Integer> surfaceChooser = new RangeSeekBar<Integer>(MIN_SURFACE, MAX_SURFACE,
+		RangeSeekBarView<Integer> surfaceChooser = new RangeSeekBarView<Integer>(MIN_SURFACE, MAX_SURFACE,
 				this);
 		surfaceChooser.setNotifyWhileDragging(true);
-		surfaceChooser.setOnRangeSeekBarChangeListener(new RangeSeekBar.OnRangeSeekBarChangeListener<Integer>() {
+		surfaceChooser.setOnRangeSeekBarChangeListener(new RangeSeekBarView.OnRangeSeekBarChangeListener<Integer>() {
 			@Override
-			public void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar, Integer minValue, 
+			public void onRangeSeekBarValuesChanged(RangeSeekBarView<?> bar, Integer minValue, 
 					Integer maxValue) {
 				selectedSurfaceRange.setText(RangeMessageBuilder.surfaceRangeMessageBuilder(minValue,
 						maxValue, MIN_SURFACE, MAX_SURFACE));
