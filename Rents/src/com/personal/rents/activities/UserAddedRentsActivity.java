@@ -74,6 +74,11 @@ public class UserAddedRentsActivity extends ActionBarActivity {
 		dismissedCounter = 0;
 		delConfirmationBtnsViewGroup.setVisibility(View.GONE);
 	}
+	
+	public void onAddRentBtnClick(View view) {
+		Intent intent = new Intent(this, AddRentActivity.class);
+		startActivity(intent);
+	}
 
 	private void init() {
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);

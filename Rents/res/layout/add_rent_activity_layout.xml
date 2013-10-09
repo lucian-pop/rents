@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+	<RelativeLayout 
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:background="#1F939597">
+	    
+	    <TextView android:id="@+id/locate_rent_btn"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentTop="true"
+	        android:layout_marginLeft="10dp"
+	        android:layout_marginRight="10dp"
+	        android:layout_marginTop="10dp"
+	        android:padding="10dp"
+	        android:gravity="center|left"
+	        android:background="@drawable/locate_rent_btn_selector"
+	        android:drawableLeft="@drawable/custom_location"
+	        android:drawablePadding="10dp"
+	        android:textAppearance="?android:attr/textAppearanceMedium"
+	        android:textColor="@color/blue"
+	        android:text="Localizeaza imobil"
+	        android:clickable="true"
+	        android:onClick="onLocateRentBtnClick"/>
+
+	    <RelativeLayout android:id="@+id/address_details"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@id/locate_rent_btn"
+	        android:layout_marginLeft="10dp"
+	        android:layout_marginRight="10dp"
+	        android:background="@color/white"
+	        android:visibility="gone">
+	   		    
+		    <LinearLayout android:id="@+id/street_details"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_alignParentTop="true"
+		        android:layout_marginLeft="10dp"
+		        android:layout_marginRight="10dp"
+		        android:orientation="horizontal">
+		        
+		        <EditText android:id="@+id/street_no"
+			        android:layout_width="0dp"
+			        android:layout_height="wrap_content"
+			        android:layout_weight="1"
+			        android:textAppearance="?android:attr/textAppearanceMedium"
+			        android:text="31"
+			        android:inputType="number"/>
+		        
+				<EditText android:id="@+id/street_name"
+			        android:layout_width="0dp"
+			        android:layout_height="wrap_content"
+			        android:layout_weight="3"
+			        android:textAppearance="?android:attr/textAppearanceMedium"
+			        android:text="Observatorului"
+			        android:inputType="text"/>
+			
+		    </LinearLayout>
+	
+		    <EditText android:id="@+id/locality"
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content"
+			        android:layout_below="@id/street_details"
+			        android:layout_marginTop="10dp"
+			        android:layout_marginLeft="10dp"
+			        android:layout_marginRight="10dp"
+			        android:textAppearance="?android:attr/textAppearanceMedium"
+			        android:text="Cluj-Napoca"
+			        android:inputType="text"/>
+		    
+		    <EditText android:id="@+id/other_address_details"
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content"
+			        android:layout_below="@id/locality"
+			        android:layout_margin="10dp"
+			        android:textAppearance="?android:attr/textAppearanceMedium"
+			        android:hint="Bloc, Scara, Ap. (daca este cazul)"
+			        android:inputType="text"/>
+	    </RelativeLayout>
+	</RelativeLayout>
+</ScrollView>

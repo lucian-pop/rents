@@ -77,6 +77,18 @@
                 android:name="android.support.PARENT_ACTIVITY"
             	android:value="com.personal.rents.activities.RentsMapActivity"/>
         </activity>
+        
+		<activity android:name="com.personal.rents.activities.AddRentActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+            	android:value="com.personal.rents.activities.UserAddedRentsActivity"/>
+        </activity>
+        
+		<activity android:name="com.personal.rents.activities.AddLocationActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+            	android:value="com.personal.rents.activities.AddRentActivity"/>
+        </activity>
 
         <meta-data
 		    android:name="com.google.android.maps.v2.API_KEY"
