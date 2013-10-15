@@ -34,10 +34,10 @@ public class RangeSeekBarView<T extends Number> extends ImageView {
         private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
         private final Bitmap thumbImage = BitmapFactory.decodeResource(getResources(), 
-        		R.drawable.seek_thumb_normal);
+        		R.drawable.app_seek_thumb_normal);
 
         private final Bitmap thumbPressedImage = BitmapFactory.decodeResource(getResources(),
-        		R.drawable.seek_thumb_pressed);
+        		R.drawable.app_seek_thumb_pressed);
        
         private final float thumbWidth = thumbImage.getWidth();
 

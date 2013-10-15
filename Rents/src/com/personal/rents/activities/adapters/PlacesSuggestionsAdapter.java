@@ -20,8 +20,6 @@ public class PlacesSuggestionsAdapter extends ArrayAdapter<String> implements Fi
 	
 	private List<String> placesNames = new ArrayList<String>();
 	
-	private List<String> placesRefs = new ArrayList<String>(); 
-	
 	private double latitude;
 	
 	private double longitude;
@@ -30,31 +28,33 @@ public class PlacesSuggestionsAdapter extends ArrayAdapter<String> implements Fi
 
 	private LayoutInflater inflater;
 	
-	private final String lastLocation;
+	private String lastLocation;
 	
-	private final String currentLocation;
+	private String currentLocation;
+	
+	private boolean addLastAndCurrLocation;
 	
 	private static class PlaceViewHolder {
 		TextView placeName;
 		TextView placeAddress;
 	}
 
-	public PlacesSuggestionsAdapter(Context context, int layoutId,
-			double latitude, double longitude) {
+	public PlacesSuggestionsAdapter(Context context, int layoutId, double latitude, double longitude, 
+			boolean addLastAndCurrLocation) {
 		super(context, layoutId);
 		this.latitude = latitude;
 		this.longitude = longitude;
 		this.layoutId = layoutId;
-		lastLocation =  context.getString(R.string.last_location);
-		currentLocation = context.getString(R.string.current_location);
-		placesNames.add(lastLocation);
-		placesNames.add(currentLocation);
+		this.addLastAndCurrLocation = addLastAndCurrLocation;
+		
+		if(addLastAndCurrLocation) {
+			lastLocation =  context.getString(R.string.last_location);
+			currentLocation = context.getString(R.string.current_location);
+			placesNames.add(lastLocation);
+			placesNames.add(currentLocation);
+		}
 		
 		inflater = ((Activity)context).getLayoutInflater();
-	}
-
-	public List<String> getPlacesRefs() {
-		return placesRefs;
 	}
 	
 	@Override
@@ -75,12 +75,13 @@ public class PlacesSuggestionsAdapter extends ArrayAdapter<String> implements Fi
                 FilterResults filterResults = new FilterResults();
                 if (constraint != null) {
                 	placesNames.clear();
-                	placesRefs.clear();
-                	placesNames.add(lastLocation);
-                	placesNames.add(currentLocation);
-                    PlacesRESTClient
-                    	.getPlacesSuggestions(constraint.toString(), latitude, longitude, 
-                    				placesNames, placesRefs);
+                	if(addLastAndCurrLocation) {
+                    	placesNames.add(lastLocation);
+                    	placesNames.add(currentLocation);
+                	}
+
+                	placesNames.addAll(PlacesRESTClient.getPlacesSuggestions(constraint.toString(),
+                			latitude, longitude));
                     filterResults.values = placesNames;
                     filterResults.count = placesNames.size();
                 }
@@ -90,11 +91,13 @@ public class PlacesSuggestionsAdapter extends ArrayAdapter<String> implements Fi
 
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
-                if (results != null && results.count > 0) {
-                    notifyDataSetChanged();
-                } else {
-                    notifyDataSetInvalidated();
-                }
+// For some reason List isn't updated
+//                if (results != null && results.count > 0) {
+//                    notifyDataSetChanged();
+//                } else {
+//                    notifyDataSetInvalidated();
+//                }
+            	notifyDataSetChanged();
             }
 		};
 		
@@ -114,6 +117,7 @@ public class PlacesSuggestionsAdapter extends ArrayAdapter<String> implements Fi
 		} else {
 			placeViewHolder = (PlaceViewHolder) convertView.getTag();
 		}
+
 		String place = placesNames.get(position);
 		int addressIndex = place.indexOf(44);
 		if(addressIndex < 0) {

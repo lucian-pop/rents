@@ -28,7 +28,7 @@
 	        android:layout_width="0dp"
 	        android:layout_height="48dp"
 	        android:layout_weight="1"
-	        android:background="@drawable/blue_btn_selector"
+	        android:background="@drawable/app_blue_btn_selector"
 	        android:textAppearance="?android:attr/textAppearanceMedium"
 	        android:textStyle="bold"
             android:textColor="@color/white"
@@ -40,7 +40,7 @@
 	        android:layout_height="48dp"
 	        android:layout_weight="1"
 	        android:layout_marginLeft="1dp"
-	        android:background="@drawable/blue_btn_selector"
+	        android:background="@drawable/app_blue_btn_selector"
 	        android:textAppearance="?android:attr/textAppearanceMedium"
 	        android:textStyle="bold"
             android:textColor="@color/white"
@@ -65,7 +65,7 @@
 		    android:layout_marginTop="10dp"
 		    android:layout_marginRight="10dp"
 		    android:layout_gravity="right"
-		    android:background="@drawable/add_rent_btn_selector"
+		    android:background="@drawable/app_add_rent_btn_selector"
 		    android:onClick="onAddRentBtnClick"/>
 	</FrameLayout>
 </RelativeLayout>

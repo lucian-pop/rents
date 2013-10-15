@@ -81,13 +81,13 @@
 		<activity android:name="com.personal.rents.activities.AddRentActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-            	android:value="com.personal.rents.activities.UserAddedRentsActivity"/>
+            	android:value="com.personal.rents.activities.RentsMapActivity"/>
         </activity>
         
 		<activity android:name="com.personal.rents.activities.AddLocationActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-            	android:value="com.personal.rents.activities.AddRentActivity"/>
+            	android:value="com.personal.rents.activities.RentsMapActivity"/>
         </activity>
 
         <meta-data

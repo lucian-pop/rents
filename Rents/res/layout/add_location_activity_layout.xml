@@ -1,11 +1,146 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
     
-		<fragment android:id="@+id/map"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          class="com.google.android.gms.maps.SupportMapFragment"/>
-</LinearLayout>
+	<fragment android:id="@+id/map"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		class="com.google.android.gms.maps.SupportMapFragment"/>
+	
+	<RelativeLayout android:id="@+id/add_location_details"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_gravity="bottom"
+	    android:background="@color/white"
+	    android:visibility="gone">
+	   
+	    <LinearLayout android:id="@+id/street"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="horizontal">
+		    
+		    <EditText android:id="@+id/street_name"
+		        android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="4"
+		        android:layout_marginTop="5dp"
+		        android:layout_marginLeft="10dp"
+		        android:layout_marginRight="10dp"
+		        android:textAppearance="?android:attr/textAppearanceMedium"
+		        android:textColor="@color/black"
+		        android:hint="Strada"
+		        android:maxLines="1"
+		        android:inputType="text"
+		        android:imeOptions="actionDone"/>
+		    
+		    <EditText android:id="@+id/street_no"
+		        android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="1"
+		        android:layout_marginTop="5dp"
+		        android:layout_marginLeft="10dp"
+		        android:layout_marginRight="10dp"
+		        android:textAppearance="?android:attr/textAppearanceMedium"
+		        android:textColor="@color/black"
+		        android:hint="Nr."
+		        android:maxLines="1"
+		        android:inputType="number"
+		        android:imeOptions="actionDone"/>
+	    </LinearLayout>
+	    
+	    <LinearLayout android:id="@+id/other_neighborhood"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@id/street"
+	        android:orientation="horizontal">
+		    
+	        <EditText android:id="@+id/other_details"
+		        android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="1"
+		        android:layout_marginLeft="10dp"
+		        android:layout_marginRight="10dp"
+		        android:textAppearance="?android:attr/textAppearanceMedium"
+		        android:textColor="@color/black"
+		        android:hint="Sc., Bl., Ap."
+		        android:maxLines="1"
+		        android:inputType="text"
+		        android:imeOptions="actionDone"/>
+		    
+		    <EditText android:id="@+id/neighborhood"
+		        android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="1"
+		        android:layout_marginLeft="10dp"
+		        android:layout_marginRight="10dp"
+		        android:textAppearance="?android:attr/textAppearanceMedium"
+		        android:textColor="@color/black"
+		        android:hint="Cartier"
+		        android:maxLines="1"
+		        android:inputType="text"
+		        android:imeOptions="actionDone"/>
+	        
+	    </LinearLayout>
+	    
+	    <LinearLayout android:id="@+id/locality_adm_area"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@id/other_neighborhood"
+	        android:orientation="horizontal">
+		    
+	        <EditText android:id="@+id/locality"
+		        android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="1"
+		        android:layout_marginLeft="10dp"
+		        android:layout_marginRight="10dp"
+		        android:textAppearance="?android:attr/textAppearanceMedium"
+		        android:textColor="@color/black"
+		        android:hint="Localitate"
+		        android:maxLines="1"
+		        android:inputType="text"
+		        android:imeOptions="actionDone"/>
+		    
+		    <EditText android:id="@+id/adm_area"
+		        android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="1"
+		        android:layout_marginLeft="10dp"
+		        android:layout_marginRight="10dp"
+		        android:textAppearance="?android:attr/textAppearanceMedium"
+		        android:textColor="@color/black"
+		        android:hint="Judet"
+		        android:maxLines="1"
+		        android:inputType="text"
+		        android:imeOptions="actionDone"/>
+	    </LinearLayout>
+	    
+		<LinearLayout android:id="@+id/reset_save_btns"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_below="@id/locality_adm_area"
+		    android:orientation="horizontal">
+		
+			<Button android:id="@+id/reset_btn"
+				android:layout_width="0dp"
+				android:layout_height="48dp"
+				android:layout_weight="1"
+				android:layout_margin="15dp"
+				android:background="@drawable/app_blue_btn_selector"
+				android:textColor="@color/white"
+				android:textStyle="bold"
+				android:text="@string/reset_btn_text"
+				android:onClick="onResetBtnClick"/>
+			
+			<Button android:id="@+id/save_btn"
+				android:layout_width="0dp"
+				android:layout_height="48dp"
+				android:layout_weight="1"
+				android:layout_margin="15dp"
+				android:background="@drawable/app_blue_btn_selector"
+				android:textColor="@color/white"
+				android:textStyle="bold"
+				android:text="Salveaza"
+				android:onClick="onSaveBtnClick"/>
+		</LinearLayout>
+	</RelativeLayout>
+</merge>

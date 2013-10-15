@@ -16,7 +16,7 @@
 	            android:layout_height="160dp"
 	            android:layout_margin="10dp"
 	            android:layout_gravity="top|center"
-	            android:src="@drawable/rent_img"
+	            android:src="@drawable/app_rent_img"
 	            android:contentDescription="@string/rent_default_img_desc"/>
 			
 			<ImageButton android:id="@+id/left_arrow"
@@ -24,19 +24,19 @@
 			    android:layout_height="wrap_content"
 			    android:layout_gravity="left|center_vertical"
 			    android:layout_marginLeft="10dp"
-			    android:background="@drawable/left_arrow_selector"/>
+			    android:background="@drawable/app_left_arrow_selector"/>
 			
 			<ImageButton android:id="@+id/right_arrow"
 			    android:layout_width="wrap_content"
 			    android:layout_height="wrap_content"
 			    android:layout_gravity="right|center_vertical"
 			    android:layout_marginRight="10dp"
-			    android:background="@drawable/right_arrow_selector"/>
+			    android:background="@drawable/app_right_arrow_selector"/>
 			
 			<ImageView android:id="@+id/rent_sticky_note"
 	            android:layout_width="70dp"
 	            android:layout_height="65dp"
-	            android:src="@drawable/rent_sticky_note"
+	            android:src="@drawable/app_rent_sticky_note"
 	            android:contentDescription="@string/rent_sticky_note_img_desc"/>
 	        
 	         <TextView android:id="@+id/rent_post_date"
@@ -64,7 +64,7 @@
 		    	android:layout_height="wrap_content"
 		    	android:layout_marginTop="5dp"
 		    	android:layout_gravity="top|right"
-		    	android:background="@drawable/rent_share_btn_selector"
+		    	android:background="@drawable/app_rent_share_btn_selector"
 		    	android:contentDescription="@string/share_app_img_desc" />
 	
 		</FrameLayout>
@@ -103,9 +103,9 @@
 	 		android:layout_below="@id/rent_party"
 	 		android:layout_marginTop="2dp"
 			android:layout_marginLeft="20dp"
-			android:drawableLeft="@drawable/call_btn"
+			android:drawableLeft="@drawable/app_call_btn"
 			android:drawablePadding="5dp"
-			android:background="@drawable/text_btn_selector"
+			android:background="@drawable/app_text_btn_selector"
 			android:textAppearance="?android:attr/textAppearanceMedium"
 			android:textColor="@color/blue"
 	 		android:text="0741 060 776"
@@ -155,7 +155,7 @@
 			android:layout_marginLeft="20dp"
 			android:gravity="center_vertical"
 			android:paddingRight="5dp"
-			android:background="@drawable/text_btn_selector"
+			android:background="@drawable/app_text_btn_selector"
 			android:textAppearance="?android:attr/textAppearanceMedium"
 			android:textColor="@color/blue"
 	 		android:text="Directionare"
@@ -182,7 +182,7 @@
 	 		android:gravity="center_vertical"
 			android:paddingLeft="5dp"
 			android:paddingRight="20dp"
-			android:background="@drawable/text_btn_selector"
+			android:background="@drawable/app_text_btn_selector"
 			android:textAppearance="?android:attr/textAppearanceMedium"
 			android:textColor="@color/blue"
 	 		android:text="Imprejurimi"
@@ -221,7 +221,7 @@
 			android:layout_below="@id/rent_desc"
 			android:layout_alignParentRight="true"
 			android:layout_marginRight="20dp"
-			android:background="@drawable/down_arrow"
+			android:background="@drawable/app_down_arrow"
 			android:clickable="true"/>
 			
 		 <ImageButton android:id="@+id/less_desc"
@@ -230,7 +230,7 @@
 		    android:layout_below="@id/rent_desc"
 			android:layout_alignParentRight="true"
 			android:layout_marginRight="20dp"
-		    android:background="@drawable/up_arrow"
+		    android:background="@drawable/app_up_arrow"
 		    android:clickable="true"
 		    android:visibility="invisible"/>
 		 
@@ -239,7 +239,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_below="@id/rent_desc"
 	        android:layout_marginTop="15dp"
-			android:drawableLeft="@drawable/checked"
+			android:drawableLeft="@drawable/app_checked"
 			android:drawablePadding="5dp"
 	        android:paddingLeft="20dp"
 	        android:paddingRight="20dp"

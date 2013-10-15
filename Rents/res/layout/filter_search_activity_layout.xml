@@ -35,7 +35,9 @@
 				style="@style/SearchPageRowStyle"
 	        	android:drawableLeft="@drawable/ic_search"
 	        	android:drawablePadding="5dp"
-	        	android:hint="@string/autocomplete_places_input_text"/>
+	        	android:hint="@string/autocomplete_places_input_text"
+	        	android:inputType="text"
+       			android:imeOptions="actionDone"/>
 		    
 		    <TextView android:id="@+id/rent_price_range"
 		       	style="@style/RangeSelectionStyle"
@@ -89,7 +91,7 @@
 		    
 		    <CheckBox android:id="@+id/pets_allowed"
 		        style="@style/SearchPageRowStyle"
-		        android:button="@drawable/checkbox_selector"
+		        android:button="@drawable/app_checkbox_selector"
 		        android:textAppearance="?android:attr/textAppearanceMedium"
 		        android:textColor="@color/green"
 		        android:text="@string/pets_allowed_text"/>

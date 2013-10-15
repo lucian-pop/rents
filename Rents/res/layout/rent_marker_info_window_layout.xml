@@ -7,7 +7,7 @@
 	<RelativeLayout 
 		android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
-	    android:background="@drawable/rent_marker_info_window">
+	    android:background="@drawable/app_rent_marker_info_window">
 	
 	    <ImageView android:id="@+id/rent_marker_img"
 	        android:layout_width="100dp"
@@ -15,7 +15,7 @@
 	        android:layout_gravity="clip_vertical"
 	        android:layout_marginTop="14dp"
 	        android:layout_marginLeft="14dp"
-	        android:src="@drawable/rent_default_img"
+	        android:src="@drawable/app_rent_default_img"
 	        android:contentDescription="@string/rent_default_img_desc">
 		</ImageView>
 		
@@ -51,7 +51,7 @@
 	    android:layout_height="wrap_content"
 	    android:layout_gravity="center"
 	    android:layout_marginLeft="15dp"
-	    android:src="@drawable/rent_marker_info_window_tail"
+	    android:src="@drawable/app_rent_marker_info_window_tail"
 	    android:contentDescription="@string/rent_default_img_desc">
 	</ImageView>
 </LinearLayout>

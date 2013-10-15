@@ -1,22 +1,18 @@
 package com.personal.rents.activities;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import com.personal.rents.R;
 import com.personal.rents.activities.adapters.PlacesSuggestionsAdapter;
-import com.personal.rents.rest.clients.PlacesRESTClient;
+import com.personal.rents.activities.tasks.GetGeolocationFromAddressAsyncTask;
+import com.personal.rents.activities.tasks.OnGetGeolocationTaskFinishListener;
+import com.personal.rents.model.Address;
 import com.personal.rents.utils.ActivitiesContract;
-import com.personal.rents.utils.Constants;
 import com.personal.rents.utils.RangeMessageBuilder;
 import com.personal.rents.views.DelayAutocompleteTextView;
 import com.personal.rents.views.RangeSeekBarView;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,8 +24,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 public class FilterSearchActivity extends ActionBarActivity {
-	
-	private static final String LOG_TAG = FilterSearchActivity.class.getSimpleName();
 	
 	private static final int MIN_PRICE = 0;
 	
@@ -43,9 +37,11 @@ public class FilterSearchActivity extends ActionBarActivity {
 	
 	private double mapCenterLongitude;
 	
-	private double queryLatitude;
+	private double placeLatitude;
 	
-	private double queryLongitude;
+	private double placeLongitude;
+	
+	private OnGetGeolocationTaskFinishListener onGetGeolocationTaskFinishListener;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -85,18 +81,27 @@ public class FilterSearchActivity extends ActionBarActivity {
 			mapCenterLongitude = extras.getDouble(ActivitiesContract.LONGITUDE);
 		}
 		
+		// add OnGetPlaceLocationTaskFinishListener
+		onGetGeolocationTaskFinishListener = new OnGetGeolocationTaskFinishListener() {
+			@Override
+			public void onGetGeolocationTaskFinish(Address address) {
+				placeLatitude = address.latitude;
+				placeLongitude = address.longitude;
+			}
+		};
+		
 		// Setup places search view.
 		DelayAutocompleteTextView placesAutocompleteTextView = 
 				(DelayAutocompleteTextView) findViewById(R.id.autocomplete_places_input);
 		final PlacesSuggestionsAdapter placesAdapter = new PlacesSuggestionsAdapter(this, 
-				R.layout.places_suggestions_list_layout, mapCenterLatitude, mapCenterLongitude);
+				R.layout.places_suggestions_list_layout, mapCenterLatitude, mapCenterLongitude, true);
 		placesAutocompleteTextView.setAdapter(placesAdapter);
 		placesAutocompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				if(position==0) {
-					queryLatitude = mapCenterLatitude;
-					queryLongitude = mapCenterLongitude;
+					placeLatitude = mapCenterLatitude;
+					placeLongitude = mapCenterLongitude;
 
 					return;
 				} else if(position==1) {
@@ -105,8 +110,9 @@ public class FilterSearchActivity extends ActionBarActivity {
 					return;
 				}
 				
-				GetPlaceLocationAsyncTask getPlaceLocationTask = new GetPlaceLocationAsyncTask();
-				getPlaceLocationTask.execute(placesAdapter.getPlacesRefs().get(position - 2));
+				GetGeolocationFromAddressAsyncTask getPlaceLocationTask = 
+						new GetGeolocationFromAddressAsyncTask(onGetGeolocationTaskFinishListener);
+				getPlaceLocationTask.execute(placesAdapter.getItem(position));
 			}
 		});
 		
@@ -171,24 +177,5 @@ public class FilterSearchActivity extends ActionBarActivity {
 		arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		
 		return arrayAdapter;
-	}
-	
-	private class GetPlaceLocationAsyncTask extends AsyncTask<String, Void, JSONObject> {
-
-		@Override
-		protected JSONObject doInBackground(String... refs) {
-			JSONObject location = PlacesRESTClient.getPlaceLocation(refs[0]);
-			return location;
-		}
-
-		@Override
-		protected void onPostExecute(JSONObject result) {
-			try {
-				queryLatitude = result.getDouble(Constants.LATITUDE);
-				queryLongitude = result.getDouble(Constants.LONGITUDE);
-			} catch (JSONException e) {
-				Log.e(LOG_TAG, "Cannot process JSON location object");
-			}
-		}
 	}
 }

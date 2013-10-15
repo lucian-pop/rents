@@ -1,26 +1,40 @@
 package com.personal.rents.rest.clients;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.personal.rents.model.Address;
+import com.personal.rents.rest.clients.utils.PlacesParser;
+import com.personal.rents.rest.clients.utils.RESTClientUtil;
 
 import android.util.Log;
 
 public final class PlacesRESTClient {
 	
-	private static final String LOG_TAG = "PlacesSuggestionsRESTClient.TAG";
+	private static final String LOG_TAG = PlacesRESTClient.class.getSimpleName();
 	
-	/*Query parameters*/
+	/*Query parameters and values */
+	
+	private static final String SENSOR_PARAM = "?sensor";
+	
+	private static final String KEY_PARAM = "&key";
+	
+	private static final String REFERENCE_PARAM = "&reference";
+	
+	private static final String LANGUAGE_PARAM = "&language";
+	
+	private static final String COMPONENTS_PARAM = "&components";
+	
+	private static final String LOCATION_PARAM = "&location";
+	
+	private static final String RADIUS_PARAM = "&radius";
+	
+	private static final String INPUT_PARAM = "&input";
+
 	private static final boolean GPS_ENABLED = true;
+	
+	private static final String API_KEY = "AIzaSyCDGOqpLsETLZ34Lco9IzZ4l62IKHmdReg";
 	
 	private static final String LANGUAGE = "ro";
 	
@@ -28,8 +42,9 @@ public final class PlacesRESTClient {
 	
 	private static final int RADIUS = 50000; // 50 km
 	
-	/*REST client config params*/
-	private static final String GOOGLE_PLACES_API_URL = "https://maps.googleapis.com/maps/api/place";
+	/*REST client configuration params*/
+	private static final String GOOGLE_PLACES_API_URL = 
+			"https://maps.googleapis.com/maps/api/place";
 	
 	private static final String AUTOCOMPLETE_MODE = "/autocomplete";
 	
@@ -37,137 +52,38 @@ public final class PlacesRESTClient {
 	
 	private static final String RESPONSE_FORMAT = "/json";
 	
-	private static final String API_KEY = "AIzaSyCDGOqpLsETLZ34Lco9IzZ4l62IKHmdReg";
-
-	private static final String REFERER = "http://blog.dahanne.net";
-	
-	/*JSON parse elements*/
-	private static final String SUGGESTIONS = "predictions";
-	
-	private static final String REFERENCE = "reference";
-	
-	private static final String DESCRIPTION = "description";
-	
-	private static final String GEOMETRY = "geometry";
-	
-	private static final String LOCATION = "location";
-	
-	private static final String RESULT = "result";
-	
 	private PlacesRESTClient() {}
 	
-	public static void getPlacesSuggestions(String input, double latitude, double longitude,
-				List<String> placesNames, List<String> placesRefs) {
-		HttpURLConnection con = null;
-		StringBuilder jsonResults = new StringBuilder();
+	public static List<String> getPlacesSuggestions(String input, double latitude, double longitude) {
 		StringBuilder urlBuilder = new StringBuilder(GOOGLE_PLACES_API_URL 
 				+ AUTOCOMPLETE_MODE + RESPONSE_FORMAT);
-		urlBuilder.append("?sensor=" + GPS_ENABLED);
-		urlBuilder.append("&key=" + API_KEY);
-		urlBuilder.append("&language=" + LANGUAGE);
-		urlBuilder.append("&components=" + COUNTRY);
-		urlBuilder.append("&location=" + latitude + "," +longitude);
-		urlBuilder.append("&radius=" + RADIUS);
+		urlBuilder.append(SENSOR_PARAM + "=" + GPS_ENABLED);
+		urlBuilder.append(KEY_PARAM + "=" + API_KEY);
+		urlBuilder.append(LANGUAGE_PARAM + "=" + LANGUAGE);
+		urlBuilder.append(COMPONENTS_PARAM + "=" + COUNTRY);
+		urlBuilder.append(LOCATION_PARAM + "=" + latitude + "," +longitude);
+		urlBuilder.append(RADIUS_PARAM + "=" + RADIUS);
 		try {
-			urlBuilder.append("&input="+ URLEncoder.encode(input, "UTF-8"));
+			urlBuilder.append(INPUT_PARAM + "="+ URLEncoder.encode(input, "UTF-8"));
+		} catch (UnsupportedEncodingException uee) {
+			Log.e(LOG_TAG, "Error encoding address", uee);
+		}
+		
+		String result = RESTClientUtil.getResultFromUrl(urlBuilder.toString(), LOG_TAG, true);
 
-			URL googlePlaces = new URL(urlBuilder.toString());
-			con = (HttpURLConnection)googlePlaces.openConnection();
-		    con.setReadTimeout(10000);
-			con.setConnectTimeout(15000);
-			con.setRequestMethod("GET");
-			con.setDoInput(true);
-			con.addRequestProperty("Referer", REFERER);
-		    con.connect();
-
-		    BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-	        String line;
-	        while ((line = in.readLine()) != null) {
-	        	jsonResults.append(line);
-	        }
-		} catch (MalformedURLException mue) {
-			Log.e(LOG_TAG, "Error processing Places API URL", mue);
-
-			return;
-		} catch (IOException ioe) {
-			Log.e(LOG_TAG, "Error connecting to Places API", ioe);
-
-			return;
-		} finally {
-	        if (con != null) {
-	            con.disconnect();
-	        }
-	    }
-
-		parsePlacesSuggestionsResult(jsonResults.toString(), placesNames, placesRefs);
+		return PlacesParser.parsePlacesResult(result, LOG_TAG);
 	}
 	
-	public static JSONObject getPlaceLocation(String reference) {
-		HttpURLConnection con = null;
-		StringBuilder jsonResult = new StringBuilder();
+	public static Address getPlaceLocation(String reference) {
 		StringBuilder urlBuilder = new StringBuilder(GOOGLE_PLACES_API_URL + DETAILS_MODE 
 				+ RESPONSE_FORMAT);
-		urlBuilder.append("?sensor=" + GPS_ENABLED);
-		urlBuilder.append("&key=" + API_KEY);
-		urlBuilder.append("&reference=" + reference);
-		try {
-
-			URL googlePlaces = new URL(urlBuilder.toString());
-			con = (HttpURLConnection)googlePlaces.openConnection();
-		    con.setReadTimeout(10000);
-			con.setConnectTimeout(15000);
-			con.setRequestMethod("GET");
-			con.setDoInput(true);
-			con.addRequestProperty("Referer", REFERER);
-		    con.connect();
-
-		    BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-	        String line;
-	        while ((line = in.readLine()) != null) {
-	        	jsonResult.append(line);
-	        }
-		} catch (IOException ioe) {
-			Log.e(LOG_TAG, "Error connecting to Places API", ioe);
-
-			return null;
-		} finally {
-	        if (con != null) {
-	            con.disconnect();
-	        }
-	    }
-		
-		JSONObject location = parsePlaceDetailsResult(jsonResult.toString());
-		
-		return location;
-	}
-
-	private static void parsePlacesSuggestionsResult(String result, List<String> placesNames,
-			List<String> placesRefs) {
-		try {
-			JSONObject jsonObject = new JSONObject(result);
-			JSONArray placesSuggestionsArray = jsonObject.getJSONArray(SUGGESTIONS);
-			JSONObject placeSuggestion = null;
-			for(int i=0; i < placesSuggestionsArray.length(); i++) {
-				placeSuggestion = placesSuggestionsArray.getJSONObject(i);
-				placesNames.add(placeSuggestion.getString(DESCRIPTION));
-				placesRefs.add(placeSuggestion.getString(REFERENCE));
-			}
-		} catch (JSONException e) {
-			 Log.e(LOG_TAG, "Cannot process JSON results", e);
-		}
-	}
+		urlBuilder.append(SENSOR_PARAM + "=" + GPS_ENABLED);
+		urlBuilder.append(KEY_PARAM + "=" + API_KEY);
+		urlBuilder.append(REFERENCE_PARAM + "=" + reference);
 	
-	private static JSONObject parsePlaceDetailsResult(String result) {
-		JSONObject location = null;
-		try {
-			JSONObject jsonObject = new JSONObject(result);
-			location = jsonObject.getJSONObject(RESULT).getJSONObject(GEOMETRY)
-					.getJSONObject(LOCATION);
-		} catch (JSONException e) {
-			Log.e(LOG_TAG, "Cannot process JSON result", e);
-		}
+		String result = RESTClientUtil.getResultFromUrl(urlBuilder.toString(), LOG_TAG, true);
 		
-		return location;
+		return PlacesParser.parsePlaceResult(result, LOG_TAG);
 	}
 
 }

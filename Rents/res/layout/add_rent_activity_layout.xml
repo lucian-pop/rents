@@ -17,12 +17,14 @@
 	        android:layout_marginTop="10dp"
 	        android:padding="10dp"
 	        android:gravity="center|left"
-	        android:background="@drawable/locate_rent_btn_selector"
-	        android:drawableLeft="@drawable/custom_location"
+	        android:background="@drawable/app_location_btn_selector"
+	        android:drawableLeft="@drawable/app_location_btn"
 	        android:drawablePadding="10dp"
 	        android:textAppearance="?android:attr/textAppearanceMedium"
 	        android:textColor="@color/blue"
 	        android:text="Localizeaza imobil"
+	        android:maxLines="1"
+	        android:ellipsize="end"
 	        android:clickable="true"
 	        android:onClick="onLocateRentBtnClick"/>
 

@@ -16,7 +16,7 @@
 		    android:layout_width="match_parent"
 		    android:layout_height="match_parent"
 		    android:layout_gravity="top|left"
-		    android:src="@drawable/rent_list_item_img"
+		    android:src="@drawable/app_rent_list_item_img"
 		    android:contentDescription="@string/rent_default_img_desc"/>
 		
 		<TextView android:id="@+id/rent_list_item_date"

@@ -6,5 +6,7 @@ public final class ActivitiesContract {
 	
 	public static final String LONGITUDE = "LONGITUDE";
 	
+	public static final String ADDRESS = "ADDRESS";
+	
 	private ActivitiesContract() {}
 }

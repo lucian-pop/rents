@@ -1,6 +1,5 @@
 package com.personal.rents.fragments.adapters;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.personal.rents.R;

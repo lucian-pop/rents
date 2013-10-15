@@ -88,7 +88,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:button="@drawable/checkbox_selector"
+        android:button="@drawable/app_checkbox_selector"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/green"
         android:text="Cu animale"/>

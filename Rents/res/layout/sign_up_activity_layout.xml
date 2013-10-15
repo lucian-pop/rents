@@ -46,7 +46,7 @@
 	        android:layout_height="48dp"
 	        android:layout_below="@+id/phonenumber"
 	        android:layout_margin="10dp"
-	        android:background="@drawable/blue_btn_selector"
+	        android:background="@drawable/app_blue_btn_selector"
 	        android:text="Creeaza cont"
 	        android:textAppearance="?android:attr/textAppearanceMedium"
 	        android:textColor="@color/white"
