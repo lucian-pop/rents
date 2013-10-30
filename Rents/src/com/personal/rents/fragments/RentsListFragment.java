@@ -3,7 +3,7 @@ import java.util.List;
 
 import com.personal.rents.R;
 import com.personal.rents.activities.RentDetailsActivity;
-import com.personal.rents.fragments.adapters.RentsListFragmentAdapter;
+import com.personal.rents.adapters.RentsListAdapter;
 import com.personal.rents.model.Rent;
 
 import android.content.Intent;
@@ -21,7 +21,7 @@ public class RentsListFragment extends ListFragment {
 		super.onActivityCreated(savedInstanceState);
 
 		// Populate the fragment by using a list adapter
-		setListAdapter(new RentsListFragmentAdapter(getActivity(), 
+		setListAdapter(new RentsListAdapter(getActivity(), 
 				R.layout.rents_list_item_layout, rents));
 	}
 

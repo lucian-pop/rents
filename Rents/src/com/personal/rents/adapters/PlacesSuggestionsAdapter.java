@@ -1,4 +1,4 @@
-package com.personal.rents.activities.adapters;
+package com.personal.rents.adapters;
 
 import java.util.ArrayList;
 import java.util.List;

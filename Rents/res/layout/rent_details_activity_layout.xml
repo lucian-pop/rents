@@ -16,8 +16,7 @@
 	            android:layout_height="160dp"
 	            android:layout_margin="10dp"
 	            android:layout_gravity="top|center"
-	            android:src="@drawable/app_rent_img"
-	            android:contentDescription="@string/rent_default_img_desc"/>
+	            android:src="@drawable/app_rent_img"/>
 			
 			<ImageButton android:id="@+id/left_arrow"
 			    android:layout_width="wrap_content"
@@ -36,8 +35,7 @@
 			<ImageView android:id="@+id/rent_sticky_note"
 	            android:layout_width="70dp"
 	            android:layout_height="65dp"
-	            android:src="@drawable/app_rent_sticky_note"
-	            android:contentDescription="@string/rent_sticky_note_img_desc"/>
+	            android:src="@drawable/app_rent_sticky_note"/>
 	        
 	         <TextView android:id="@+id/rent_post_date"
 	                android:layout_width="70dp"
@@ -64,8 +62,7 @@
 		    	android:layout_height="wrap_content"
 		    	android:layout_marginTop="5dp"
 		    	android:layout_gravity="top|right"
-		    	android:background="@drawable/app_rent_share_btn_selector"
-		    	android:contentDescription="@string/share_app_img_desc" />
+		    	android:background="@drawable/app_rent_share_btn_selector"/>
 	
 		</FrameLayout>
 		

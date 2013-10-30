@@ -1,11 +1,13 @@
 package com.personal.rents.activities;
 
 import com.personal.rents.R;
-import com.personal.rents.activities.adapters.PlacesSuggestionsAdapter;
-import com.personal.rents.activities.tasks.GetGeolocationFromAddressAsyncTask;
-import com.personal.rents.activities.tasks.OnGetGeolocationTaskFinishListener;
+import com.personal.rents.adapters.AdapterFactory;
+import com.personal.rents.adapters.PlacesSuggestionsAdapter;
 import com.personal.rents.model.Address;
+import com.personal.rents.tasks.GetGeolocationFromAddressAsyncTask;
+import com.personal.rents.tasks.OnGetGeolocationTaskFinishListener;
 import com.personal.rents.utils.ActivitiesContract;
+import com.personal.rents.utils.Constants;
 import com.personal.rents.utils.RangeMessageBuilder;
 import com.personal.rents.views.DelayAutocompleteTextView;
 import com.personal.rents.views.RangeSeekBarView;
@@ -25,14 +27,6 @@ import android.widget.TextView;
 
 public class FilterSearchActivity extends ActionBarActivity {
 	
-	private static final int MIN_PRICE = 0;
-	
-	private static final int MAX_PRICE = 1000;
-	
-	private static final int MIN_SURFACE = 0;
-	
-	private static final int MAX_SURFACE = 1000;
-	
 	private double mapCenterLatitude;
 	
 	private double mapCenterLongitude;
@@ -47,6 +41,12 @@ public class FilterSearchActivity extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.filter_search_activity_layout);
+		
+		Bundle extras = getIntent().getExtras();
+		if (extras != null) {
+			mapCenterLatitude = extras.getDouble(ActivitiesContract.LATITUDE);
+			mapCenterLongitude = extras.getDouble(ActivitiesContract.LONGITUDE);
+		}
 		
 		init();
 	}
@@ -71,15 +71,7 @@ public class FilterSearchActivity extends ActionBarActivity {
 	}
 
 	private void init() {
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		getSupportActionBar().setTitle("Cautare chirii");
-		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
-		Bundle extras = getIntent().getExtras();
-		if (extras != null) {
-			mapCenterLatitude = extras.getDouble(ActivitiesContract.LATITUDE);
-			mapCenterLongitude = extras.getDouble(ActivitiesContract.LONGITUDE);
-		}
+		setupActionBar();
 		
 		// add OnGetPlaceLocationTaskFinishListener
 		onGetGeolocationTaskFinishListener = new OnGetGeolocationTaskFinishListener() {
@@ -90,7 +82,22 @@ public class FilterSearchActivity extends ActionBarActivity {
 			}
 		};
 		
-		// Setup places search view.
+		setupPlacesAutocomplete();
+
+		setupPriceChooser();
+		
+		setupSurfaceChooser();
+		
+		setupSpinners();
+	}
+	
+	private void setupActionBar() {
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setTitle("Cautare chirii");
+		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+	}
+	
+	private void setupPlacesAutocomplete() {
 		DelayAutocompleteTextView placesAutocompleteTextView = 
 				(DelayAutocompleteTextView) findViewById(R.id.autocomplete_places_input);
 		final PlacesSuggestionsAdapter placesAdapter = new PlacesSuggestionsAdapter(this, 
@@ -115,34 +122,13 @@ public class FilterSearchActivity extends ActionBarActivity {
 				getPlaceLocationTask.execute(placesAdapter.getItem(position));
 			}
 		});
-		
-		Spinner partiesSpinner = (Spinner) findViewById(R.id.rent_party);
-		ArrayAdapter<CharSequence> spinnerAdapter = createSpinnerAdapter(R.array.rent_parties);
-		partiesSpinner.setAdapter(spinnerAdapter);
-		
-		Spinner typesSpinner = (Spinner) findViewById(R.id.rent_type);
-		spinnerAdapter = createSpinnerAdapter(R.array.rent_types);
-		typesSpinner.setAdapter(spinnerAdapter);
-		
-		Spinner structSpinner = (Spinner) findViewById(R.id.rent_structure);
-		spinnerAdapter = createSpinnerAdapter(R.array.rent_structures);
-		structSpinner.setAdapter(spinnerAdapter);
-		
-		Spinner ageSpinner = (Spinner) findViewById(R.id.rent_age);
-		spinnerAdapter = createSpinnerAdapter(R.array.rent_ages);
-		ageSpinner.setAdapter(spinnerAdapter);
-		
-		Spinner roomsSpinner = (Spinner) findViewById(R.id.rent_rooms);
-		spinnerAdapter = createSpinnerAdapter(R.array.rent_rooms);
-		roomsSpinner.setAdapter(spinnerAdapter);
-		
-		Spinner bathsSpinner = (Spinner) findViewById(R.id.rent_baths);
-		spinnerAdapter = createSpinnerAdapter(R.array.rent_baths);
-		bathsSpinner.setAdapter(spinnerAdapter);
-		
+	}
+	
+	private void setupPriceChooser() {
 		ViewGroup priceChooserWrapper = (ViewGroup) findViewById(R.id.rent_price_chooser);
 		final TextView selectedPriceRange = (TextView) findViewById(R.id.rent_price_range);
-		RangeSeekBarView<Integer> priceChooser = new RangeSeekBarView<Integer>(MIN_PRICE, MAX_PRICE, this);
+		RangeSeekBarView<Integer> priceChooser = new RangeSeekBarView<Integer>(Constants.MIN_PRICE, 
+				Constants.MAX_PRICE, this);
 		priceChooser.setNotifyWhileDragging(true);
 		priceChooser.setOnRangeSeekBarChangeListener(
 				new RangeSeekBarView.OnRangeSeekBarChangeListener<Integer>() {
@@ -150,32 +136,53 @@ public class FilterSearchActivity extends ActionBarActivity {
 			public void onRangeSeekBarValuesChanged(RangeSeekBarView<?> bar, Integer minValue, 
 					Integer maxValue) {
 				selectedPriceRange.setText(RangeMessageBuilder.priceRangeMessageBuilder(minValue,
-						maxValue, MIN_PRICE, MAX_PRICE));
+						maxValue, Constants.MIN_PRICE, Constants.MAX_PRICE));
 			}
 		});
 		priceChooserWrapper.addView(priceChooser);
-		
+	}
+	
+	private void setupSurfaceChooser() {
 		ViewGroup surfaceChooserWrapper = (ViewGroup) findViewById(R.id.rent_surface_chooser);
 		final TextView selectedSurfaceRange = (TextView) findViewById(R.id.rent_surface_range);
-		RangeSeekBarView<Integer> surfaceChooser = new RangeSeekBarView<Integer>(MIN_SURFACE, MAX_SURFACE,
-				this);
+		RangeSeekBarView<Integer> surfaceChooser = new RangeSeekBarView<Integer>(Constants.MIN_SURFACE, 
+				Constants.MAX_SURFACE, this);
 		surfaceChooser.setNotifyWhileDragging(true);
 		surfaceChooser.setOnRangeSeekBarChangeListener(new RangeSeekBarView.OnRangeSeekBarChangeListener<Integer>() {
 			@Override
 			public void onRangeSeekBarValuesChanged(RangeSeekBarView<?> bar, Integer minValue, 
 					Integer maxValue) {
 				selectedSurfaceRange.setText(RangeMessageBuilder.surfaceRangeMessageBuilder(minValue,
-						maxValue, MIN_SURFACE, MAX_SURFACE));
+						maxValue, Constants.MIN_SURFACE, Constants.MAX_SURFACE));
 			}
 		});
 		surfaceChooserWrapper.addView(surfaceChooser);
 	}
 	
-	private ArrayAdapter<CharSequence> createSpinnerAdapter(final int arrayResourceId) {
-		ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(this, arrayResourceId, 
-				android.R.layout.simple_spinner_item);
-		arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+	private void setupSpinners() {
+		Spinner partiesSpinner = (Spinner) findViewById(R.id.rent_party);
+		ArrayAdapter<CharSequence> spinnerAdapter = AdapterFactory.createSpinnerAdapter(this, 
+				R.array.rent_parties);
+		partiesSpinner.setAdapter(spinnerAdapter);
 		
-		return arrayAdapter;
+		Spinner typesSpinner = (Spinner) findViewById(R.id.rent_type);
+		spinnerAdapter = AdapterFactory.createSpinnerAdapter(this, R.array.rent_types);
+		typesSpinner.setAdapter(spinnerAdapter);
+		
+		Spinner structSpinner = (Spinner) findViewById(R.id.rent_structure);
+		spinnerAdapter = AdapterFactory.createSpinnerAdapter(this, R.array.rent_structures);
+		structSpinner.setAdapter(spinnerAdapter);
+		
+		Spinner ageSpinner = (Spinner) findViewById(R.id.rent_age);
+		spinnerAdapter = AdapterFactory.createSpinnerAdapter(this, R.array.rent_ages);
+		ageSpinner.setAdapter(spinnerAdapter);
+		
+		Spinner roomsSpinner = (Spinner) findViewById(R.id.rent_rooms);
+		spinnerAdapter = AdapterFactory.createSpinnerAdapter(this, R.array.rent_rooms);
+		roomsSpinner.setAdapter(spinnerAdapter);
+		
+		Spinner bathsSpinner = (Spinner) findViewById(R.id.rent_baths);
+		spinnerAdapter = AdapterFactory.createSpinnerAdapter(this, R.array.rent_baths);
+		bathsSpinner.setAdapter(spinnerAdapter);
 	}
 }

@@ -1,4 +1,4 @@
-package com.personal.rents.fragments.adapters;
+package com.personal.rents.adapters;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
-public class RentsListFragmentAdapter extends ArrayAdapter<Rent> implements ListAdapter {
+public class RentsListAdapter extends ArrayAdapter<Rent> implements ListAdapter {
 
 	private LayoutInflater inflater;
 	
@@ -38,7 +38,7 @@ public class RentsListFragmentAdapter extends ArrayAdapter<Rent> implements List
 		private TextView rentTypeDesc;
 	}
 
-	public RentsListFragmentAdapter(Context context, int layoutId, List<Rent> rents) {
+	public RentsListAdapter(Context context, int layoutId, List<Rent> rents) {
 		super(context, layoutId, rents);
 		
 		inflater = ((Activity) context).getLayoutInflater();

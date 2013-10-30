@@ -4,7 +4,7 @@ import com.personal.rents.model.Address;
 
 import android.test.AndroidTestCase;
 
-public class GecodingRESTClient extends AndroidTestCase {
+public class GecodingRESTClientTest extends AndroidTestCase {
 	
 	private double latitude  = 46.7667;
 	

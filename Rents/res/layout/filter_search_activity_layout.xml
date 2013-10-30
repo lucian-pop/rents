@@ -30,7 +30,7 @@
 	  		android:layout_height="wrap_content"
 	        android:orientation="vertical">
 		        
-		    <com.personal.rents.views.DelayAutocompleteTextView 
+		    <com.personal.rents.views.DelayAutocompleteTextView
 		        android:id="@+id/autocomplete_places_input"
 				style="@style/SearchPageRowStyle"
 	        	android:drawableLeft="@drawable/ic_search"

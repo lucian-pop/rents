@@ -10,21 +10,25 @@ public final class Constants {
 	// Map related.
 	public static final int DEFAULT_ZOOM_FACTOR = 15;
 	
-	public static final String CENTER = "Center";
-	
 	public static final String ENABLE_NETWORK_LOCATION_TAG = "ENABLE_NETWORK_LOCATION_DIALOG";
 	
-	// PLACES API
-	
-	public static final String LATITUDE = "lat";
-	
-	public static final String LONGITUDE = "lng";
-	
-	// CURRENCIES
+	// Currencies
 	public static final String EURO = "€";
 	
-	// METERS
-	public static final String SQUARE_METERS = "m2";
+	// Metrics
+	public static final String SQUARE_METERS = "mp";
+	
+	// Ranges
+	public static final int MIN_PRICE = 0;
+	
+	public static final int MAX_PRICE = 1000;
+	
+	public static final int MIN_SURFACE = 0;
+	
+	public static final int MAX_SURFACE = 500;
+	
+	// Image resizing
+	public static final int DEST_IMG_SIZE = 800;
 
 	private Constants() {}	
 }

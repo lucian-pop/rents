@@ -12,7 +12,6 @@
 	    android:layout_marginTop="58dp"
 	    android:layout_marginRight="10dp"
 	    android:layout_gravity="right"
-	    android:background="@drawable/app_share_btn_selector"
-	    android:contentDescription="@string/share_app_img_desc" />
+	    android:background="@drawable/app_share_btn_selector"/>
 
 </merge>

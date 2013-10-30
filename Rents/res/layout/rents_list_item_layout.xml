@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingTop="10dp"
-    android:paddingBottom="10dp">
+    android:paddingBottom="10dp"
+    android:background="@color/white">
     
     <FrameLayout android:id="@+id/rent_list_img_panel"
         android:layout_width="120dp"
@@ -16,8 +17,7 @@
 		    android:layout_width="match_parent"
 		    android:layout_height="match_parent"
 		    android:layout_gravity="top|left"
-		    android:src="@drawable/app_rent_list_item_img"
-		    android:contentDescription="@string/rent_default_img_desc"/>
+		    android:src="@drawable/app_rent_list_item_img"/>
 		
 		<TextView android:id="@+id/rent_list_item_date"
 	        android:layout_width="wrap_content"

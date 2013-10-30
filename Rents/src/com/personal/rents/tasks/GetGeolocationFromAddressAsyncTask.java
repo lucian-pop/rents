@@ -1,4 +1,4 @@
-package com.personal.rents.activities.tasks;
+package com.personal.rents.tasks;
 
 import android.os.AsyncTask;
 

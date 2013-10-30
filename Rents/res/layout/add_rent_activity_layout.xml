@@ -12,9 +12,9 @@
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentTop="true"
-	        android:layout_marginLeft="10dp"
-	        android:layout_marginRight="10dp"
 	        android:layout_marginTop="10dp"
+	        android:layout_marginLeft="10dp"
+	        android:layout_marginRight="10dp" 
 	        android:padding="10dp"
 	        android:gravity="center|left"
 	        android:background="@drawable/app_location_btn_selector"
@@ -27,61 +27,208 @@
 	        android:ellipsize="end"
 	        android:clickable="true"
 	        android:onClick="onLocateRentBtnClick"/>
-
-	    <RelativeLayout android:id="@+id/address_details"
+	    
+	    <LinearLayout android:id="@+id/rent_price_surface"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
-	        android:layout_below="@id/locate_rent_btn"
+	        android:layout_marginTop="10dp"
 	        android:layout_marginLeft="10dp"
 	        android:layout_marginRight="10dp"
+	        android:layout_below="@id/locate_rent_btn"
+	        android:paddingTop="10dp"
 	        android:background="@color/white"
-	        android:visibility="gone">
-	   		    
-		    <LinearLayout android:id="@+id/street_details"
+	        android:orientation="horizontal">
+	        
+	        <EditText android:id="@+id/rent_price"
+	            android:layout_width="0dp"
+	            android:layout_height="wrap_content"
+	            android:layout_weight="1"
+	            android:layout_marginLeft="10dp"
+	            android:layout_marginBottom="10dp"
+	            android:textAppearance="?android:attr/textAppearanceMedium"
+	            android:hint="Pret"
+	            android:maxLines="1"
+	            android:inputType="number"
+	            android:imeOptions="actionDone" />
+	        
+	        <TextView android:id="@+id/price_currency"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_marginLeft="5dp"
+	            android:textAppearance="?android:attr/textAppearanceMedium"
+	            android:text="@string/currency"/>
+	        
+	        
+	        <EditText android:id="@+id/rent_surface"
+	            android:layout_width="0dp"
+	            android:layout_height="wrap_content"
+	            android:layout_weight="1"
+	            android:layout_marginLeft="10dp"
+	            android:layout_marginBottom="10dp"
+	            android:textAppearance="?android:attr/textAppearanceMedium"
+	            android:hint="Suprafata"
+	            android:maxLines="1"
+	            android:inputType="number"
+	            android:imeOptions="actionDone"/>
+	        
+	        <TextView android:id="@+id/square_metrics"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_marginLeft="5dp"
+	            android:layout_marginRight="10dp"
+	            android:textAppearance="?android:attr/textAppearanceMedium"
+	            android:text="@string/square_meters"/>
+
+		</LinearLayout>
+		
+	    <LinearLayout android:id="@+id/rent_rooms_baths"
+			android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_marginLeft="10dp"
+	        android:layout_marginRight="10dp"
+	        android:paddingBottom="10dp"
+	        android:layout_below="@id/rent_price_surface"
+	        android:background="@color/white"
+	        android:orientation="horizontal">
+		
+			<EditText android:id="@+id/rent_rooms"
+	            android:layout_width="0dp"
+	            android:layout_height="wrap_content"
+	            android:layout_weight="1"
+	            android:layout_marginLeft="10dp"
+	            android:textAppearance="?android:attr/textAppearanceMedium"
+	            android:hint="Nr."
+	            android:maxLines="1"
+	            android:inputType="number"
+	            android:imeOptions="actionDone" />
+	        
+	        <TextView android:id="@+id/rooms_label"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_marginLeft="5dp"
+	            android:textAppearance="?android:attr/textAppearanceMedium"
+	            android:text="@string/rooms_label"/>
+	        
+	        
+	        <EditText android:id="@+id/rent_baths"
+	            android:layout_width="0dp"
+	            android:layout_height="wrap_content"
+	            android:layout_weight="1"
+	            android:layout_marginLeft="10dp"
+	            android:textAppearance="?android:attr/textAppearanceMedium"
+	            android:hint="Nr."
+	            android:maxLines="1"
+	            android:inputType="number"
+	            android:imeOptions="actionDone"/>
+	        
+	        <TextView android:id="@+id/baths_label"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_marginLeft="5dp"
+	            android:layout_marginRight="10dp"
+	            android:textAppearance="?android:attr/textAppearanceMedium"
+	            android:text="@string/baths_label"/>
+
+		</LinearLayout>
+		
+	    <RelativeLayout android:id="@+id/rent_specs"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="10dp"
+	        android:layout_marginLeft="10dp"
+	        android:layout_marginRight="10dp"
+	        android:paddingBottom="10dp"
+	        android:layout_below="@id/rent_rooms_baths"
+	        android:background="@color/white">
+		    
+	        <LinearLayout android:id="@+id/rent_party_type"
+		        style="@style/SearchPageRowStyle"
+		        android:layout_marginTop="10dp"
+		        android:orientation="horizontal">
+		
+				<Spinner android:id="@+id/rent_party"
+			        style="@style/SpinnerStyle" />
+			    
+			    <Spinner android:id="@+id/rent_type"
+					style="@style/SpinnerStyle"
+			        android:layout_marginLeft="10dp"/>
+		    </LinearLayout>
+		    
+	        <LinearLayout android:id="@+id/rent_struct_age"
+		        style="@style/SearchPageRowStyle"
+		        android:layout_below="@id/rent_party_type"
+		        android:orientation="horizontal">
+		
+				<Spinner android:id="@+id/rent_structure"
+			        style="@style/SpinnerStyle" />
+			    
+			    <Spinner android:id="@+id/rent_age"
+					style="@style/SpinnerStyle"
+			        android:layout_marginLeft="10dp" />
+		    </LinearLayout>
+		    
+	    </RelativeLayout>
+	    
+	    
+	    <RelativeLayout android:id="@+id/rent_desc_pets"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="10dp"
+	        android:layout_marginLeft="10dp"
+	        android:layout_marginRight="10dp"
+	        android:paddingTop="10dp"
+	        android:paddingBottom="10dp"
+	        android:layout_below="@id/rent_specs"
+	        android:background="@color/white">
+	        
+		    <EditText android:id="@+id/rent_desc"
 		        android:layout_width="match_parent"
 		        android:layout_height="wrap_content"
-		        android:layout_alignParentTop="true"
 		        android:layout_marginLeft="10dp"
 		        android:layout_marginRight="10dp"
-		        android:orientation="horizontal">
-		        
-		        <EditText android:id="@+id/street_no"
-			        android:layout_width="0dp"
-			        android:layout_height="wrap_content"
-			        android:layout_weight="1"
-			        android:textAppearance="?android:attr/textAppearanceMedium"
-			        android:text="31"
-			        android:inputType="number"/>
-		        
-				<EditText android:id="@+id/street_name"
-			        android:layout_width="0dp"
-			        android:layout_height="wrap_content"
-			        android:layout_weight="3"
-			        android:textAppearance="?android:attr/textAppearanceMedium"
-			        android:text="Observatorului"
-			        android:inputType="text"/>
-			
-		    </LinearLayout>
-	
-		    <EditText android:id="@+id/locality"
-			        android:layout_width="match_parent"
-			        android:layout_height="wrap_content"
-			        android:layout_below="@id/street_details"
-			        android:layout_marginTop="10dp"
-			        android:layout_marginLeft="10dp"
-			        android:layout_marginRight="10dp"
-			        android:textAppearance="?android:attr/textAppearanceMedium"
-			        android:text="Cluj-Napoca"
-			        android:inputType="text"/>
+		        android:textAppearance="?android:attr/textAppearanceMedium"
+		        android:hint="Descriere"
+		        android:inputType="textMultiLine">
+		    </EditText>
 		    
-		    <EditText android:id="@+id/other_address_details"
-			        android:layout_width="match_parent"
-			        android:layout_height="wrap_content"
-			        android:layout_below="@id/locality"
-			        android:layout_margin="10dp"
-			        android:textAppearance="?android:attr/textAppearanceMedium"
-			        android:hint="Bloc, Scara, Ap. (daca este cazul)"
-			        android:inputType="text"/>
+		    <CheckBox android:id="@+id/pets_allowed"
+		        style="@style/SearchPageRowStyle"
+		        android:layout_marginBottom="10dp"
+		        android:layout_below="@id/rent_desc"
+		        android:button="@drawable/app_checkbox_selector"
+		        android:textAppearance="?android:attr/textAppearanceMedium"
+		        android:textColor="@color/green"
+		        android:text="@string/pets_allowed_text"/>
+	        
 	    </RelativeLayout>
+	    
+		<com.personal.rents.views.DynamicGridView android:id="@+id/rent_pics"
+		    android:layout_width="match_parent"
+		    android:layout_height="match_parent"
+		    android:layout_marginTop="10dp"
+		    android:layout_marginLeft="10dp"
+		    android:layout_marginRight="10dp"
+		    android:layout_below="@id/rent_desc_pets"
+		    android:padding="10dp"
+		    android:background="@color/white"
+		    android:numColumns="auto_fit"
+		    android:columnWidth="80dp"
+		    android:horizontalSpacing="10dp"
+		    android:verticalSpacing="10dp"
+		    android:stretchMode="none" />
+	    
+	    <Button android:id="@+id/add_rent_btn"
+	        android:layout_width="match_parent"
+	        android:layout_height="48dp"
+	        android:layout_marginTop="10dp"
+	        android:layout_marginLeft="10dp"
+	        android:layout_marginRight="10dp"
+	        android:layout_below="@id/rent_pics"
+	        android:background="@drawable/app_blue_btn_selector"
+	        android:textAppearance="?android:attr/textAppearanceMedium"
+	        android:textColor="@color/white"
+	        android:textStyle="bold"
+	        android:text="Adauga chirie" />
+
 	</RelativeLayout>
 </ScrollView>

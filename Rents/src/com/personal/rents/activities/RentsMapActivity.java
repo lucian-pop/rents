@@ -12,7 +12,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.VisibleRegion;
 import com.personal.rents.R;
-import com.personal.rents.activities.adapters.RentMarkerInfoWindowAdapter;
+import com.personal.rents.adapters.RentMarkerInfoWindowAdapter;
 import com.personal.rents.fragments.RentsMapFragment;
 import com.personal.rents.model.Rent;
 import com.personal.rents.rest.clients.RentsRESTClient;
@@ -28,6 +28,8 @@ import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -78,8 +80,15 @@ public class RentsMapActivity extends ActionBarActivity implements OnInfoWindowC
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.rents_map_menu, menu);
-
+		
 		return true;
+	}
+
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v,
+			ContextMenuInfo menuInfo) {
+		// TODO Auto-generated method stub
+		super.onCreateContextMenu(menu, v, menuInfo);
 	}
 
 	@Override
@@ -88,6 +97,7 @@ public class RentsMapActivity extends ActionBarActivity implements OnInfoWindowC
 			Intent intent = new Intent(this, FilterSearchActivity.class);
 			intent.putExtra(ActivitiesContract.LATITUDE, lastCenterPosition.latitude);
 			intent.putExtra(ActivitiesContract.LONGITUDE, lastCenterPosition.longitude);
+
 			startActivity(intent);
 
 			return true;
@@ -95,11 +105,13 @@ public class RentsMapActivity extends ActionBarActivity implements OnInfoWindowC
 			Intent intent = new Intent(this, RentsListActivity.class);
 			intent.putExtra(ActivitiesContract.LATITUDE, lastCenterPosition.latitude);
 			intent.putExtra(ActivitiesContract.LONGITUDE, lastCenterPosition.longitude);
+
 			startActivity(intent);
 			
 			return true;
 		} else if(item.getItemId() == R.id.user_account_action) {
 			Intent intent = new Intent(this, UserAddedRentsActivity.class);
+
 			startActivity(intent);
 			
 			return true;
@@ -148,6 +160,7 @@ public class RentsMapActivity extends ActionBarActivity implements OnInfoWindowC
 	@Override
 	public void onInfoWindowClick(Marker arg0) {
 		Intent intent = new Intent(this, RentDetailsActivity.class);
+
 		startActivity(intent);
 	}
 	

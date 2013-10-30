@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    
+    <item android:id="@+id/delete_pic_action"
+          android:title="@string/delete_pic_action_title"/>
+    
+    <item android:id="@+id/browse_pic_action"
+          android:title="@string/browse_pic_action_title"/>
+    
+    <item android:id="@+id/take_pic_action"
+          android:title="@string/take_pic_action_title"/>
+    
+</menu>

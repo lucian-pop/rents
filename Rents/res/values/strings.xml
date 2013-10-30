@@ -3,34 +3,47 @@
 
     <string name="app_name">Rents</string>
     <string name="action_settings">Settings</string>
-    
-	<string name="rent_marker_icon_img_desc">Rent marker icon image</string>
-	<string name="rent_marker_info_img_desc">Rent marker info window background image</string>
-	<string name="rent_default_img_desc">Rent marker info window background image</string>
-	<string name="share_app_img_desc">Background image for share app button</string>
-	<string name="rent_sticky_note_img_desc">Rent sticky note image</string>
 	
-	<string name="rent_date_default_text">12 Sep \'13</string>
-	<string name="rent_price_default_text">12500 €</string>
-	<string name="rent_street_default_text">Str. Simion Barnutiu, Nr. 31, Ap. 18</string>
-	<string name="rent_short_desc_default_text">3 cam., 2 bai, 1008 mp</string>
-	<string name="rent_type_default_text">Apartament, c-tie. veche</string>
+	<string name="reset_btn_text">Anuleaza</string>
 	
+	<!-- Metrics -->
+	<string name="currency">€</string>
+	<string name="square_meters">mp</string>
+	
+	<!-- Labels -->
+	<string name="rooms_label">camere</string>
+	<string name="baths_label">bai</string>
+	
+	<!-- General menu -->
 	<string name="search_action_title">Cauta</string>
 	<string name="list_rents_action_title">Cele mai noi</string>
 	<string name="user_account_action_title">Contul tau</string>
 	<string name="add_to_favorites_action_title">Salveaza</string>
 	<string name="signout_action_title">Iesire cont</string>
 	
-	<string name="reset_btn_text">Anuleaza</string>
+	<!-- User added rents activity menu -->
+	<string name="add_rent_action_title">Adauga chirie</string>
+	<string name="edit_account_action_title">Editeaza cont</string>
+	
+	<!-- Add rent picture menu -->
+	<string name="delete_pic_action_title">Sterge poza</string>
+	<string name="browse_pic_action_title">Incarca poza</string>
+	<string name="take_pic_action_title">Fotografiaza</string>
+	
+	<!-- Rent details activity -->
+	<string name="rent_date_default_text">12 Sep \'13</string>
+	<string name="rent_price_default_text">12500 €</string>
+	<string name="rent_street_default_text">Str. Simion Barnutiu, Nr. 31, Ap. 18</string>
+	<string name="rent_short_desc_default_text">3 cam., 2 bai, 1008 mp</string>
+	<string name="rent_type_default_text">Apartament, c-tie. veche</string>
 	
 	<!-- Filter search activity -->
 	<string name="last_location">Ultima locatie</string>
 	<string name="current_location">Locatia curenta</string>
 	<string name="search_submit_btn_text">Cauta</string>
 	<string name="autocomplete_places_input_text">Locatie...</string>
-	<string name="rent_price_range_text">Alegeti pretul</string>
-	<string name="rent_surface_range_text">Alegeti pretul</string>
+	<string name="rent_price_range_text">Pret</string>
+	<string name="rent_surface_range_text">Suprafata</string>
 	<string name="pets_allowed_text">Cu animale</string>
 	
 	<string-array name="rent_parties">
@@ -57,16 +70,15 @@
         <item>1 camera</item>
         <item>2 camere</item>
         <item>3 camere</item>
-        <item>4+ camere</item>
+        <item>4 camere</item>
+        <item>5+ camere</item>
     </string-array>
 
 	<string-array name="rent_baths">
         <item>1 baie</item>
         <item>2 bai</item>
-        <item>3+ bai</item>
+        <item>3 bai</item>
+        <item>4+ bai</item>
     </string-array>
-    
-	<!-- User added rents activity -->
-	<string name="add_rent_action_title">Adauga chirie</string>
-	<string name="edit_account_action_title">Editeaza cont</string>
+
 </resources>

@@ -1,4 +1,4 @@
-package com.personal.rents.activities.tasks;
+package com.personal.rents.tasks;
 
 import com.personal.rents.model.Address;
 import com.personal.rents.rest.clients.GeocodingRESTClient;

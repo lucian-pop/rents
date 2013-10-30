@@ -6,8 +6,7 @@
     <ImageView android:id="@+id/rent_marker_icon_img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_rent_marker"
-        android:contentDescription="@string/rent_marker_icon_img_desc"/>
+        android:src="@drawable/ic_rent_marker"/>
     
      <TextView
         android:id="@+id/rent_marker_price"

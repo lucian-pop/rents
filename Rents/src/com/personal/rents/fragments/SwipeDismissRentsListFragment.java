@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.personal.rents.R;
 import com.personal.rents.activities.RentDetailsActivity;
-import com.personal.rents.fragments.adapters.RentsListFragmentAdapter;
+import com.personal.rents.adapters.RentsListAdapter;
 import com.personal.rents.model.Rent;
 import com.personal.rents.views.SwipeDismissListViewTouchListener;
 
@@ -21,7 +21,7 @@ public class SwipeDismissRentsListFragment extends ListFragment {
 	
 	private List<Rent> initialRents;
 	
-	private RentsListFragmentAdapter rentsListAdapter;
+	private RentsListAdapter rentsListAdapter;
 	
 	private OnListItemDismissListener onListItemDismissListener;
 	
@@ -33,7 +33,7 @@ public class SwipeDismissRentsListFragment extends ListFragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
-		rentsListAdapter = new RentsListFragmentAdapter(getActivity(), 
+		rentsListAdapter = new RentsListAdapter(getActivity(), 
 				R.layout.rents_list_item_layout, rents);
 		setListAdapter(rentsListAdapter);
 
