@@ -36,11 +36,28 @@ public class RentsListActivity extends ActionBarActivity {
 			bundle = getIntent().getExtras();
 		}
 		
-		mapCenterLatitude = bundle.getDouble(ActivitiesContract.LATITUDE);
-		mapCenterLongitude = bundle.getDouble(ActivitiesContract.LONGITUDE);
-		// populate rents from the bundle
+		if(bundle != null) {
+			mapCenterLatitude = bundle.getDouble(ActivitiesContract.LATITUDE);
+			mapCenterLongitude = bundle.getDouble(ActivitiesContract.LONGITUDE);
+			
+			// populate rents from the bundle
+		}
 
 		init();
+	}
+	
+	private void init() {
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setTitle("Lista chirii");
+
+		rents = new ArrayList<Rent>(6);
+		Rent rent = new Rent(new LatLng(10, 10), 160);
+		for(int i=0; i < 6; i++) {
+			rents.add(rent);
+		}
+		RentsListFragment rentsListFragment = (RentsListFragment) getSupportFragmentManager()
+				.findFragmentById(R.id.rents_list_fragment);
+		rentsListFragment.setRents(rents);
 	}
 	
 	@Override
@@ -56,30 +73,22 @@ public class RentsListActivity extends ActionBarActivity {
 			Intent intent = new Intent(this, FilterSearchActivity.class);
 			intent.putExtra(ActivitiesContract.LATITUDE, mapCenterLatitude);
 			intent.putExtra(ActivitiesContract.LONGITUDE, mapCenterLongitude);
+			intent.putExtra(ActivitiesContract.FROM_ACTIVITY, 
+					ActivitiesContract.RENTS_LIST_ACTIVITY);
+
 			startActivity(intent);
 
 			return true;
 		} else if(item.getItemId() == R.id.user_account_action) {
-			Intent intent = new Intent(this, LoginActivity.class);
+			Intent intent = new Intent(this, UserAddedRentsActivity.class);
+			intent.putExtra(ActivitiesContract.FROM_ACTIVITY, 
+					ActivitiesContract.RENTS_LIST_ACTIVITY);
+
 			startActivity(intent);
 			
 			return true;
 		}
 		
 		return false;
-	}
-
-	private void init() {
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		getSupportActionBar().setTitle("Lista chirii");
-
-		rents = new ArrayList<Rent>(6);
-		Rent rent = new Rent(new LatLng(10, 10), 160);
-		for(int i=0; i < 6; i++) {
-			rents.add(rent);
-		}
-		RentsListFragment rentsListFragment = (RentsListFragment) getSupportFragmentManager()
-				.findFragmentById(R.id.rents_list_fragment);
-		rentsListFragment.setRents(rents);
 	}
 }

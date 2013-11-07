@@ -1,6 +1,6 @@
 package com.personal.rents.utils;
 
-public final class Constants {
+public final class GeneralConstants {
 
 	// Characters.
 	public static final String SPACE = " ";
@@ -30,5 +30,5 @@ public final class Constants {
 	// Image resizing
 	public static final int DEST_IMG_SIZE = 800;
 
-	private Constants() {}	
+	private GeneralConstants() {}	
 }

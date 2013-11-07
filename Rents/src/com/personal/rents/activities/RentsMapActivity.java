@@ -14,10 +14,10 @@ import com.google.android.gms.maps.model.VisibleRegion;
 import com.personal.rents.R;
 import com.personal.rents.adapters.RentMarkerInfoWindowAdapter;
 import com.personal.rents.fragments.RentsMapFragment;
+import com.personal.rents.logic.LocationManagerWrapper;
 import com.personal.rents.model.Rent;
 import com.personal.rents.rest.clients.RentsRESTClient;
 import com.personal.rents.utils.ActivitiesContract;
-import com.personal.rents.utils.LocationHelper;
 import com.personal.rents.utils.RentMarkerBuilder;
 import com.personal.rents.views.TouchableMapView;
 
@@ -44,7 +44,7 @@ public class RentsMapActivity extends ActionBarActivity implements OnInfoWindowC
 	
     public GoogleMap rentsMap;
 
-    private LocationHelper locationHelper;
+    private LocationManagerWrapper locationHelper;
     
     private LatLng lastCenterPosition;
     
@@ -70,6 +70,8 @@ public class RentsMapActivity extends ActionBarActivity implements OnInfoWindowC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.rents_map_activity_layout);
+        
+        getSupportActionBar().setTitle("Chirii");
 
         setUpMapIfNeeded();
         
@@ -97,6 +99,8 @@ public class RentsMapActivity extends ActionBarActivity implements OnInfoWindowC
 			Intent intent = new Intent(this, FilterSearchActivity.class);
 			intent.putExtra(ActivitiesContract.LATITUDE, lastCenterPosition.latitude);
 			intent.putExtra(ActivitiesContract.LONGITUDE, lastCenterPosition.longitude);
+			intent.putExtra(ActivitiesContract.FROM_ACTIVITY, 
+					ActivitiesContract.RENTS_MAP_ACTIVITY);
 
 			startActivity(intent);
 
@@ -111,6 +115,8 @@ public class RentsMapActivity extends ActionBarActivity implements OnInfoWindowC
 			return true;
 		} else if(item.getItemId() == R.id.user_account_action) {
 			Intent intent = new Intent(this, UserAddedRentsActivity.class);
+			intent.putExtra(ActivitiesContract.FROM_ACTIVITY, 
+					ActivitiesContract.RENTS_MAP_ACTIVITY);
 
 			startActivity(intent);
 			
@@ -145,7 +151,7 @@ public class RentsMapActivity extends ActionBarActivity implements OnInfoWindowC
         rentsMap.setOnMarkerClickListener(new RentsMapOnMarkerClickListener());
         rentsMap.setOnInfoWindowClickListener(this);
         
-        locationHelper = new LocationHelper(getApplicationContext());
+        locationHelper = new LocationManagerWrapper(getApplicationContext());
         Location location = locationHelper.getLastKnownLocation();
         if(location != null) {
         	locationHelper.moveToLocation(location, rentsMap);
@@ -160,6 +166,7 @@ public class RentsMapActivity extends ActionBarActivity implements OnInfoWindowC
 	@Override
 	public void onInfoWindowClick(Marker arg0) {
 		Intent intent = new Intent(this, RentDetailsActivity.class);
+		intent.putExtra(ActivitiesContract.FROM_ACTIVITY, ActivitiesContract.RENTS_MAP_ACTIVITY);
 
 		startActivity(intent);
 	}

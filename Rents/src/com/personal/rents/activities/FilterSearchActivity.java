@@ -7,15 +7,15 @@ import com.personal.rents.model.Address;
 import com.personal.rents.tasks.GetGeolocationFromAddressAsyncTask;
 import com.personal.rents.tasks.OnGetGeolocationTaskFinishListener;
 import com.personal.rents.utils.ActivitiesContract;
-import com.personal.rents.utils.Constants;
+import com.personal.rents.utils.GeneralConstants;
 import com.personal.rents.utils.RangeMessageBuilder;
 import com.personal.rents.views.DelayAutocompleteTextView;
 import com.personal.rents.views.RangeSeekBarView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +35,8 @@ public class FilterSearchActivity extends ActionBarActivity {
 	
 	private double placeLongitude;
 	
+	private int fromActivity;
+	
 	private OnGetGeolocationTaskFinishListener onGetGeolocationTaskFinishListener;
 
 	@Override
@@ -42,27 +44,42 @@ public class FilterSearchActivity extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.filter_search_activity_layout);
 		
-		Bundle extras = getIntent().getExtras();
-		if (extras != null) {
-			mapCenterLatitude = extras.getDouble(ActivitiesContract.LATITUDE);
-			mapCenterLongitude = extras.getDouble(ActivitiesContract.LONGITUDE);
+		Bundle bundle;
+		if(savedInstanceState != null) {
+			bundle = savedInstanceState;
+		} else {
+			bundle = getIntent().getExtras();
+		}
+
+		if (bundle != null) {
+			mapCenterLatitude = bundle.getDouble(ActivitiesContract.LATITUDE);
+			mapCenterLongitude = bundle.getDouble(ActivitiesContract.LONGITUDE);
+			fromActivity = bundle.getInt(ActivitiesContract.FROM_ACTIVITY);
 		}
 		
 		init();
 	}
 	
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.filter_search_menu, menu);
-
-		return true;
+	protected void onSaveInstanceState(Bundle outState) {
+		outState.putDouble(ActivitiesContract.LATITUDE, mapCenterLatitude);
+		outState.putDouble(ActivitiesContract.LONGITUDE, mapCenterLongitude);
+		outState.putInt(ActivitiesContract.FROM_ACTIVITY, fromActivity);
+		
+		super.onSaveInstanceState(outState);
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if(item.getItemId() == R.id.user_account_action) {
-			Intent intent = new Intent(this, LoginActivity.class);
-			startActivity(intent);
+		if(item.getItemId() == android.R.id.home) {
+			Intent intent;
+			if(fromActivity == ActivitiesContract.RENTS_LIST_ACTIVITY){
+				intent = new Intent(this, RentsListActivity.class);
+			} else {
+				intent = new Intent(this, RentsMapActivity.class);
+			}
+
+			NavUtils.navigateUpTo(this, intent);
 			
 			return true;
 		}
@@ -127,8 +144,8 @@ public class FilterSearchActivity extends ActionBarActivity {
 	private void setupPriceChooser() {
 		ViewGroup priceChooserWrapper = (ViewGroup) findViewById(R.id.rent_price_chooser);
 		final TextView selectedPriceRange = (TextView) findViewById(R.id.rent_price_range);
-		RangeSeekBarView<Integer> priceChooser = new RangeSeekBarView<Integer>(Constants.MIN_PRICE, 
-				Constants.MAX_PRICE, this);
+		RangeSeekBarView<Integer> priceChooser = new RangeSeekBarView<Integer>(GeneralConstants.MIN_PRICE, 
+				GeneralConstants.MAX_PRICE, this);
 		priceChooser.setNotifyWhileDragging(true);
 		priceChooser.setOnRangeSeekBarChangeListener(
 				new RangeSeekBarView.OnRangeSeekBarChangeListener<Integer>() {
@@ -136,7 +153,7 @@ public class FilterSearchActivity extends ActionBarActivity {
 			public void onRangeSeekBarValuesChanged(RangeSeekBarView<?> bar, Integer minValue, 
 					Integer maxValue) {
 				selectedPriceRange.setText(RangeMessageBuilder.priceRangeMessageBuilder(minValue,
-						maxValue, Constants.MIN_PRICE, Constants.MAX_PRICE));
+						maxValue, GeneralConstants.MIN_PRICE, GeneralConstants.MAX_PRICE));
 			}
 		});
 		priceChooserWrapper.addView(priceChooser);
@@ -145,15 +162,15 @@ public class FilterSearchActivity extends ActionBarActivity {
 	private void setupSurfaceChooser() {
 		ViewGroup surfaceChooserWrapper = (ViewGroup) findViewById(R.id.rent_surface_chooser);
 		final TextView selectedSurfaceRange = (TextView) findViewById(R.id.rent_surface_range);
-		RangeSeekBarView<Integer> surfaceChooser = new RangeSeekBarView<Integer>(Constants.MIN_SURFACE, 
-				Constants.MAX_SURFACE, this);
+		RangeSeekBarView<Integer> surfaceChooser = new RangeSeekBarView<Integer>(GeneralConstants.MIN_SURFACE, 
+				GeneralConstants.MAX_SURFACE, this);
 		surfaceChooser.setNotifyWhileDragging(true);
 		surfaceChooser.setOnRangeSeekBarChangeListener(new RangeSeekBarView.OnRangeSeekBarChangeListener<Integer>() {
 			@Override
 			public void onRangeSeekBarValuesChanged(RangeSeekBarView<?> bar, Integer minValue, 
 					Integer maxValue) {
 				selectedSurfaceRange.setText(RangeMessageBuilder.surfaceRangeMessageBuilder(minValue,
-						maxValue, Constants.MIN_SURFACE, Constants.MAX_SURFACE));
+						maxValue, GeneralConstants.MIN_SURFACE, GeneralConstants.MAX_SURFACE));
 			}
 		});
 		surfaceChooserWrapper.addView(surfaceChooser);

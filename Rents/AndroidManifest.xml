@@ -4,9 +4,8 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
-    <uses-sdk
-        android:minSdkVersion="8"
-        android:targetSdkVersion="18" />
+    <uses-sdk android:minSdkVersion="8"
+        android:targetSdkVersion="18"/>
     
     <uses-permission android:name="android.permission.INTERNET"/>
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
@@ -30,65 +29,71 @@
 
         <activity
             android:name="com.personal.rents.activities.RentsMapActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:launchMode="singleTop">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
         
-        <activity android:name="com.personal.rents.activities.RentDetailsActivity">
+        <activity android:name="com.personal.rents.activities.RentDetailsActivity"/>
+        
+        <activity android:name="com.personal.rents.activities.FilterSearchActivity"/>
+        
+		<activity android:name="com.personal.rents.activities.RentsListActivity"
+		    android:launchMode="singleTop">
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
             	android:value="com.personal.rents.activities.RentsMapActivity"/>
-        </activity>
-        
-        <activity android:name="com.personal.rents.activities.FilterSearchActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-            	android:value="com.personal.rents.activities.RentsMapActivity"/>
-        </activity>
-        
-		<activity android:name="com.personal.rents.activities.RentsListActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-            	android:value="com.personal.rents.activities.RentsMapActivity"/>
+
         </activity>
         
 		<activity android:name="com.personal.rents.activities.LoginActivity">
+		    
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
             	android:value="com.personal.rents.activities.RentsMapActivity"/>
+
         </activity>
         
 		<activity android:name="com.personal.rents.activities.SignUpActivity">
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-            	android:value="com.personal.rents.activities.RentsMapActivity"/>
+            	android:value="com.personal.rents.activities.LoginActivity"/>
+
         </activity>
         
-		<activity android:name="com.personal.rents.activities.UserAddedRentsActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-            	android:value="com.personal.rents.activities.RentsMapActivity"/>
-        </activity>
+		<activity android:name="com.personal.rents.activities.UserAddedRentsActivity"
+		    android:launchMode="singleTop"/>
         
 		<activity android:name="com.personal.rents.activities.EditUserAccountActivity">
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-            	android:value="com.personal.rents.activities.RentsMapActivity"/>
+            	android:value="com.personal.rents.activities.UserAddedRentsActivity"/>
+
         </activity>
         
-		<activity android:name="com.personal.rents.activities.AddRentActivity">
+		<activity android:name="com.personal.rents.activities.AddRentActivity"
+		    android:launchMode="singleTop">
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-            	android:value="com.personal.rents.activities.RentsMapActivity"/>
+            	android:value="com.personal.rents.activities.UserAddedRentsActivity"/>
+
         </activity>
         
 		<activity android:name="com.personal.rents.activities.AddLocationActivity">
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-            	android:value="com.personal.rents.activities.RentsMapActivity"/>
+            	android:value="com.personal.rents.activities.AddRentActivity"/>
+
         </activity>
 
         <meta-data

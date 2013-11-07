@@ -7,6 +7,7 @@ import com.personal.rents.R;
 import com.personal.rents.activities.RentDetailsActivity;
 import com.personal.rents.adapters.RentsListAdapter;
 import com.personal.rents.model.Rent;
+import com.personal.rents.utils.ActivitiesContract;
 import com.personal.rents.views.SwipeDismissListViewTouchListener;
 
 import android.content.Intent;
@@ -82,6 +83,8 @@ public class SwipeDismissRentsListFragment extends ListFragment {
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		Intent intent = new Intent(getActivity(), RentDetailsActivity.class);
+		intent.putExtra(ActivitiesContract.FROM_ACTIVITY, ActivitiesContract.USER_ACCOUNT_ACTIVITY);
+		
 		startActivity(intent);
 	}
 }

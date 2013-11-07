@@ -5,6 +5,7 @@ import com.personal.rents.model.User;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -24,7 +25,14 @@ public class EditUserAccountActivity extends ActionBarActivity {
 		
 		init();
 	}
-	
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.edit_user_menu, menu);
+
+		return true;
+	}
+
 	public void onUndoBtnClick(View view) {
 		userEmail.setText(user.getUserEmail());
 		userPhone.setText(user.getUserPhone());

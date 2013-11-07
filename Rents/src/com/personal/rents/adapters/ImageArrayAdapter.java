@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 import com.personal.rents.R;
 
-public class ImageAdapter extends ArrayAdapter<Bitmap> implements ListAdapter {
+public class ImageArrayAdapter extends ArrayAdapter<Bitmap> implements ListAdapter {
 	
 	private ArrayList<Bitmap> images;
 	
@@ -33,7 +33,7 @@ public class ImageAdapter extends ArrayAdapter<Bitmap> implements ListAdapter {
 		ImageView imgView;
 	}
 
-	public ImageAdapter(Context context, int imgLayoutId, ArrayList<Bitmap> imagesList, int initSize) {
+	public ImageArrayAdapter(Context context, int imgLayoutId, ArrayList<Bitmap> imagesList, int initSize) {
 		super(context, imgLayoutId);
 		this.initSize = initSize;
 		this.imgLayoutId = imgLayoutId;

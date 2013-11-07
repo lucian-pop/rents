@@ -1,20 +1,21 @@
-package com.personal.rents.utils;
+package com.personal.rents.logic;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.personal.rents.utils.GeneralConstants;
 
 import android.content.Context;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 
-public class LocationHelper {
+public class LocationManagerWrapper {
 
 	private static LocationManager locationManager;
 	
-	public LocationHelper(Context context) {
+	public LocationManagerWrapper(Context context) {
 		if(locationManager == null) {
 			locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 		}
@@ -45,7 +46,7 @@ public class LocationHelper {
 	
 	public void moveToLocation(LatLng position, GoogleMap map) {
 		CameraPosition cameraPosition = new CameraPosition.Builder().target(position)
-				.zoom(Constants.DEFAULT_ZOOM_FACTOR).build();
+				.zoom(GeneralConstants.DEFAULT_ZOOM_FACTOR).build();
 		map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 	}
 	

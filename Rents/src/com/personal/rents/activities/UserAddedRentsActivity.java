@@ -7,9 +7,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.personal.rents.R;
 import com.personal.rents.fragments.SwipeDismissRentsListFragment;
 import com.personal.rents.model.Rent;
+import com.personal.rents.utils.ActivitiesContract;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,6 +24,8 @@ public class UserAddedRentsActivity extends ActionBarActivity {
 	private List<Rent> rents;
 	
 	private int dismissedCounter;
+	
+	private int fromActivity;
 	
 	private ViewGroup delConfirmationBtnsViewGroup;
 	
@@ -40,11 +44,22 @@ public class UserAddedRentsActivity extends ActionBarActivity {
 			bundle = getIntent().getExtras();
 		}
 		
+		if(bundle != null) {
+			fromActivity = bundle.getInt(ActivitiesContract.FROM_ACTIVITY);
+		}
+		
 		// populate rents from the bundle.
 		
 		init();
 	}
 	
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		outState.putInt(ActivitiesContract.FROM_ACTIVITY, fromActivity);
+		
+		super.onSaveInstanceState(outState);
+	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.user_added_rents_menu, menu);
@@ -54,7 +69,18 @@ public class UserAddedRentsActivity extends ActionBarActivity {
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if(item.getItemId() == R.id.edit_account_action) {
+		if(item.getItemId() == android.R.id.home) {
+			Intent intent;
+			if(fromActivity == ActivitiesContract.RENTS_LIST_ACTIVITY){
+				intent = new Intent(this, RentsListActivity.class);
+			} else {
+				intent = new Intent(this, RentsMapActivity.class);
+			}
+
+			NavUtils.navigateUpTo(this, intent);
+			
+			return true;
+		} else if(item.getItemId() == R.id.edit_account_action) {
 			Intent intent = new Intent(this, EditUserAccountActivity.class);
 			startActivity(intent);
 			

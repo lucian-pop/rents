@@ -7,12 +7,12 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.personal.rents.R;
 import com.personal.rents.adapters.PlacesSuggestionsAdapter;
+import com.personal.rents.logic.LocationManagerWrapper;
 import com.personal.rents.model.Address;
 import com.personal.rents.tasks.GetGeolocationFromAddressAsyncTask;
 import com.personal.rents.tasks.GetGeolocationFromLocationAsyncTask;
 import com.personal.rents.tasks.OnGetGeolocationTaskFinishListener;
 import com.personal.rents.utils.ActivitiesContract;
-import com.personal.rents.utils.LocationHelper;
 import com.personal.rents.views.DelayAutocompleteTextView;
 
 import android.content.Intent;
@@ -32,7 +32,7 @@ public class AddLocationActivity extends ActionBarActivity {
 	
 	public GoogleMap map;
 	
-	private LocationHelper locationHelper;
+	private LocationManagerWrapper locationHelper;
 	
 	private OnGetGeolocationTaskFinishListener onGetGeolocationFromAddrTaskFinishListener;
 	
@@ -180,7 +180,7 @@ public class AddLocationActivity extends ActionBarActivity {
 			}
 		});
 		
-		locationHelper = new LocationHelper(getApplicationContext());
+		locationHelper = new LocationManagerWrapper(getApplicationContext());
 		moveToLastKnownLocation();
 	}
 	

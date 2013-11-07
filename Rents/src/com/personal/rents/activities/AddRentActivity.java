@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import com.personal.rents.R;
 import com.personal.rents.adapters.AdapterFactory;
-import com.personal.rents.adapters.ImageAdapter;
+import com.personal.rents.adapters.ImageArrayAdapter;
 import com.personal.rents.model.Address;
 import com.personal.rents.utils.ActivitiesContract;
 import com.personal.rents.utils.BitmapUtils;
@@ -20,6 +20,7 @@ import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -36,7 +37,7 @@ public class AddRentActivity extends ActionBarActivity {
 
 	private ArrayList<Bitmap> pics;
 	
-	private ImageAdapter imageAdapter;
+	private ImageArrayAdapter imageAdapter;
 	
 	private int selectedPicPosition;
 	
@@ -66,66 +67,6 @@ public class AddRentActivity extends ActionBarActivity {
 		init();
 	}
 	
-	private void init() {
-		setupActionBar();
-		
-		setupLocateRentBtn();
-		
-		setupSpinners();
-		
-		setupPicsGridView();
-	}
-
-	private void setupActionBar() {
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		getSupportActionBar().setTitle("Adaugare chirie");
-		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-	}
-
-	private void setupLocateRentBtn() {
-		TextView locateRentBtn = (TextView) findViewById(R.id.locate_rent_btn);
-		if(address != null) {
-			locateRentBtn.setText(address.toString());
-		}
-	}
-	
-	private void setupSpinners() {
-		Spinner partiesSpinner = (Spinner) findViewById(R.id.rent_party);
-		ArrayAdapter<CharSequence> spinnerAdapter = AdapterFactory.createSpinnerAdapter(this, 
-				R.array.rent_parties);
-		partiesSpinner.setAdapter(spinnerAdapter);
-		
-		Spinner typesSpinner = (Spinner) findViewById(R.id.rent_type);
-		spinnerAdapter = AdapterFactory.createSpinnerAdapter(this, R.array.rent_types);
-		typesSpinner.setAdapter(spinnerAdapter);
-		
-		Spinner structSpinner = (Spinner) findViewById(R.id.rent_structure);
-		spinnerAdapter = AdapterFactory.createSpinnerAdapter(this, R.array.rent_structures);
-		structSpinner.setAdapter(spinnerAdapter);
-		
-		Spinner ageSpinner = (Spinner) findViewById(R.id.rent_age);
-		spinnerAdapter = AdapterFactory.createSpinnerAdapter(this, R.array.rent_ages);
-		ageSpinner.setAdapter(spinnerAdapter);
-	}
-	
-	private void setupPicsGridView() {
-		DynamicGridView picsGridView = (DynamicGridView) findViewById(R.id.rent_pics);
-		imageAdapter = new ImageAdapter(this, R.layout.add_picture_layout, pics, NO_OF_PICS);
-		picsGridView.setAdapter(imageAdapter);
-		
-		picsGridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-			@Override
-			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, 
-					long id) {
-				selectedPicPosition = position;
-				
-				return false;
-			}
-		});
-		
-		registerForContextMenu(picsGridView);
-	}
-	
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		outState.putParcelable(ActivitiesContract.ADDRESS, address);
@@ -134,6 +75,13 @@ public class AddRentActivity extends ActionBarActivity {
 		outState.putParcelableArrayList(ActivitiesContract.SELECTED_PICS, imageAdapter.getImages());
 		
 		super.onSaveInstanceState(outState);
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.add_rent_menu, menu);
+
+		return true;
 	}
 
 	@Override
@@ -199,6 +147,66 @@ public class AddRentActivity extends ActionBarActivity {
 		intent.putExtra(ActivitiesContract.ADDRESS, address);
 
 		startActivity(intent);
+	}
+	
+	private void init() {
+		setupActionBar();
+		
+		setupLocateRentBtn();
+		
+		setupSpinners();
+		
+		setupPicsGridView();
+	}
+
+	private void setupActionBar() {
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setTitle("Adaugare chirie");
+		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+	}
+
+	private void setupLocateRentBtn() {
+		TextView locateRentBtn = (TextView) findViewById(R.id.locate_rent_btn);
+		if(address != null) {
+			locateRentBtn.setText(address.toString());
+		}
+	}
+	
+	private void setupSpinners() {
+		Spinner partiesSpinner = (Spinner) findViewById(R.id.rent_party);
+		ArrayAdapter<CharSequence> spinnerAdapter = AdapterFactory.createSpinnerAdapter(this, 
+				R.array.rent_parties);
+		partiesSpinner.setAdapter(spinnerAdapter);
+		
+		Spinner typesSpinner = (Spinner) findViewById(R.id.rent_type);
+		spinnerAdapter = AdapterFactory.createSpinnerAdapter(this, R.array.rent_types);
+		typesSpinner.setAdapter(spinnerAdapter);
+		
+		Spinner structSpinner = (Spinner) findViewById(R.id.rent_structure);
+		spinnerAdapter = AdapterFactory.createSpinnerAdapter(this, R.array.rent_structures);
+		structSpinner.setAdapter(spinnerAdapter);
+		
+		Spinner ageSpinner = (Spinner) findViewById(R.id.rent_age);
+		spinnerAdapter = AdapterFactory.createSpinnerAdapter(this, R.array.rent_ages);
+		ageSpinner.setAdapter(spinnerAdapter);
+	}
+	
+	private void setupPicsGridView() {
+		DynamicGridView picsGridView = (DynamicGridView) findViewById(R.id.rent_pics);
+		imageAdapter = new ImageArrayAdapter(this, R.layout.add_picture_layout, pics, NO_OF_PICS);
+		picsGridView.setAdapter(imageAdapter);
+		
+		picsGridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, 
+					long id) {
+				selectedPicPosition = position;
+				
+				return false;
+			}
+		});
+		
+		registerForContextMenu(picsGridView);
 	}
 
 	private void initiatePicBrowsing() {
