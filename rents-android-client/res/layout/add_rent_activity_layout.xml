@@ -202,7 +202,7 @@
 	        
 	    </RelativeLayout>
 	    
-		<com.personal.rents.views.DynamicGridView android:id="@+id/rent_pics"
+		<com.personal.rents.view.DynamicGridView android:id="@+id/rent_pics"
 		    android:layout_width="match_parent"
 		    android:layout_height="match_parent"
 		    android:layout_marginTop="10dp"

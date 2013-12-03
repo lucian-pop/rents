@@ -1,7 +1,7 @@
 .metadata/
 android-support-v7-appcompat/bin/
 google-play-services_lib/bin/
-Rents/bin/
-Rents/gen/
-RentsTest/bin/
-RentsTest/gen/
+rents-android-client/bin/
+rents-android-client/gen/
+rents-android-client-test/bin/
+rents-android-client-test/gen/

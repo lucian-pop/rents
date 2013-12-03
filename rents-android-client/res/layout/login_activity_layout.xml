@@ -60,7 +60,7 @@
 	        android:textColor="@color/black"
 	        android:text="sau"/>
 	
-	    <EditText android:id="@+id/username"
+	    <EditText android:id="@+id/email"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
 	        android:layout_below="@+id/login_with_reg_acc_section"
@@ -73,7 +73,7 @@
 	    <EditText android:id="@+id/password"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
-	        android:layout_below="@+id/username"
+	        android:layout_below="@+id/email"
 	        android:layout_margin="10dp"
 	        android:textAppearance="?android:attr/textAppearanceMedium"
 	        android:inputType="textPassword"
@@ -90,7 +90,8 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textStyle="bold"
             android:textColor="@color/white"
-            android:text="Autentificare"/>
+            android:text="Login"
+            android:onClick="onLoginBtnClick"/>
 	    
 	    <TextView android:id="@+id/forgot_password_btn"
 	  		android:layout_width="wrap_content"

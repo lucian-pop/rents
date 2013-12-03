@@ -4,7 +4,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.personal.rents.utils.GeneralConstants;
+import com.personal.rents.util.GeneralConstants;
 
 import android.content.Context;
 import android.location.Criteria;

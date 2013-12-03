@@ -64,17 +64,25 @@
 			    android:text="Telefon"
 			    android:inputType="phone"/>
 			
-			<EditText android:id="@+id/user_password"
+			<EditText android:id="@+id/password"
 			    android:layout_width="match_parent"
 			    android:layout_height="wrap_content"
 			    android:layout_marginTop="10dp"
 			    android:layout_marginLeft="10dp"
 			    android:layout_marginRight="10dp"
 			    android:textAppearance="?android:attr/textAppearanceMedium"
-			    android:hint="Parola"
+			    android:hint="Parola actuala"
 			    android:inputType="textPassword"/>
 			
-			<EditText android:id="@+id/user_repeated_password"
+			<EditText android:id="@+id/newPassword"
+			    android:layout_width="match_parent"
+			    android:layout_height="wrap_content"
+			    android:layout_margin="10dp"
+			    android:textAppearance="?android:attr/textAppearanceMedium"
+			    android:hint="Noua parola"
+			    android:inputType="textPassword"/>
+			    
+			<EditText android:id="@+id/repeatPassword"
 			    android:layout_width="match_parent"
 			    android:layout_height="wrap_content"
 			    android:layout_margin="10dp"
@@ -82,5 +90,5 @@
 			    android:hint="Repeta parola"
 			    android:inputType="textPassword"/>"
 	    </LinearLayout>
-    </ScrollView>"
+    </ScrollView>
 </RelativeLayout>

@@ -6,5 +6,5 @@
 	<fragment android:id="@+id/rents_list_fragment"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
-	    class="com.personal.rents.fragments.RentsListFragment"/>
+	    class="com.personal.rents.fragment.RentsListFragment"/>
 </RelativeLayout>

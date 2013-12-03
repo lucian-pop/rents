@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:layout_gravity="fill_horizontal">
     
-    <com.personal.rents.views.DelayAutocompleteTextView 
+    <com.personal.rents.view.DelayAutocompleteTextView 
         android:id="@+id/autocomplete_places_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

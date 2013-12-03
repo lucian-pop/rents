@@ -28,7 +28,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name="com.personal.rents.activities.RentsMapActivity"
+            android:name="com.personal.rents.activity.RentsMapActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop">
 
@@ -39,60 +39,60 @@
 
         </activity>
         
-        <activity android:name="com.personal.rents.activities.RentDetailsActivity"/>
+        <activity android:name="com.personal.rents.activity.RentDetailsActivity"/>
         
-        <activity android:name="com.personal.rents.activities.FilterSearchActivity"/>
+        <activity android:name="com.personal.rents.activity.FilterSearchActivity"/>
         
-		<activity android:name="com.personal.rents.activities.RentsListActivity"
+		<activity android:name="com.personal.rents.activity.RentsListActivity"
 		    android:launchMode="singleTop">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-            	android:value="com.personal.rents.activities.RentsMapActivity"/>
+            	android:value="com.personal.rents.activity.RentsMapActivity"/>
 
         </activity>
         
-		<activity android:name="com.personal.rents.activities.LoginActivity">
+		<activity android:name="com.personal.rents.activity.LoginActivity">
 		    
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-            	android:value="com.personal.rents.activities.RentsMapActivity"/>
+            	android:value="com.personal.rents.activity.RentsMapActivity"/>
 
         </activity>
         
-		<activity android:name="com.personal.rents.activities.SignUpActivity">
+		<activity android:name="com.personal.rents.activity.SignupActivity">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-            	android:value="com.personal.rents.activities.LoginActivity"/>
+            	android:value="com.personal.rents.activity.LoginActivity"/>
 
         </activity>
         
-		<activity android:name="com.personal.rents.activities.UserAddedRentsActivity"
+		<activity android:name="com.personal.rents.activity.UserAddedRentsActivity"
 		    android:launchMode="singleTop"/>
         
-		<activity android:name="com.personal.rents.activities.EditUserAccountActivity">
+		<activity android:name="com.personal.rents.activity.EditUserAccountActivity">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-            	android:value="com.personal.rents.activities.UserAddedRentsActivity"/>
+            	android:value="com.personal.rents.activity.UserAddedRentsActivity"/>
 
         </activity>
         
-		<activity android:name="com.personal.rents.activities.AddRentActivity"
+		<activity android:name="com.personal.rents.activity.AddRentActivity"
 		    android:launchMode="singleTop">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-            	android:value="com.personal.rents.activities.UserAddedRentsActivity"/>
+            	android:value="com.personal.rents.activity.UserAddedRentsActivity"/>
 
         </activity>
         
-		<activity android:name="com.personal.rents.activities.AddLocationActivity">
+		<activity android:name="com.personal.rents.activity.AddLocationActivity">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-            	android:value="com.personal.rents.activities.AddRentActivity"/>
+            	android:value="com.personal.rents.activity.AddRentActivity"/>
 
         </activity>
 
