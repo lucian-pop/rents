@@ -22,8 +22,6 @@ public class Account {
 	
 	private Date signupDate;
 	
-	private Date passwordChangeDate;
-	
 	private String tokenKey;
 
 	public Integer getId() {
@@ -96,14 +94,6 @@ public class Account {
 
 	public void setSignupDate(Date signupDate) {
 		this.signupDate = signupDate;
-	}
-
-	public Date getPasswordChangeDate() {
-		return passwordChangeDate;
-	}
-
-	public void setPasswordChangeDate(Date passwordChangeDate) {
-		this.passwordChangeDate = passwordChangeDate;
 	}
 
 	public String getTokenKey() {

@@ -53,8 +53,6 @@ public class AddLocationActivity extends ActionBarActivity {
 	
 	EditText streetNumberEditText;
 	
-	EditText otherDetailsEditText;
-	
 	EditText neighborhoohEditText;
 	
 	EditText localityEditText;
@@ -88,14 +86,14 @@ public class AddLocationActivity extends ActionBarActivity {
 
 	public void onSaveBtnClick(View view) {
 		address.streetName = streetNameEditText.getText().toString();
-		address.streetNumber = streetNumberEditText.getText().toString();
-		address.otherDetails = otherDetailsEditText.getText().toString();
-		address.neighborhood = neighborhoohEditText.getText().toString();
+		address.streetNo = streetNumberEditText.getText().toString();
+		address.neighbourhood = neighborhoohEditText.getText().toString();
 		address.locality = localityEditText.getText().toString();
-		address.adminArea1 = admAreaEditText.getText().toString();
+		address.admAreaL1 = admAreaEditText.getText().toString();
 		
 		// Show a toast message which specifies to fill the red input fields.
 		// Turn color text of unfilled input fields in red.
+
 		Intent intent = new Intent(this, AddRentActivity.class);
 		intent.putExtra(ActivitiesContract.ADDRESS, address);
 		startActivity(intent);
@@ -227,8 +225,7 @@ public class AddLocationActivity extends ActionBarActivity {
 		addLocationDetailsPanel = (ViewGroup) findViewById(R.id.add_location_details);
 		streetNameEditText = (EditText) findViewById(R.id.street_name);
 		streetNumberEditText = (EditText) findViewById(R.id.street_no);
-		otherDetailsEditText = (EditText) findViewById(R.id.other_details);
-		neighborhoohEditText = (EditText) findViewById(R.id.neighborhood);
+		neighborhoohEditText = (EditText) findViewById(R.id.neighbourhood);
 		localityEditText = (EditText) findViewById(R.id.locality);
 		admAreaEditText = (EditText) findViewById(R.id.adm_area);
 
@@ -242,11 +239,11 @@ public class AddLocationActivity extends ActionBarActivity {
 		addLocationDetailsPanel.setVisibility(View.VISIBLE);
 		streetNameEditText.setText(address.streetName);
 
-		streetNumberEditText.setText(address.streetNumber);
+		streetNumberEditText.setText(address.streetNo);
 
-		neighborhoohEditText.setText(address.neighborhood);
+		neighborhoohEditText.setText(address.neighbourhood);
 		localityEditText.setText(address.locality);
-		admAreaEditText.setText(address.adminArea1);
+		admAreaEditText.setText(address.admAreaL1);
 	}
 	
 	private void dropPin(LatLng position) {

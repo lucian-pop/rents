@@ -28,13 +28,81 @@
 	        android:clickable="true"
 	        android:onClick="onLocateRentBtnClick"/>
 	    
+	    <LinearLayout android:id="@+id/building_staircase"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_marginLeft="10dp"
+	        android:layout_marginRight="10dp"
+	        android:layout_below="@id/locate_rent_btn"
+	        android:background="@color/white"
+	        android:orientation="horizontal">
+	        
+	        <EditText android:id="@+id/building"
+	            android:layout_width="0dp"
+	            android:layout_height="wrap_content"
+	            android:layout_weight="1"
+	            android:layout_marginLeft="10dp"
+	            android:layout_marginBottom="10dp"
+	            android:textAppearance="?android:attr/textAppearanceMedium"
+	            android:hint="Bloc"
+				android:maxLines="1"
+				android:imeOptions="actionDone"/>
+	        
+	        <EditText android:id="@+id/staircase"
+	            android:layout_width="0dp"
+	            android:layout_height="wrap_content"
+	            android:layout_weight="1"
+	            android:layout_marginLeft="10dp"
+	            android:layout_marginRight="10dp"
+	            android:layout_marginBottom="10dp"
+	            android:textAppearance="?android:attr/textAppearanceMedium"
+	            android:hint="Scara"
+				android:maxLines="1"
+				android:imeOptions="actionDone"/>"
+	    </LinearLayout>
+	    
+	     <LinearLayout android:id="@+id/floor_ap"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_marginLeft="10dp"
+	        android:layout_marginRight="10dp"
+	        android:layout_below="@id/building_staircase"
+	        android:paddingBottom="10dp"
+	        android:background="@color/white"
+	        android:orientation="horizontal">
+	        
+	        <EditText android:id="@+id/floor"
+	            android:layout_width="0dp"
+	            android:layout_height="wrap_content"
+	            android:layout_weight="1"
+	            android:layout_marginLeft="10dp"
+	            android:layout_marginBottom="10dp"
+	            android:textAppearance="?android:attr/textAppearanceMedium"
+	            android:hint="Etaj"
+				android:maxLines="1"
+				android:inputType="number"
+				android:imeOptions="actionDone"/>
+	        
+	        <EditText android:id="@+id/ap"
+	            android:layout_width="0dp"
+	            android:layout_height="wrap_content"
+	            android:layout_weight="1"
+	            android:layout_marginLeft="10dp"
+	            android:layout_marginRight="10dp"
+	            android:layout_marginBottom="10dp"
+	            android:textAppearance="?android:attr/textAppearanceMedium"
+	            android:hint="Ap."
+				android:maxLines="1"
+				android:imeOptions="actionDone"/>
+	    </LinearLayout>
+
 	    <LinearLayout android:id="@+id/rent_price_surface"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
 	        android:layout_marginTop="10dp"
 	        android:layout_marginLeft="10dp"
 	        android:layout_marginRight="10dp"
-	        android:layout_below="@id/locate_rent_btn"
+	        android:layout_below="@id/floor_ap"
 	        android:paddingTop="10dp"
 	        android:background="@color/white"
 	        android:orientation="horizontal">
@@ -202,13 +270,30 @@
 	        
 	    </RelativeLayout>
 	    
+	    <EditText android:id="@+id/rent_phone"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="10dp"
+	        android:layout_marginLeft="10dp"
+	        android:layout_below="@id/rent_desc_pets"
+	        android:paddingTop="10dp"
+	        android:paddingBottom="10dp"
+	        android:paddingLeft="10dp"
+	        android:textAppearance="?android:attr/textAppearanceMedium"
+	        android:background="@color/white"
+	        android:hint="Telefon"
+	        android:maxLines="1"
+	        android:inputType="textMultiLine"
+	        android:imeOptions="actionDone">
+		</EditText>
+	    
 		<com.personal.rents.view.DynamicGridView android:id="@+id/rent_pics"
 		    android:layout_width="match_parent"
 		    android:layout_height="match_parent"
 		    android:layout_marginTop="10dp"
 		    android:layout_marginLeft="10dp"
 		    android:layout_marginRight="10dp"
-		    android:layout_below="@id/rent_desc_pets"
+		    android:layout_below="@id/rent_phone"
 		    android:padding="10dp"
 		    android:background="@color/white"
 		    android:numColumns="auto_fit"
@@ -228,7 +313,8 @@
 	        android:textAppearance="?android:attr/textAppearanceMedium"
 	        android:textColor="@color/white"
 	        android:textStyle="bold"
-	        android:text="Adauga chirie" />
+	        android:text="Adauga chirie" 
+	        android:onClick="onAddRentBtnClick"/>
 
 	</RelativeLayout>
 </ScrollView>

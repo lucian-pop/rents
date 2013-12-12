@@ -50,11 +50,23 @@ public class BitmapUtilsTest extends AndroidTestCase {
 	
 	public void testGetAbsoluteScaledImg() {
 		Bitmap image = BitmapUtils.getRelativeScaledImg(IMAGE_PATH, DEST_SIZE);
-		assertTrue(image != null);
+		assertNotNull(image);
 		
-		image = BitmapUtils.getAbsoluteScaledImg(getContext(), image, DEST_SIZE, IMAGE_PATH);
-		assertTrue(image != null);
+		image = BitmapUtils.getAbsoluteScaledImg(getContext(), image, IMAGE_PATH, DEST_SIZE);
+		assertNotNull(image);
 		assertTrue(image.getWidth() <= DEST_SIZE);
 		assertTrue(image.getHeight() <= DEST_SIZE);
 	}
+	
+	public void testGetCompressedImg() {
+		Bitmap image = BitmapUtils.getRelativeScaledImg(IMAGE_PATH, DEST_SIZE);
+		assertNotNull(image);
+		
+		image = BitmapUtils.getAbsoluteScaledImg(getContext(), image, IMAGE_PATH, DEST_SIZE);
+		assertNotNull(image);
+		
+		byte[] imageBytes = BitmapUtils.compressImg(image, 60);
+		assertTrue(imageBytes.length > 0);
+	}
+	
 }

@@ -107,8 +107,7 @@ public class ImageArrayAdapter extends ArrayAdapter<Bitmap> implements ListAdapt
 	
 	public void replaceImage(Bitmap image, int position) {
 		Bitmap currImage = images.get(position);
-		images.remove(position);
-		images.add(position, image);
+		images.set(position, image);
 		if(currImage != null) {
 			currImage.recycle();
 			currImage = null;
@@ -116,12 +115,5 @@ public class ImageArrayAdapter extends ArrayAdapter<Bitmap> implements ListAdapt
 
 		notifyDataSetChanged();
 	}
-	
-	public void removeImage(int position) {
-		Bitmap currImage = images.get(position);
-		currImage.recycle();
-		currImage = null;
 
-		notifyDataSetChanged();
-	}
 }	

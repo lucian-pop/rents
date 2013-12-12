@@ -1,7 +1,10 @@
 package com.personal.rents.util;
 
+import java.io.ByteArrayOutputStream;
+
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 
@@ -28,8 +31,8 @@ public final class BitmapUtils {
 		return BitmapFactory.decodeFile(imagePath, options);
 	}
 	
-	public static Bitmap getAbsoluteScaledImg(Context context, Bitmap image, int destSize, 
-			String imagePath) {
+	public static Bitmap getAbsoluteScaledImg(Context context, Bitmap image, String imagePath,
+			int destSize) {
 		int maxSize = Math.max(image.getWidth(), image.getHeight());
 		float scale = (float) destSize / maxSize;
 		if(scale > 1) {
@@ -48,11 +51,15 @@ public final class BitmapUtils {
 		
 		Bitmap scaledImg = Bitmap.createBitmap(image, 0, 0, image.getWidth(), image.getHeight(),
 				scaleMatrix, true);
-		image.recycle();
-		image = null;
 
 		return scaledImg;
 	}
+	
+	public static byte[] compressImg(Bitmap image, int quality) {
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		image.compress(CompressFormat.JPEG, quality, bos);
+				
+		return bos.toByteArray();	}
 	
 	protected static int calculateInSampleSize(int srcWidth, int srcHeight, int destSize) {
 		int maxSize = Math.max(srcWidth, srcHeight);

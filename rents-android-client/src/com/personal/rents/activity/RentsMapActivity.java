@@ -218,8 +218,9 @@ public class RentsMapActivity extends ActionBarActivity implements OnInfoWindowC
     		for(Rent rent : result) { 
     			rentMarkerIcon = RentMarkerBuilder.createRentMarkerIcon(rentMarkerView,
     					rent.price);
-    			rentsMap.addMarker(new MarkerOptions().position(rent.position)
-    					.icon(BitmapDescriptorFactory.fromBitmap(rentMarkerIcon)));
+    			rentsMap.addMarker(new MarkerOptions()
+    				.position(new LatLng(rent.address.latitude, rent.address.longitude))
+    				.icon(BitmapDescriptorFactory.fromBitmap(rentMarkerIcon)));
     		}
     		rentMarkerIcon = RentMarkerBuilder.createRentMarkerIcon(rentMarkerView, 500);
     		rentsMap.addMarker(new MarkerOptions().position(rentsMap.getCameraPosition().target)

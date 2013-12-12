@@ -5,14 +5,22 @@ import java.util.List;
 import java.util.Random;
 
 import retrofit.RestAdapter;
+import retrofit.client.Response;
+import retrofit.mime.TypedByteArray;
+import retrofit.mime.TypedString;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.personal.rents.model.Account;
+import com.personal.rents.model.Address;
 import com.personal.rents.model.Rent;
+import com.personal.rents.rest.api.IAddRent;
+import com.personal.rents.rest.api.IAuthorization;
 import com.personal.rents.rest.api.IChangePassword;
 import com.personal.rents.rest.api.ILogin;
 import com.personal.rents.rest.api.IMyResource;
 import com.personal.rents.rest.api.ISignup;
+import com.personal.rents.rest.api.IUploadImage;
+import com.personal.rents.rest.util.WebserviceResponseStatus;
 
 public class RentsClient {
 	
@@ -20,10 +28,10 @@ public class RentsClient {
 	
 	private static final int maxPrice = 20000;
 	
-	private static final String BASE_URL = "http://192.168.1.3:8080/rents-server/ws";
-	
+	private static final String BASE_URL = "http://192.168.1.5:8080/rents-server/ws";
+
 	private static final RestAdapter restAdapter;
-	
+
 	static {
 		restAdapter = new RestAdapter.Builder().setServer(BASE_URL).build();
 	}
@@ -45,6 +53,32 @@ public class RentsClient {
 				password, newPassword);
 		
 		return tokenKey;
+	}
+	
+	public static boolean isAuthorized(int accountId, String tokenKey) {
+		boolean authorized = true;
+		Response response = restAdapter.create(IAuthorization.class).authorize(accountId, tokenKey);
+		if(response.getStatus() != WebserviceResponseStatus.OK.getCode()) {
+			authorized = false;
+		}
+
+		return authorized;
+	}
+	
+	public static String uploadImage(byte[] image, String filename, String accountId, 
+			String datetime) {
+		TypedByteArray imagePart = new TypedByteArray("application/octet-stream", image);
+		String imageURI = restAdapter.create(IUploadImage.class).uploadImage(imagePart, 
+				new TypedString(filename), new TypedString(accountId), new TypedString(datetime));
+		
+		
+		return imageURI;
+	}
+	
+	public static Rent addRent(Rent rent) {
+		rent = restAdapter.create(IAddRent.class).addRent(rent);
+
+		return rent;
 	}
 	
 	public static String getResource() {
@@ -72,11 +106,18 @@ public class RentsClient {
 		int price = 0;
 		List<Rent> rents = new ArrayList<Rent>(size);
 		Random random = new Random();
+		Rent rent = null;
 		for(int i = 0; i < size; i++) {
 			x = x0 + (x1 - x0) * random.nextDouble();
 			y = y0 + (y1 - y0) * random.nextDouble();
 			price = minPrice + random.nextInt(maxPrice - minPrice);
-			rents.add(new Rent(new LatLng(y, x), price));
+
+			rent = new Rent();
+			rent.address = new Address();
+			rent.address.latitude = y;
+			rent.address.longitude = x;
+			rent.price = price;
+			rents.add(rent);
 		}
 		
 		return rents;

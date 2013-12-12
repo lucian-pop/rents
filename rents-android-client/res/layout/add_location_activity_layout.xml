@@ -5,16 +5,18 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		class="com.google.android.gms.maps.SupportMapFragment"/>
+
 	<ScrollView  
 	    android:layout_width="fill_parent" 
 	    android:layout_height="wrap_content"
 	    android:layout_gravity="bottom"
-	    android:fillViewport="true"> 
-	<RelativeLayout android:id="@+id/add_location_details"
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:background="@color/white"
-	    android:visibility="gone">
+	    android:fillViewport="true">
+	    
+		<RelativeLayout android:id="@+id/add_location_details"
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:background="@color/white"
+		    android:visibility="gone">
 	   
 	    <LinearLayout android:id="@+id/street"
 	        android:layout_width="match_parent"
@@ -48,46 +50,25 @@
 		        android:maxLines="1"
 		        android:inputType="number"
 		        android:imeOptions="actionDone"/>
-	    </LinearLayout>
+	    </LinearLayout>	 
 	    
-	    <LinearLayout android:id="@+id/other_neighborhood"
+	    <EditText android:id="@+id/neighbourhood"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
 	        android:layout_below="@id/street"
-	        android:orientation="horizontal">
-		    
-	        <EditText android:id="@+id/other_details"
-		        android:layout_width="0dp"
-		        android:layout_height="wrap_content"
-		        android:layout_weight="1"
-		        android:layout_marginLeft="10dp"
-		        android:layout_marginRight="10dp"
-		        android:textAppearance="?android:attr/textAppearanceMedium"
-		        android:textColor="@color/black"
-		        android:hint="Sc., Bl., Ap."
-		        android:maxLines="1"
-		        android:inputType="text"
-		        android:imeOptions="actionDone"/>
-		    
-		    <EditText android:id="@+id/neighborhood"
-		        android:layout_width="0dp"
-		        android:layout_height="wrap_content"
-		        android:layout_weight="1"
-		        android:layout_marginLeft="10dp"
-		        android:layout_marginRight="10dp"
-		        android:textAppearance="?android:attr/textAppearanceMedium"
-		        android:textColor="@color/black"
-		        android:hint="Cartier"
-		        android:maxLines="1"
-		        android:inputType="text"
-		        android:imeOptions="actionDone"/>
-	        
-	    </LinearLayout>
-	    
+	        android:layout_marginLeft="10dp"
+	        android:layout_marginRight="10dp"
+	        android:textAppearance="?android:attr/textAppearanceMedium"
+	        android:textColor="@color/black"
+	        android:hint="Cartier"
+	        android:maxLines="1"
+	        android:inputType="text"
+	        android:imeOptions="actionDone"/>
+
 	    <LinearLayout android:id="@+id/locality_adm_area"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
-	        android:layout_below="@id/other_neighborhood"
+	        android:layout_below="@id/neighbourhood"
 	        android:orientation="horizontal">
 		    
 	        <EditText android:id="@+id/locality"
@@ -146,6 +127,6 @@
 				android:onClick="onSaveBtnClick"/>
 		</LinearLayout>
 
-	</RelativeLayout>
-</ScrollView>
+		</RelativeLayout>
+	</ScrollView>
 </merge>

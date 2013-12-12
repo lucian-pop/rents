@@ -5,30 +5,36 @@ import android.os.Parcelable;
 
 public class Address implements Parcelable {
 
-	public String streetNumber;
+	public int id;
 	
-	public String streetName = "";
+	public String streetNo;
 	
-	public String neighborhood = "";
-
-	public String locality = "";
+	public String streetName;
 	
-	public String adminArea1 = "";
-
-	public String country = "";
+	public String neighbourhood;
 	
-	public String formattedAddress = "";
+	public String sublocality;
 	
-	public String otherDetails = "";
+	public String locality;
+	
+	public String admAreaL1;
+	
+	public String country;
 	
 	public double latitude;
 	
 	public double longitude;
 	
-	private static final String COMMA= ", ";
+	public String building;
+	
+	public String staircase;
+	
+	public int floor;
+	
+	public String ap;
 	
 	public static final Parcelable.Creator<Address> CREATOR;
-	    
+    
     static {
     	CREATOR = new Parcelable.Creator<Address>() {
     	    public Address createFromParcel(Parcel source) {
@@ -45,40 +51,48 @@ public class Address implements Parcelable {
     }
     
     public Address(Parcel source) {
-    	streetNumber = source.readString();
+    	id = source.readInt();
+    	streetNo = source.readString();
     	streetName = source.readString();
-    	neighborhood = source.readString();
+    	neighbourhood = source.readString();
+    	sublocality = source.readString();
     	locality = source.readString();
-    	adminArea1 = source.readString();
+    	admAreaL1 = source.readString();
     	country = source.readString();
-    	formattedAddress = source.readString();
-    	otherDetails = source.readString();
     	latitude = source.readDouble();
     	longitude = source.readDouble();
+    	building = source.readString();
+    	staircase = source.readString();
+    	floor = source.readInt();
+    	ap = source.readString();
     }
 
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
-    	dest.writeString(streetNumber);
-    	dest.writeString(streetName);
-    	dest.writeString(neighborhood);
-    	dest.writeString(locality);
-    	dest.writeString(adminArea1);
-    	dest.writeString(country);
-    	dest.writeString(formattedAddress);
-    	dest.writeString(otherDetails);
-    	dest.writeDouble(latitude);
-    	dest.writeDouble(longitude);
+		dest.writeInt(id);
+		dest.writeString(streetNo);
+		dest.writeString(streetName);
+		dest.writeString(neighbourhood);
+		dest.writeString(sublocality);
+		dest.writeString(locality);
+		dest.writeString(admAreaL1);
+		dest.writeString(country);
+		dest.writeDouble(latitude);
+		dest.writeDouble(longitude);
+		dest.writeString(building);
+		dest.writeString(staircase);
+		dest.writeInt(floor);
+		dest.writeString(ap);
 	}
-	
+
 	@Override
 	public int describeContents() {
 		return this.hashCode();
 	}
-	
+
 	@Override
 	public String toString() {
-		return streetName + " " + streetNumber + COMMA +  neighborhood + COMMA + locality + COMMA
-				+ adminArea1 + COMMA + country + COMMA + latitude + COMMA + longitude;
+		return streetName + " " + streetNo + ", " + neighbourhood + ", " + locality + ", "
+				+ admAreaL1 + ", " + country + ", " + latitude + ", " + longitude;
 	}
 }

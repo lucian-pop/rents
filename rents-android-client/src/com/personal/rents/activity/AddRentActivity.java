@@ -2,13 +2,20 @@ package com.personal.rents.activity;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 
 import com.personal.rents.R;
 import com.personal.rents.adapter.AdapterFactory;
 import com.personal.rents.adapter.ImageArrayAdapter;
+import com.personal.rents.logic.ImageManager;
+import com.personal.rents.logic.UserAccountManager;
 import com.personal.rents.model.Address;
+import com.personal.rents.model.Rent;
+import com.personal.rents.task.AddRentAsyncTask;
+import com.personal.rents.task.AuthorizationAsyncTask;
+import com.personal.rents.task.listener.OnAddRentTaskFinishListener;
+import com.personal.rents.task.listener.OnAuthorizationTaskFinishListener;
 import com.personal.rents.util.ActivitiesContract;
-import com.personal.rents.util.BitmapUtils;
 import com.personal.rents.util.MediaUtils;
 import com.personal.rents.view.DynamicGridView;
 
@@ -26,6 +33,8 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -34,21 +43,22 @@ public class AddRentActivity extends ActionBarActivity {
 	private static final int NO_OF_PICS = 5;
 
 	private Address address;
-
-	private ArrayList<Bitmap> pics;
-	
-	private ImageArrayAdapter imageAdapter;
 	
 	private int selectedPicPosition;
 	
 	private Bitmap selectedBitmap;
 	
 	private String selectedPicPath;
+
+	private ArrayList<Bitmap> pics;
 	
+	private ArrayList<String> imagesPaths = new ArrayList<String>(NO_OF_PICS);
+	
+	private ImageArrayAdapter imageAdapter;
 	
 	/**
-	 * Recycle selectedBitmap during onPause() and onDestroy().
-	 *
+	 * Recycle selectedBitmap and pics on onDestroy().
+	 * Recreate pics from paths using an AsyncTask.
 	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +72,7 @@ public class AddRentActivity extends ActionBarActivity {
 					ActivitiesContract.SELECTED_PIC_POSITION);
 			selectedPicPath = savedInstanceState.getString(ActivitiesContract.SELECTED_PIC_PATH);
 			pics = savedInstanceState.getParcelableArrayList(ActivitiesContract.SELECTED_PICS);
+			imagesPaths = savedInstanceState.getStringArrayList(ActivitiesContract.IMAGES_PATHS);
 		} else {
 			bundle = getIntent().getExtras();
 		}
@@ -78,6 +89,7 @@ public class AddRentActivity extends ActionBarActivity {
 		outState.putInt(ActivitiesContract.SELECTED_PIC_POSITION, selectedPicPosition);
 		outState.putString(ActivitiesContract.SELECTED_PIC_PATH, selectedPicPath);
 		outState.putParcelableArrayList(ActivitiesContract.SELECTED_PICS, imageAdapter.getImages());
+		outState.putStringArrayList(ActivitiesContract.IMAGES_PATHS, imagesPaths);
 		
 		super.onSaveInstanceState(outState);
 	}
@@ -133,12 +145,16 @@ public class AddRentActivity extends ActionBarActivity {
 
 					break;
 				}
-			 
+			
 			if(selectedPicPath != null) {
-				selectedBitmap = BitmapUtils.getRelativeScaledImg(selectedPicPath, 
+				if(imagesPaths.size() > selectedPicPosition) {
+					imagesPaths.set(selectedPicPosition, selectedPicPath);
+				} else {
+					imagesPaths.add(selectedPicPath);
+				}
+
+				selectedBitmap = ImageManager.resizeImage(this, selectedPicPath, 
 						imageAdapter.getImageMaxSize());
-				selectedBitmap  = BitmapUtils.getAbsoluteScaledImg(this, selectedBitmap, 
-						imageAdapter.getImageMaxSize(), selectedPicPath);
 			}
 			 
 			if(selectedBitmap != null) {
@@ -152,6 +168,24 @@ public class AddRentActivity extends ActionBarActivity {
 		intent.putExtra(ActivitiesContract.ADDRESS, address);
 
 		startActivity(intent);
+	}
+	
+	public void onAddRentBtnClick(View view) {
+		AuthorizationAsyncTask authorizationTask = new AuthorizationAsyncTask(
+				new OnAuthorizationTaskFinishListener() {
+			@Override
+			public void onTaskFinish(boolean authorized) {
+				if(!authorized) {
+					Intent intent = new Intent(AddRentActivity.this, LoginActivity.class);
+					startActivity(intent);
+				} else {
+					addRent();
+				}
+			}
+		});
+		authorizationTask.execute(this);
+		
+
 	}
 	
 	private void init() {
@@ -176,7 +210,7 @@ public class AddRentActivity extends ActionBarActivity {
 			locateRentBtn.setText(address.toString());
 		}
 	}
-	
+
 	private void setupSpinners() {
 		Spinner partiesSpinner = (Spinner) findViewById(R.id.rent_party);
 		ArrayAdapter<CharSequence> spinnerAdapter = AdapterFactory.createSpinnerAdapter(this, 
@@ -231,9 +265,84 @@ public class AddRentActivity extends ActionBarActivity {
 		intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(imageFile));
 		
 	    startActivityForResult(intent, ActivitiesContract.TAKE_PIC_REQ_CODE);
+		
 	}
 
 	private void deletePicture() {
 		imageAdapter.replaceImage(null, selectedPicPosition);
+	}
+	
+	private void addRent() {
+		updateAddress();
+		Rent rent = initRent();
+		AddRentAsyncTask addRentTask = new AddRentAsyncTask(imagesPaths, new OnAddRentTaskFinishListener() {
+			@Override
+			public void onTaskFinish(Rent rent) {
+				handleResponse(rent, AddRentActivity.this);
+			}
+		});
+		addRentTask.execute(rent, this.getApplicationContext());
+	}
+	
+	private Rent initRent() {
+		EditText rentPrice = (EditText)	findViewById(R.id.rent_price);
+		EditText rentSurface = (EditText) findViewById(R.id.rent_surface);
+		EditText rentRooms = (EditText) findViewById(R.id.rent_rooms);
+		EditText rentBaths = (EditText) findViewById(R.id.rent_baths);
+		Spinner rentParties = (Spinner) findViewById(R.id.rent_party);
+		Spinner rentTypes = (Spinner) findViewById(R.id.rent_type);
+		Spinner rentStruct = (Spinner) findViewById(R.id.rent_structure);
+		Spinner rentAge = (Spinner) findViewById(R.id.rent_age);
+		EditText rentDesc = (EditText) findViewById(R.id.rent_desc);
+		CheckBox  petsAllowed = (CheckBox) findViewById(R.id.pets_allowed);
+		EditText phone = (EditText) findViewById(R.id.rent_phone);
+		
+		Rent rent = new Rent();
+		rent.accountId = UserAccountManager.getAccount(this).getId();
+		rent.address = address;
+		rent.price = Integer.parseInt(rentPrice.getText().toString());
+		rent.surface = Integer.parseInt(rentSurface.getText().toString());
+		rent.rooms = Integer.parseInt(rentRooms.getText().toString());
+		rent.baths = Integer.parseInt(rentBaths.getText().toString());
+		rent.party = (byte) rentParties.getSelectedItemPosition();
+		rent.rentType = (byte) rentTypes.getSelectedItemPosition();
+		rent.architecture = (byte) rentStruct.getSelectedItemPosition();
+		rent.age = rentAge.getSelectedItemPosition();
+
+		if(!rentDesc.getText().toString().equals("")) {
+			rent.description = rentDesc.getText().toString();
+		}
+
+		rent.petsAllowed = petsAllowed.isChecked();
+		rent.phone = phone.getText().toString();
+		rent.creationDate = new Date();
+		rent.imageURIs = new ArrayList<String>(NO_OF_PICS);
+		
+		return rent;
+	}
+	
+	private void updateAddress() {
+		EditText building = (EditText) findViewById(R.id.building);
+		EditText staircase = (EditText) findViewById(R.id.staircase);
+		EditText floor = (EditText) findViewById(R.id.floor);
+		EditText ap = (EditText) findViewById(R.id.ap);
+		
+		if(!building.getText().toString().equals("")) {
+			address.building = building.getText().toString();
+		}
+		
+		if(!staircase.getText().toString().equals("")) {
+			address.staircase = staircase.getText().toString();
+		}
+		
+		if(!floor.getText().toString().equals("")) {
+			address.floor = Integer.parseInt(floor.getText().toString());
+		}
+		
+		if(!ap.getText().toString().equals("")) {
+			address.ap = ap.getText().toString();
+		}
+
+		address.country = getString(R.string.country);
 	}
 }

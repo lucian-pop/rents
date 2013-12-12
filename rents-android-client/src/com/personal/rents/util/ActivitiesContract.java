@@ -8,6 +8,8 @@ public final class ActivitiesContract {
 	
 	public static final String ADDRESS = "ADDRESS";
 	
+	public static final String RENT = "RENT";
+	
 	public static final String IMAGE_TYPE = "image/*";
 	
 	public static final int BROWSE_PIC_REQ_CODE = 1;
@@ -19,6 +21,8 @@ public final class ActivitiesContract {
 	public static final String SELECTED_PIC_PATH = "SELECTED_PIC_PATH";
 	
 	public static final String SELECTED_PICS = "SELECTED_PICS";
+	
+	public static final String IMAGES_PATHS = "IMAGES_PATHS";
 	
 	public static final String PICTURE_ID = "PICTURE_ID";
 	

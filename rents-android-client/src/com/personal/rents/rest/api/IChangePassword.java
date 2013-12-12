@@ -10,4 +10,4 @@ public interface IChangePassword {
 	@FormUrlEncoded
 	public String changePassword(@Field("email") String email, @Field("password") String password,
 			@Field("newPassword") String newPassword);
-}
+}	

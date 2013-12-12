@@ -46,26 +46,107 @@ public final class MediaUtils {
 		return uri.getPath();
 	}
 	
+	public static File createImageFile(Context context) {
+		String timeStamp = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault())
+			.format(new Date());
+		File imageFile = null;
+		try {
+			imageFile = File.createTempFile(timeStamp, IMAGE_FORMAT, getAlbumDir(context));
+		} catch (IOException e) {
+			Log.e(LOG_TAG, "Unable to create temporary image file");
+		}
+
+		return imageFile;
+	}
+	
+	public static void addImageToGallery(Context context, String imagePath) {
+	    Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+	    Uri imageUri = Uri.fromFile(new File(imagePath));
+	    intent.setData(imageUri);
+
+	    context.sendBroadcast(intent);
+	}
+	
+	public static File getAlbumDir(Context context) {
+		File albumDir = null;
+		String appName = context.getString(R.string.app_name);
+		if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+			albumDir = new File(Environment.getExternalStoragePublicDirectory(
+					Environment.DIRECTORY_PICTURES), appName);
+			if(!albumDir.exists()) {
+				albumDir.mkdirs();
+			}
+		} else {
+			Log.v(LOG_TAG, "External storage is not mounted.");
+		}
+
+		return albumDir;
+	}
+	
+
 	public static int getImageOrientation(Context context, String imagePath) {
+		int orientation = getOrientationFromExif(imagePath);
+		if(orientation <= 0) {
+			orientation = getOrientationFromMediaStore(context, imagePath);
+		}
+
+        return orientation;
+    }
+
+	private static int getOrientationFromExif(String imagePath) {
+		int orientation = -1;
+		try {
+			ExifInterface exif = new ExifInterface(imagePath);
+			int exifOrientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 
+					ExifInterface.ORIENTATION_NORMAL);
+			
+			switch (exifOrientation) {
+				case ExifInterface.ORIENTATION_ROTATE_270:
+					orientation = 270;
+	
+					break;
+				case ExifInterface.ORIENTATION_ROTATE_180:
+					orientation = 180;
+					
+					break;
+				case ExifInterface.ORIENTATION_ROTATE_90:
+					orientation = 90;
+					
+					break;
+					
+				case ExifInterface.ORIENTATION_NORMAL:
+					orientation = 0;
+					
+					break;
+				default:
+					break;
+			}
+		} catch (IOException e) {
+			Log.e(LOG_TAG, "Unable to get image exif orientation", e);
+		}
+		
+		return orientation;
+	}
+	
+	private static int getOrientationFromMediaStore(Context context, String imagePath) {
 		Uri imageUri = getImageContentUri(context, imagePath);
 		if(imageUri == null) {
 			return -1;
 		}
-		
+
         String[] projection = {MediaStore.Images.ImageColumns.ORIENTATION};
         Cursor cursor = context.getContentResolver().query(imageUri, projection, null, null, null);
-
+        
+        int orientation = -1;
         if (cursor != null && cursor.moveToFirst()) {
-        	int orientation = cursor.getInt(0);
+        	orientation = cursor.getInt(0);
         	cursor.close();
-
-            return orientation;
         }
-
-        return getExifOrientationAttribute(imagePath);
-    }
-
-	public static Uri getImageContentUri(Context context, String imagePath) {
+        
+        return orientation;
+	}
+	
+	private static Uri getImageContentUri(Context context, String imagePath) {
         String[] projection = new String[] {MediaStore.Images.Media._ID};
         String selection = MediaStore.Images.Media.DATA + "=? ";
         String[] selectionArgs = new String[] {imagePath};
@@ -89,82 +170,5 @@ public final class MediaUtils {
 
         return null;
     }
-	
-	public static File createImageFile(Context context) {
-		String timeStamp = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault())
-			.format(new Date());
-		File imageFile = null;
-		try {
-			imageFile = File.createTempFile(timeStamp, IMAGE_FORMAT, getAlbumDir(context));
-		} catch (IOException e) {
-			Log.e(LOG_TAG, "Unable to create temporary image file");
-		}
 
-		return imageFile;
-	}
-	
-	public static void addImageToGallery(Context context, String imagePath) {
-	    Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-	    Uri imageUri = Uri.fromFile(new File(imagePath));
-	    intent.setData(imageUri);
-
-	    context.sendBroadcast(intent);
-	    
-        try {
-            Thread.sleep(200);
-        } catch (Exception e) {
-        	Log.e(LOG_TAG, "Exception occured while waiting for the media scanner to add the image" +
-        			" to gallery.", e);
-        }
-	}
-	
-	public static File getAlbumDir(Context context) {
-		File albumDir = null;
-		String appName = context.getString(R.string.app_name);
-		if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-			albumDir = new File(Environment.getExternalStoragePublicDirectory(
-					Environment.DIRECTORY_PICTURES), appName);
-			if(!albumDir.exists()) {
-				albumDir.mkdirs();
-			}
-		} else {
-			Log.v(LOG_TAG, "External storage is not mounted.");
-		}
-
-		return albumDir;
-	}
-	
-	/**
-	 *  Test on Samsung Galaxy S3, HTC models, Sony Xperia etc.
-	 * 
-	 */
-	private static int getExifOrientationAttribute(String imagePath) {
-		int orientation = -1;
-		try {
-			ExifInterface exif = new ExifInterface(imagePath);
-			int exifOrientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 
-					ExifInterface.ORIENTATION_NORMAL);
-			
-			switch (exifOrientation) {
-				case ExifInterface.ORIENTATION_ROTATE_270:
-					orientation = 270;
-	
-					break;
-				case ExifInterface.ORIENTATION_ROTATE_180:
-					orientation = 180;
-					
-					break;
-				case ExifInterface.ORIENTATION_ROTATE_90:
-					orientation = 90;
-					
-					break;
-				default:
-					break;
-			}
-		} catch (IOException e) {
-			Log.e(LOG_TAG, "Unable to get image exif orientation", e);
-		}
-		
-		return orientation;
-	}
 }

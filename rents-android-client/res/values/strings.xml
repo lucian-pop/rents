@@ -6,6 +6,9 @@
 	
 	<string name="reset_btn_text">Anuleaza</string>
 	
+	<!-- Country -->
+	<string name="country">Romania</string>
+
 	<!-- Metrics -->
 	<string name="currency">€</string>
 	<string name="square_meters">mp</string>

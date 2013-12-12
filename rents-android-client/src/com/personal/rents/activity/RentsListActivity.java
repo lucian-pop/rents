@@ -3,9 +3,9 @@ package com.personal.rents.activity;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.personal.rents.R;
 import com.personal.rents.fragment.RentsListFragment;
+import com.personal.rents.model.Address;
 import com.personal.rents.model.Rent;
 import com.personal.rents.util.ActivitiesContract;
 
@@ -51,7 +51,11 @@ public class RentsListActivity extends ActionBarActivity {
 		getSupportActionBar().setTitle("305 oferte gasite");
 
 		rents = new ArrayList<Rent>(6);
-		Rent rent = new Rent(new LatLng(10, 10), 160);
+		Rent rent = new Rent();
+		rent.address = new Address();
+		rent.address.latitude = 10;
+		rent.address.longitude = 10;
+		rent.price = 160;
 		for(int i=0; i < 6; i++) {
 			rents.add(rent);
 		}

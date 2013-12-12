@@ -27,8 +27,10 @@ public final class GeneralConstants {
 	
 	public static final int MAX_SURFACE = 500;
 	
-	// Image resizing
+	// Image
 	public static final int DEST_IMG_SIZE = 800;
+	
+	public static final String IMG_FILE_EXT = ".jpg";
 
 	private GeneralConstants() {}	
 }

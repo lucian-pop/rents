@@ -29,26 +29,24 @@ public final class GeocodingParser {
 		for(AddressComponent addrComp : result.address_components) {
 			addrCompType = addrComp.types[0];
 			if(addrCompType.equals(STREET_NO_TYPE)) {
-				address.streetNumber = addrComp.long_name;
+				address.streetNo = addrComp.long_name;
 			} 
 			else if(addrCompType.equals(STREET_NAME_TYPE)) {
 				address.streetName = addrComp.long_name;
 			} 
 			else if(addrCompType.equals(NEIGHBORHOOD_TYPE)) {
-				address.neighborhood = addrComp.long_name;
+				address.neighbourhood = addrComp.long_name;
 			} 
 			else if(addrCompType.equals(LOCALITY_TYPE)) {
 				address.locality = addrComp.long_name;
 			} 
 			else if(addrCompType.equals(ADM_AREA_1_TYPE)) {
-				address.adminArea1 = addrComp.long_name;
+				address.admAreaL1 = addrComp.long_name;
 			}
 			else if(addrCompType.equals(COUNTRY_TYPE)) {
 				address.country = addrComp.long_name;
 			}
 		}
-		
-		address.formattedAddress = result.formatted_address;
 		
 		Coordinate location = result.geometry.location;
 		address.latitude = location.lat;
