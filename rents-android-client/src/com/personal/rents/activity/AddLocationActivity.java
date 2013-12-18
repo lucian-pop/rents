@@ -19,6 +19,7 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -251,6 +252,7 @@ public class AddLocationActivity extends ActionBarActivity {
 
 		droppedPin = map.addMarker(new MarkerOptions().position(position));
 		locationHelper.moveToLocation(position, map);
+		Log.e("TEST_TAG", "LATITUDE: " + position.latitude + " LONGITUDE: " + position.longitude);
 	}
 	
 	private void removeDroppedPin() {

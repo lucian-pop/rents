@@ -8,7 +8,7 @@ public final class GeneralConstants {
 	public static final String MINUS = "-";
 	
 	// Map related.
-	public static final int DEFAULT_ZOOM_FACTOR = 15;
+	public static final int DEFAULT_ZOOM_FACTOR = 14;
 	
 	public static final String ENABLE_NETWORK_LOCATION_TAG = "ENABLE_NETWORK_LOCATION_DIALOG";
 	

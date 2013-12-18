@@ -57,6 +57,7 @@
 	<string-array name="rent_types">
         <item>Apartament</item>
         <item>Casa/Vila</item>
+        <item>Spatii comerciale/birouri</item>
     </string-array>
     
 	<string-array name="rent_structures">

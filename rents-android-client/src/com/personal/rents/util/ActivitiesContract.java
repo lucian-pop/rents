@@ -2,6 +2,12 @@ package com.personal.rents.util;
 
 public final class ActivitiesContract {
 
+	public static final String HAS_DELAYED_TASKS = "IN_PROGRESS";
+	
+	public static final String LAST_MAP_CENTER = "LAST_MAP_CENTER";
+	
+	public static final String LAST_ZOOM_LEVEL = "LAST_ZOOM_LEVEL";
+
 	public static final String LATITUDE = "LATITUDE";
 	
 	public static final String LONGITUDE = "LONGITUDE";

@@ -122,4 +122,5 @@ public class RentsClient {
 		
 		return rents;
 	}
+
 }

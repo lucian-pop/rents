@@ -24,7 +24,7 @@ public class TouchableMapView extends FrameLayout {
 	public boolean dispatchTouchEvent(MotionEvent ev) {
 		boolean touched = (ev.getAction() != MotionEvent.ACTION_UP);
 		onMapTouchListener.onMapTouch(touched);
-
+		
 		return super.dispatchTouchEvent(ev);
 	}
 }
