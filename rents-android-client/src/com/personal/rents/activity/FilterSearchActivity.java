@@ -94,8 +94,8 @@ public class FilterSearchActivity extends ActionBarActivity {
 		onGetGeolocationTaskFinishListener = new OnGetGeolocationTaskFinishListener() {
 			@Override
 			public void onGetGeolocationTaskFinish(Address address) {
-				placeLatitude = address.latitude;
-				placeLongitude = address.longitude;
+				placeLatitude = address.addressLatitude;
+				placeLongitude = address.addressLongitude;
 			}
 		};
 		

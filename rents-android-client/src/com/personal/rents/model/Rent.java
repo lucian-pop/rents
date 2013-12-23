@@ -8,41 +8,41 @@ import android.os.Parcelable;
 
 public class Rent implements Parcelable {
 	
-	public int id;
+	public int rentId;
 	
 	public int accountId;
 	
 	public Address address;
 	
-	public int price;
+	public int rentPrice;
 	
-	public int surface;
+	public int rentSurface;
 	
-	public int rooms;
+	public int rentRooms;
 	
-	public int baths;
+	public int rentBaths;
 	
-	public byte party;
+	public byte rentParty;
 	
 	public byte rentType;
 	
-	public byte architecture;
+	public byte rentArchitecture;
 	
-	public int age;
+	public int rentAge;
 	
-	public String description;
+	public String rentDescription;
 	
-	public boolean petsAllowed;
+	public boolean rentPetsAllowed;
 	
-	public String phone;
+	public String rentPhone;
 	
-	public Date creationDate;
+	public Date rentAddDate;
 	
 	public byte rentStatus;
 	
-	public List<String> imageURIs;
+	public List<String> rentImageURIs;
 	
-	public transient int uploadStatus;
+	public transient int rentUploadStatus;
 	
 	public static final Parcelable.Creator<Rent> CREATOR;
     
@@ -62,53 +62,49 @@ public class Rent implements Parcelable {
 	}
 	
 	public Rent(Parcel source) {
-		id = source.readInt();
+		rentId = source.readInt();
 		accountId = source.readInt();
 		address = source.readParcelable(Address.class.getClassLoader());
-		price = source.readInt();
-		surface = source.readInt();
-		rooms = source.readInt();
-		baths = source.readInt();
-		party = source.readByte();
+		rentPrice = source.readInt();
+		rentSurface = source.readInt();
+		rentRooms = source.readInt();
+		rentBaths = source.readInt();
+		rentParty = source.readByte();
 		rentType = source.readByte();
-		architecture = source.readByte();
-		age = source.readInt();
-		description = source.readString();
-		petsAllowed = (Boolean) source.readValue(Boolean.class.getClassLoader());
-		phone = source.readString();
-		creationDate = new Date(source.readLong());
+		rentArchitecture = source.readByte();
+		rentAge = source.readInt();
+		rentDescription = source.readString();
+		rentPetsAllowed = (Boolean) source.readValue(Boolean.class.getClassLoader());
+		rentPhone = source.readString();
+		rentAddDate = new Date(source.readLong());
 		rentStatus = source.readByte();
-		source.readStringList(imageURIs);
+		source.readStringList(rentImageURIs);
 	}
 
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeInt(id);
+		dest.writeInt(rentId);
 		dest.writeInt(accountId);
 		dest.writeParcelable(address, flags);
-		dest.writeInt(price);
-		dest.writeInt(surface);
-		dest.writeInt(rooms);
-		dest.writeInt(baths);
-		dest.writeByte(party);
+		dest.writeInt(rentPrice);
+		dest.writeInt(rentSurface);
+		dest.writeInt(rentRooms);
+		dest.writeInt(rentBaths);
+		dest.writeByte(rentParty);
 		dest.writeByte(rentType);
-		dest.writeByte(architecture);
-		dest.writeInt(age);
-		dest.writeString(description);
-		dest.writeValue(petsAllowed);
-		dest.writeString(phone);
-		dest.writeLong(creationDate.getTime());
+		dest.writeByte(rentArchitecture);
+		dest.writeInt(rentAge);
+		dest.writeString(rentDescription);
+		dest.writeValue(rentPetsAllowed);
+		dest.writeString(rentPhone);
+		dest.writeLong(rentAddDate.getTime());
 		dest.writeByte(rentStatus);
-		dest.writeStringList(imageURIs);
+		dest.writeStringList(rentImageURIs);
 	}
 	
 	@Override
 	public int describeContents() {
 		return this.hashCode();
-	}
-	
-	public void addImageURI(String imageURI) {
-		imageURIs.add(imageURI);
 	}
 
 }

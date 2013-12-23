@@ -45,12 +45,12 @@ public class AddRentAsyncTask extends AsyncTask<Object, Void, Rent> {
 			if(error.isNetworkError()) {
 				boolean internetConnected = ConnectionDetector.hasInternetConnectivity(context);
 				if(internetConnected) {
-					rent.uploadStatus = 1;
+					rent.rentUploadStatus = 1;
 				} else {
-					rent.uploadStatus = 2;
+					rent.rentUploadStatus = 2;
 				}
 			} else {
-				rent.uploadStatus = 3;
+				rent.rentUploadStatus = 3;
 			}
 		}
 		
@@ -72,8 +72,8 @@ public class AddRentAsyncTask extends AsyncTask<Object, Void, Rent> {
 					GeneralConstants.DEST_IMG_SIZE);
 
 			imageURI = RentsClient.uploadImage(imageBytes, i + GeneralConstants.IMG_FILE_EXT, 
-					Integer.toString(UserAccountManager.getAccount(context).getId()),
-					Long.toString(rent.creationDate.getTime()));
+					Integer.toString(UserAccountManager.getAccount(context).accountId),
+					Long.toString(rent.rentAddDate.getTime()));
 			
 			// Cancel task if an image failed to upload.
 			if(imageURI == null) {
@@ -82,7 +82,7 @@ public class AddRentAsyncTask extends AsyncTask<Object, Void, Rent> {
 			}
 
 			Log.e("TEST_TAG", "**********Image URI is: " + imageURI);
-			rent.addImageURI(imageURI);
+			rent.rentImageURIs.add(imageURI);
 		}
 	}
 

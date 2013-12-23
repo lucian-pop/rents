@@ -25,8 +25,8 @@ public class UserAccountPreferencesManager {
 	
 	public static void addAccount(Account account, Context context) {
 		SharedPreferences.Editor accountPrefsEditor = getAccountPrefs(context).edit();
-		accountPrefsEditor.putInt(ID, account.getId());
-		accountPrefsEditor.putString(TOKEN_KEY, account.getTokenKey());
+		accountPrefsEditor.putInt(ID, account.accountId);
+		accountPrefsEditor.putString(TOKEN_KEY, account.tokenKey);
 		accountPrefsEditor.commit();
 	}
 	
@@ -38,8 +38,8 @@ public class UserAccountPreferencesManager {
 		}
 		
 		Account account = new Account();
-		account.setId(accountPrefs.getInt(ID, -1));
-		account.setTokenKey(accountPrefs.getString(TOKEN_KEY, null));
+		account.accountId = accountPrefs.getInt(ID, -1);
+		account.tokenKey = accountPrefs.getString(TOKEN_KEY, null);
 		
 		return account;
 	}

@@ -50,7 +50,7 @@ public class LoginActivity extends ActionBarActivity {
 			@Override
 			public void onTaskFinish(Account account) {
 				Toast.makeText(LoginActivity.this, "My token key is: "
-						+ account.getTokenKey(), Toast.LENGTH_LONG).show();
+						+ account.tokenKey, Toast.LENGTH_LONG).show();
 				
 				Intent intent = new Intent(LoginActivity.this, RentsMapActivity.class);
 				startActivity(intent);

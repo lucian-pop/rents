@@ -1,6 +1,6 @@
 package com.personal.rents.task.listener;
 
-public interface OnTaskFinishListener {
+public interface OnTaskFinishListener<T> {
 
-	public void onTaskFinish(Object result);
+	public void onTaskFinish(T result, int taskId);
 }

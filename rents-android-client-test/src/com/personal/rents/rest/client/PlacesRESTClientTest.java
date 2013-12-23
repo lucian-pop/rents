@@ -28,6 +28,6 @@ public class PlacesRESTClientTest extends AndroidTestCase {
 	public void testGetPlaceLocation() {
 		Address address = PlacesClient.getPlaceLocation(REFERENCE);
 
-		assertTrue(address.latitude != 0) ;
+		assertTrue(address.addressLatitude != 0) ;
 	}	
 }

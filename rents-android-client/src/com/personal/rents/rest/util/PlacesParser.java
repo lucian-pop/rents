@@ -59,8 +59,8 @@ public final class PlacesParser {
 
 			JSONObject location = jsonResult.getJSONObject(GEOMETRY).getJSONObject(LOCATION);
 			address = new Address();
-			address.latitude = location.getDouble(LATITUDE);
-			address.longitude = location.getDouble(LONGITUDE);
+			address.addressLatitude = location.getDouble(LATITUDE);
+			address.addressLongitude = location.getDouble(LONGITUDE);
 		} catch (JSONException e) {
 			Log.e(logTag, "Cannot process JSON result", e);
 		}

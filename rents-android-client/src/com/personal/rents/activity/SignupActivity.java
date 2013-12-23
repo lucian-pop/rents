@@ -42,16 +42,16 @@ public class SignupActivity extends ActionBarActivity {
 	
 	public void onSignupBtnClick(View view) {
 		Account account = new Account();
-		account.setEmail(email.getText().toString());
-		account.setPassword(password.getText().toString());
-		account.setAccountType((byte) 0);
-		account.setSignupDate(new Date());
+		account.accountEmail = email.getText().toString();
+		account.accountPassword = password.getText().toString();
+		account.accountType = (byte) 0;
+		account.accountSignupDate = new Date();
 		
 		SignupAsyncTask signupTask = new SignupAsyncTask(new OnSignupTaskFinishListener() {
 			@Override
 			public void onTaskFinish(Account account) {
 				Toast.makeText(SignupActivity.this, "My token keu is: "
-						+ account.getTokenKey(), Toast.LENGTH_LONG).show();
+						+ account.tokenKey, Toast.LENGTH_LONG).show();
 			}
 		});
 		signupTask.execute(account, this.getApplicationContext());

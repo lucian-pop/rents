@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Random;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.VisibleRegion;
@@ -38,8 +39,6 @@ public final class RentsGenerator {
 	
 	private static final String DEFAULT_IMAGE_URI = "/storage/sdcard0/Bluetooth/rent_image_800.jpg";
 	
-	private static final List<String> IMAGE_URIS;
-	
 	// Constants used for ADDRESS
 	private static final String DEFAULT_STREET_NAME = "Aleea fericirii";
 	
@@ -48,11 +47,6 @@ public final class RentsGenerator {
 	private static final String DEFAULT_ADM_AREA = "Cluj";
 	
 	private static final String DEFAULT_COUNTRY = "Romania";
-	
-	static {
-		IMAGE_URIS = new ArrayList<String>(DEFAULT_IMAGE_URIS_SIZE);
-		IMAGE_URIS.add(DEFAULT_IMAGE_URI);
-	}
 	
 	public static List<LatLng> generatePositions(VisibleRegion visibleRegion) {
 		LatLng southwest = visibleRegion.latLngBounds.southwest;
@@ -68,6 +62,10 @@ public final class RentsGenerator {
 		temp = y0;
 		y0 = Math.min(y0, y1);
 		y1 = Math.max(temp, y1);
+		Log.e("SMART_TAG", "********Min latitude: " + y0);
+		Log.e("SMART_TAG", "********Max latitude: " + y1);
+		Log.e("SMART_TAG", "********Min longitude: " + x0);
+		Log.e("SMART_TAG", "********Max Longitude: " + x1);
 		
 		double x = 0;
 		double y = 0;
@@ -100,22 +98,22 @@ public final class RentsGenerator {
 		Random random = new Random();
 
 		Rent rent = new Rent();
-		rent.accountId = UserAccountManager.getAccount(context).getId();
+		rent.accountId = UserAccountManager.getAccount(context).accountId;
 		rent.address = createAddress(position);
-		rent.price = MIN_PRICE + random.nextInt(MAX_PRICE - MIN_PRICE);
-		rent.surface = MIN_SURFACE + random.nextInt(MAX_SURFACE - MIN_SURFACE);
-		rent.rooms = 1 + random.nextInt(10);
-		rent.baths = 1 + random.nextInt(rent.rooms);
-		rent.party = (byte) random.nextInt(2);
+		rent.rentPrice = MIN_PRICE + random.nextInt(MAX_PRICE - MIN_PRICE);
+		rent.rentSurface = MIN_SURFACE + random.nextInt(MAX_SURFACE - MIN_SURFACE);
+		rent.rentRooms = 1 + random.nextInt(10);
+		rent.rentBaths = 1 + random.nextInt(rent.rentRooms);
+		rent.rentParty = (byte) random.nextInt(2);
 		rent.rentType = (byte) random.nextInt(3);
-		rent.architecture = (byte) random.nextInt(2);
-		rent.age = random.nextInt(2);
-		rent.description = DEFAULT_DESC;
-		rent.petsAllowed = random.nextBoolean();
-		rent.phone = DEFAULT_PHONE;
-		rent.creationDate = new Date();
+		rent.rentArchitecture = (byte) random.nextInt(2);
+		rent.rentAge = random.nextInt(2);
+		rent.rentDescription = DEFAULT_DESC;
+		rent.rentPetsAllowed = random.nextBoolean();
+		rent.rentPhone = DEFAULT_PHONE;
+		rent.rentAddDate = new Date();
 		rent.rentStatus = DEFAULT_STATUS;
-		rent.imageURIs = imageURIs;
+		rent.rentImageURIs = imageURIs;
 		
 		return rent;
 	}
@@ -124,24 +122,24 @@ public final class RentsGenerator {
 		Address address = GeocodeClient.getAddressFromLocation(position.latitude, position.longitude);
 		Random random = new Random();
 		
-		if(address.streetNo == null) {
-			address.streetNo = Integer.toString(random.nextInt(100));
+		if(address.addressStreetNo == null) {
+			address.addressStreetNo = Integer.toString(random.nextInt(100));
 		}
 		
-		if(address.streetName == null) {
-			address.streetName = DEFAULT_STREET_NAME;
+		if(address.addressStreetName == null) {
+			address.addressStreetName = DEFAULT_STREET_NAME;
 		}
 		
-		if(address.locality == null) {
-			address.locality = DEFAULT_LOCALITY;
+		if(address.addressLocality == null) {
+			address.addressLocality = DEFAULT_LOCALITY;
 		}
 		
-		if(address.admAreaL1 == null) {
-			address.admAreaL1 = DEFAULT_ADM_AREA;
+		if(address.addressAdmAreaL1 == null) {
+			address.addressAdmAreaL1 = DEFAULT_ADM_AREA;
 		}
 		
-		if(address.country == null) {
-			address.country = DEFAULT_COUNTRY;
+		if(address.addressCountry == null) {
+			address.addressCountry = DEFAULT_COUNTRY;
 		}
 
 		return address; 

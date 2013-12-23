@@ -109,5 +109,9 @@
 	    <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
     </style>
 	
+	<!-- DialogFragment with progress bar style -->
+	<style name="Theme_Background_Not_Dimmed" parent="@android:style/Theme.Dialog">
+    	<item name="android:backgroundDimEnabled">false</item>
+	</style>
 	    
 </resources>

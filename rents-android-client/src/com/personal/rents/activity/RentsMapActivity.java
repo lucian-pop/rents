@@ -8,23 +8,23 @@ import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.VisibleRegion;
 import com.personal.rents.R;
 import com.personal.rents.adapter.RentMarkerInfoWindowAdapter;
 import com.personal.rents.fragment.ProgressBarFragment;
 import com.personal.rents.fragment.RentsMapFragment;
 import com.personal.rents.logic.LocationManagerWrapper;
+import com.personal.rents.model.Rent;
 import com.personal.rents.task.AddMarkersTask;
-import com.personal.rents.task.AddRentsAsyncTask;
+import com.personal.rents.task.GetRentsByMapBoundariesAsyncTask;
 import com.personal.rents.task.listener.OnTaskFinishListener;
 import com.personal.rents.util.ActivitiesContract;
-import com.personal.rents.util.RentsGenerator;
 import com.personal.rents.view.TouchableMapView;
 
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -37,8 +37,6 @@ public class RentsMapActivity extends ActionBarActivity implements OnInfoWindowC
 	private static final String TASK_FRAGMENT_TAG = "TASK";
 	
 	private static final long EVENTS_DELAY = 1000L;
-	
-    private FragmentManager fragmentManager;
 	
     private RentsMapFragment rentsMapFragment;
     
@@ -53,8 +51,6 @@ public class RentsMapActivity extends ActionBarActivity implements OnInfoWindowC
     private Marker lastClickedMarker;
     
     private boolean isTouched = false;
-    
-    private OnTaskFinishListener onTaskFinishListener;
     
     private Handler handler = new Handler();
     
@@ -74,8 +70,6 @@ public class RentsMapActivity extends ActionBarActivity implements OnInfoWindowC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.rents_map_activity_layout);
-
-		fragmentManager = getSupportFragmentManager();
 
         init();
 
@@ -167,8 +161,6 @@ public class RentsMapActivity extends ActionBarActivity implements OnInfoWindowC
 		
 		setUpMapIfNeeded();
 		
-		initListeners();
-		
 		initProgressBarFragment();
 	}
 
@@ -177,7 +169,8 @@ public class RentsMapActivity extends ActionBarActivity implements OnInfoWindowC
 	}
 	
 	private void setUpMapIfNeeded() {
-        rentsMapFragment = (RentsMapFragment) fragmentManager.findFragmentById(R.id.rents_map);
+        rentsMapFragment = 
+        		(RentsMapFragment) getSupportFragmentManager().findFragmentById(R.id.rents_map);
 		if (rentsMap == null) {
 			rentsMap = rentsMapFragment.getMap();
 	        if (rentsMap != null) {
@@ -203,33 +196,14 @@ public class RentsMapActivity extends ActionBarActivity implements OnInfoWindowC
         ((TouchableMapView) rentsMapFragment.getView())
         	.setOnMapTouchListener(new RentsMapOnTouchListener());
 	}
-	
-	private void initListeners() {
-		onTaskFinishListener = new OnTaskFinishListener() {
-			@Override
-			public void onTaskFinish(Object result) {
-				if(result != null) {
-					Toast.makeText(RentsMapActivity.this, "Rents have been successfully added", 
-							Toast.LENGTH_LONG).show();
-				} else {
-					Toast.makeText(RentsMapActivity.this, "Rents couldn't be added", 
-							Toast.LENGTH_LONG).show();
-				}
-				
-				if(progressBarFragment.isResumed()) {
-					progressBarFragment.dismiss();
-				} else {
-					progressBarFragment.setTask(null);
-				}
-			}
-		};
-	}
-	
+
 	private void initProgressBarFragment() {
-		progressBarFragment = (ProgressBarFragment) fragmentManager.findFragmentByTag(TASK_FRAGMENT_TAG);
+		progressBarFragment = 
+				(ProgressBarFragment) getSupportFragmentManager().findFragmentByTag(TASK_FRAGMENT_TAG);
 		
 		if(progressBarFragment != null && progressBarFragment.getTask() != null) {
-			progressBarFragment.getTask().setOnTaskFinishListener(onTaskFinishListener);
+			((GetRentsByMapBoundariesAsyncTask) progressBarFragment.getTask())
+				.setOnTaskFinishListener(new GetRentsTaskFinishListener());
 		}
 	}
 
@@ -245,22 +219,14 @@ public class RentsMapActivity extends ActionBarActivity implements OnInfoWindowC
 		lastCenterPosition = newCenter;
 		lastZoomLevel = newZoom;
 
-		List<LatLng> positions = 
-				RentsGenerator.generatePositions(rentsMap.getProjection().getVisibleRegion());
-		AddMarkersTask addMarkersTask = new AddMarkersTask(this, rentsMap);
-		
 		if ((!newCenter.equals(oldCenter)) && (newZoom != oldZoom)) {
-			rentsMap.clear();
 			Toast.makeText(RentsMapActivity.this, "Map Zoom + Pan", Toast.LENGTH_SHORT).show();
-			addMarkersTask.addMarkers(positions);
 
-			startAddRentsAsyncTask(positions);
+			startGetRentsAsyncTask(rentsMap.getProjection().getVisibleRegion());
 		} else if (!newCenter.equals(oldCenter)) {
-			rentsMap.clear();
 			Toast.makeText(RentsMapActivity.this, "Map Pan", Toast.LENGTH_SHORT).show();
-			addMarkersTask.addMarkers(positions);
 
-			startAddRentsAsyncTask(positions);
+			startGetRentsAsyncTask(rentsMap.getProjection().getVisibleRegion());
 		} else if (newZoom != oldZoom) {
 			Toast.makeText(RentsMapActivity.this, "Map Zoom", Toast.LENGTH_SHORT).show();
 		}
@@ -271,15 +237,15 @@ public class RentsMapActivity extends ActionBarActivity implements OnInfoWindowC
 		handler.postDelayed(onMapChangeTask, EVENTS_DELAY);
 	}
     
-	private void startAddRentsAsyncTask(List<LatLng> positions) {
-		AddRentsAsyncTask addRentsTask = new AddRentsAsyncTask(positions);
-		addRentsTask.setOnTaskFinishListener(onTaskFinishListener);
+	private void startGetRentsAsyncTask(VisibleRegion visibleRegion) {
+		GetRentsByMapBoundariesAsyncTask getRentsTask = new GetRentsByMapBoundariesAsyncTask();
+		getRentsTask.setOnTaskFinishListener(new GetRentsTaskFinishListener());
 		
 		if(progressBarFragment == null) {
 			progressBarFragment = new ProgressBarFragment();
-			progressBarFragment.show(fragmentManager, TASK_FRAGMENT_TAG);
+			progressBarFragment.show(getSupportFragmentManager(), TASK_FRAGMENT_TAG);
 		} else if(progressBarFragment.getTask() != null && progressBarFragment.isResumed()) {
-			progressBarFragment.getTask().cancel(false);
+			progressBarFragment.getTask().cancel(true);
 		} else {
 			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 			transaction.remove(progressBarFragment);
@@ -287,8 +253,8 @@ public class RentsMapActivity extends ActionBarActivity implements OnInfoWindowC
 			transaction.commit();
 		}
 		
-		progressBarFragment.setTask(addRentsTask);
-		addRentsTask.execute(this.getApplicationContext());
+		progressBarFragment.setTask(getRentsTask);
+		getRentsTask.execute(visibleRegion);
 	}
 
     private class RentsMapOnCameraChangeListener implements GoogleMap.OnCameraChangeListener {
@@ -330,4 +296,28 @@ public class RentsMapActivity extends ActionBarActivity implements OnInfoWindowC
             }
     	}
     }
+    
+    private class GetRentsTaskFinishListener implements OnTaskFinishListener<List<Rent>> {
+    	@Override
+		public void onTaskFinish(List<Rent> result, int taskId) {
+			if(result != null) {
+				Toast.makeText(RentsMapActivity.this, "Rents have been successfully added" + result.size(), 
+						Toast.LENGTH_LONG).show();
+				AddMarkersTask addMarkersTask = 
+						new AddMarkersTask(RentsMapActivity.this, rentsMap);
+				addMarkersTask.addMarkers((List<Rent>) result);
+			} else {
+				Toast.makeText(RentsMapActivity.this, "Rents couldn't be retrieved", 
+						Toast.LENGTH_LONG).show();
+			}
+    		
+			if(progressBarFragment.isResumed() 
+					&& (progressBarFragment.getCurrentTaskId() == taskId)) {
+				progressBarFragment.dismiss();
+			} 
+			
+			progressBarFragment.setTask(null);
+		}
+    }
+
 }

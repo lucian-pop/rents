@@ -28,7 +28,7 @@ public abstract class OnAddRentTaskFinishListener {
 			return;
 		}
 		
-		switch (rent.uploadStatus) {
+		switch (rent.rentUploadStatus) {
 			case 1:
 				Toast.makeText(context, NETWORK_DOWN_ERROR, Toast.LENGTH_LONG).show();
 
@@ -42,7 +42,7 @@ public abstract class OnAddRentTaskFinishListener {
 
 				break;
 			default:
-				Toast.makeText(context, OK + rent.id, Toast.LENGTH_LONG).show();
+				Toast.makeText(context, OK + rent.rentId, Toast.LENGTH_LONG).show();
 				
 				break;
 		}

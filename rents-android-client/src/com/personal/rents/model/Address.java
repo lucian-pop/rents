@@ -5,33 +5,33 @@ import android.os.Parcelable;
 
 public class Address implements Parcelable {
 
-	public int id;
+	public int addressId;
 	
-	public String streetNo;
+	public String addressStreetNo;
 	
-	public String streetName;
+	public String addressStreetName;
 	
-	public String neighbourhood;
+	public String addressNeighbourhood;
 	
-	public String sublocality;
+	public String addressSublocality;
 	
-	public String locality;
+	public String addressLocality;
 	
-	public String admAreaL1;
+	public String addressAdmAreaL1;
 	
-	public String country;
+	public String addressCountry;
 	
-	public double latitude;
+	public double addressLatitude;
 	
-	public double longitude;
+	public double addressLongitude;
 	
-	public String building;
+	public String addressBuilding;
 	
-	public String staircase;
+	public String addressStaircase;
 	
-	public int floor;
+	public int addressFloor;
 	
-	public String ap;
+	public String addressAp;
 	
 	public static final Parcelable.Creator<Address> CREATOR;
     
@@ -51,38 +51,38 @@ public class Address implements Parcelable {
     }
     
     public Address(Parcel source) {
-    	id = source.readInt();
-    	streetNo = source.readString();
-    	streetName = source.readString();
-    	neighbourhood = source.readString();
-    	sublocality = source.readString();
-    	locality = source.readString();
-    	admAreaL1 = source.readString();
-    	country = source.readString();
-    	latitude = source.readDouble();
-    	longitude = source.readDouble();
-    	building = source.readString();
-    	staircase = source.readString();
-    	floor = source.readInt();
-    	ap = source.readString();
+    	addressId = source.readInt();
+    	addressStreetNo = source.readString();
+    	addressStreetName = source.readString();
+    	addressNeighbourhood = source.readString();
+    	addressSublocality = source.readString();
+    	addressLocality = source.readString();
+    	addressAdmAreaL1 = source.readString();
+    	addressCountry = source.readString();
+    	addressLatitude = source.readDouble();
+    	addressLongitude = source.readDouble();
+    	addressBuilding = source.readString();
+    	addressStaircase = source.readString();
+    	addressFloor = source.readInt();
+    	addressAp = source.readString();
     }
 
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeInt(id);
-		dest.writeString(streetNo);
-		dest.writeString(streetName);
-		dest.writeString(neighbourhood);
-		dest.writeString(sublocality);
-		dest.writeString(locality);
-		dest.writeString(admAreaL1);
-		dest.writeString(country);
-		dest.writeDouble(latitude);
-		dest.writeDouble(longitude);
-		dest.writeString(building);
-		dest.writeString(staircase);
-		dest.writeInt(floor);
-		dest.writeString(ap);
+		dest.writeInt(addressId);
+		dest.writeString(addressStreetNo);
+		dest.writeString(addressStreetName);
+		dest.writeString(addressNeighbourhood);
+		dest.writeString(addressSublocality);
+		dest.writeString(addressLocality);
+		dest.writeString(addressAdmAreaL1);
+		dest.writeString(addressCountry);
+		dest.writeDouble(addressLatitude);
+		dest.writeDouble(addressLongitude);
+		dest.writeString(addressBuilding);
+		dest.writeString(addressStaircase);
+		dest.writeInt(addressFloor);
+		dest.writeString(addressAp);
 	}
 
 	@Override
@@ -92,7 +92,8 @@ public class Address implements Parcelable {
 
 	@Override
 	public String toString() {
-		return streetName + " " + streetNo + ", " + neighbourhood + ", " + locality + ", "
-				+ admAreaL1 + ", " + country + ", " + latitude + ", " + longitude;
+		return addressStreetName + " " + addressStreetNo + ", " + addressNeighbourhood + ", " 
+				+ addressLocality + ", " + addressAdmAreaL1 + ", " + addressCountry + ", " 
+				+ addressLatitude + ", " + addressLongitude;
 	}
 }

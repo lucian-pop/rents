@@ -55,7 +55,7 @@ public class EditUserAccountActivity extends ActionBarActivity {
 			}
 		});
 		
-		changePasswordTask.execute(account.getEmail(), password.getText().toString(), 
+		changePasswordTask.execute(account.accountEmail, password.getText().toString(), 
 				newPassword.getText().toString(), this.getApplicationContext());
 	}
 
@@ -69,8 +69,8 @@ public class EditUserAccountActivity extends ActionBarActivity {
 		password = (EditText) findViewById(R.id.password);
 		newPassword = (EditText) findViewById(R.id.newPassword);
 		
-		email.setText(account.getEmail());
-		phone.setText(account.getPhone());
+		email.setText(account.accountEmail);
+		phone.setText(account.accountPhone);
 	}
 	
 	private void setupActionBar() {

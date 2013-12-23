@@ -86,11 +86,11 @@ public class AddLocationActivity extends ActionBarActivity {
 	}
 
 	public void onSaveBtnClick(View view) {
-		address.streetName = streetNameEditText.getText().toString();
-		address.streetNo = streetNumberEditText.getText().toString();
-		address.neighbourhood = neighborhoohEditText.getText().toString();
-		address.locality = localityEditText.getText().toString();
-		address.admAreaL1 = admAreaEditText.getText().toString();
+		address.addressStreetName = streetNameEditText.getText().toString();
+		address.addressStreetNo = streetNumberEditText.getText().toString();
+		address.addressNeighbourhood = neighborhoohEditText.getText().toString();
+		address.addressLocality = localityEditText.getText().toString();
+		address.addressAdmAreaL1 = admAreaEditText.getText().toString();
 		
 		// Show a toast message which specifies to fill the red input fields.
 		// Turn color text of unfilled input fields in red.
@@ -114,8 +114,8 @@ public class AddLocationActivity extends ActionBarActivity {
 			@Override
 			public void onGetGeolocationTaskFinish(Address address) {
 				// If geolocation is not found (address is null), app crashes.
-				placeLatitude = address.latitude;
-				placeLongitude = address.longitude;
+				placeLatitude = address.addressLatitude;
+				placeLongitude = address.addressLongitude;
 				AddLocationActivity.this.address = address;
 
 				dropPin(new LatLng(placeLatitude, placeLongitude));
@@ -183,8 +183,8 @@ public class AddLocationActivity extends ActionBarActivity {
 	
 	private void moveToLastKnownLocation() {
 		if(address != null) {
-			placeLatitude = address.latitude;
-			placeLongitude = address.longitude;
+			placeLatitude = address.addressLatitude;
+			placeLongitude = address.addressLongitude;
 			dropPin(new LatLng(placeLatitude, placeLongitude));
 		} else {
 			Location lastKnownLocation = locationHelper.getLastKnownLocation();
@@ -238,13 +238,13 @@ public class AddLocationActivity extends ActionBarActivity {
 	
 	private void populateAddLocationDetailsPanel(Address address) {
 		addLocationDetailsPanel.setVisibility(View.VISIBLE);
-		streetNameEditText.setText(address.streetName);
+		streetNameEditText.setText(address.addressStreetName);
 
-		streetNumberEditText.setText(address.streetNo);
+		streetNumberEditText.setText(address.addressStreetNo);
 
-		neighborhoohEditText.setText(address.neighbourhood);
-		localityEditText.setText(address.locality);
-		admAreaEditText.setText(address.admAreaL1);
+		neighborhoohEditText.setText(address.addressNeighbourhood);
+		localityEditText.setText(address.addressLocality);
+		admAreaEditText.setText(address.addressAdmAreaL1);
 	}
 	
 	private void dropPin(LatLng position) {

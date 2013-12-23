@@ -53,9 +53,9 @@ public class RentsListActivity extends ActionBarActivity {
 		rents = new ArrayList<Rent>(6);
 		Rent rent = new Rent();
 		rent.address = new Address();
-		rent.address.latitude = 10;
-		rent.address.longitude = 10;
-		rent.price = 160;
+		rent.address.addressLatitude = 10;
+		rent.address.addressLongitude = 10;
+		rent.rentPrice = 160;
 		for(int i=0; i < 6; i++) {
 			rents.add(rent);
 		}

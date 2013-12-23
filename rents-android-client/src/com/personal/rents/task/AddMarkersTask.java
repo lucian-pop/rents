@@ -1,7 +1,6 @@
 package com.personal.rents.task;
 
 import java.util.List;
-import java.util.Random;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -13,13 +12,10 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.personal.rents.R;
+import com.personal.rents.model.Rent;
 import com.personal.rents.util.RentMarkerBuilder;
 
 public class AddMarkersTask {
-	
-	private static final int MIN_PRICE = 100;
-	
-	private static final int MAX_PRICE = 20000;
 	
 	private LayoutInflater inflater;
 	
@@ -30,18 +26,16 @@ public class AddMarkersTask {
 		this.rentsMap = rentsMap;
 	}
 
-	public void addMarkers(List<LatLng> positions) {
+	public void addMarkers(List<Rent> rents) {
+		rentsMap.clear();
+		
 		View rentMarkerView = inflater.inflate(R.layout.rent_marker_icon_layout, null);
 
-		Random random = new Random();
 		Bitmap rentMarkerIcon = null;
-		int price = 0;
-		for(LatLng postion : positions) {
-			price = MIN_PRICE + random.nextInt(MAX_PRICE - MIN_PRICE);
-			rentMarkerIcon = RentMarkerBuilder.createRentMarkerIcon(rentMarkerView,
-					price);
+		for(Rent rent : rents) {
+			rentMarkerIcon = RentMarkerBuilder.createRentMarkerIcon(rentMarkerView, rent.rentPrice);
 			rentsMap.addMarker(new MarkerOptions()
-				.position(postion)
+				.position(new LatLng(rent.address.addressLatitude, rent.address.addressLongitude))
 				.icon(BitmapDescriptorFactory.fromBitmap(rentMarkerIcon)));
 		}
 

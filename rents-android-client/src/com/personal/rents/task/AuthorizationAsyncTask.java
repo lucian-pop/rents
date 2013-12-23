@@ -25,7 +25,7 @@ public class AuthorizationAsyncTask extends AsyncTask<Context, Void, Boolean> {
 			return false;
 		}
 
-		return RentsClient.isAuthorized(account.getId(), account.getTokenKey());
+		return RentsClient.isAuthorized(account.accountId, account.tokenKey);
 	}
 
 	@Override

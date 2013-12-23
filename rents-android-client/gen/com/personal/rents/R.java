@@ -1686,9 +1686,9 @@ containing a value of this type.
     
  API 14 theme customizations can go here. 
          */
-        public static final int AppBaseTheme=0x7f0b008b;
+        public static final int AppBaseTheme=0x7f0b008c;
         public static final int AppTheme=0x7f0b007f;
-        public static final int AutoCompleteTextViewAppTheme=0x7f0b008c;
+        public static final int AutoCompleteTextViewAppTheme=0x7f0b008d;
         /**  Filter search page styles 
          */
         public static final int BottomButtonsStyle=0x7f0b0084;
@@ -1696,10 +1696,10 @@ containing a value of this type.
          */
         public static final int CreateAccountInputStyle=0x7f0b008a;
         public static final int CustomActionBar=0x7f0b0080;
-        public static final int EditTextAppTheme=0x7f0b008d;
+        public static final int EditTextAppTheme=0x7f0b008e;
         public static final int MarkerInfoWindowTextView=0x7f0b0081;
         public static final int PlacesSuggestionsListItem=0x7f0b0083;
-        public static final int RadioButtonAppTheme=0x7f0b008e;
+        public static final int RadioButtonAppTheme=0x7f0b008f;
         public static final int RangeSelectionStyle=0x7f0b0085;
         /**   List rents page 
          */
@@ -1707,9 +1707,9 @@ containing a value of this type.
         public static final int SearchPageRowStyle=0x7f0b0087;
         public static final int SearchRangeSeekBarStyle=0x7f0b0088;
         public static final int SectionUnderline=0x7f0b0082;
-        public static final int SpinnerAppTheme=0x7f0b008f;
-        public static final int SpinnerAppTheme_DropDown=0x7f0b0090;
-        public static final int SpinnerDropDownItemAppTheme=0x7f0b0091;
+        public static final int SpinnerAppTheme=0x7f0b0090;
+        public static final int SpinnerAppTheme_DropDown=0x7f0b0091;
+        public static final int SpinnerDropDownItemAppTheme=0x7f0b0092;
         public static final int SpinnerStyle=0x7f0b0086;
         /**  Mimic text appearance in select_dialog_item.xml 
          */
@@ -1804,6 +1804,9 @@ containing a value of this type.
         /**  Base platform-dependent theme providing a light-themed activity. 
          */
         public static final int Theme_Base_Light=0x7f0b0079;
+        /**  DialogFragment with progress bar style 
+         */
+        public static final int Theme_Background_Not_Dimmed=0x7f0b008b;
         /**  Styles in here can be extended for customisation in your application. Each utilises
          one of the Base styles. If Holo themes are available on the current platform version
          they will be used instead of the compat styles. 

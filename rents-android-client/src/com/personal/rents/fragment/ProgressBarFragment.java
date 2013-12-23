@@ -8,8 +8,11 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.view.ContextThemeWrapper;
 
 public class ProgressBarFragment extends DialogFragment {
+	
+	private int currentTaskId = -1;
 	
 	private ProgressDialog progressDialog;
 
@@ -18,46 +21,38 @@ public class ProgressBarFragment extends DialogFragment {
 	public BaseAsyncTask<?, ?, ?> getTask() {
 		return task;
 	}
-	
-	// when onTaskFinished called on listener, if dialog fragment isResumed dismiss it.
-	// otherwise set task to null for the dialog to be dismissed when resumed.
+
+	public int getCurrentTaskId() {
+		return currentTaskId;
+	}
+
 	public void setTask(BaseAsyncTask<?, ?, ?> task) {
+		if(task != null) {
+			task.setTaskId(++currentTaskId);
+		}
+
 		this.task = task;
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		setRetainInstance(true);
 	}
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		progressDialog = new ProgressDialog(getActivity());
+		ContextThemeWrapper context = new ContextThemeWrapper(getActivity(), 
+				R.style.Theme_Background_Not_Dimmed);
+		progressDialog = new ProgressDialog(context);
 		progressDialog.setIndeterminate(true);
-		progressDialog.setCanceledOnTouchOutside(false);
+		progressDialog.setCanceledOnTouchOutside(true);
 		progressDialog.show();
 		progressDialog.setContentView(R.layout.progress_bar_fragment_layout);
-		
+
 		return progressDialog;
 	}
-
-	
-//	@Override
-//	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//			Bundle savedInstanceState) {
-//		View view = inflater.inflate(R.layout.progress_bar_fragment_layout, container);
-//		
-//		getDialog().setCanceledOnTouchOutside(false);
-//		
-//		return view;
-//	}
-//
-//	@Override
-//	public Dialog getDialog() {
-//		return progressDialog;
-//	}
 
 	@Override
 	public void onDestroyView() {
@@ -75,7 +70,7 @@ public class ProgressBarFragment extends DialogFragment {
 		super.onDismiss(dialog);
 		
 		if(task != null) {
-			task.cancel(false);
+			task.cancel(true);
 		}
 	}
 

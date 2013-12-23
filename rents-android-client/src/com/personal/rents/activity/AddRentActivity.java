@@ -298,25 +298,25 @@ public class AddRentActivity extends ActionBarActivity {
 		EditText phone = (EditText) findViewById(R.id.rent_phone);
 		
 		Rent rent = new Rent();
-		rent.accountId = UserAccountManager.getAccount(this).getId();
+		rent.accountId = UserAccountManager.getAccount(this).accountId;
 		rent.address = address;
-		rent.price = Integer.parseInt(rentPrice.getText().toString());
-		rent.surface = Integer.parseInt(rentSurface.getText().toString());
-		rent.rooms = Integer.parseInt(rentRooms.getText().toString());
-		rent.baths = Integer.parseInt(rentBaths.getText().toString());
-		rent.party = (byte) rentParties.getSelectedItemPosition();
+		rent.rentPrice = Integer.parseInt(rentPrice.getText().toString());
+		rent.rentSurface = Integer.parseInt(rentSurface.getText().toString());
+		rent.rentRooms = Integer.parseInt(rentRooms.getText().toString());
+		rent.rentBaths = Integer.parseInt(rentBaths.getText().toString());
+		rent.rentParty = (byte) rentParties.getSelectedItemPosition();
 		rent.rentType = (byte) rentTypes.getSelectedItemPosition();
-		rent.architecture = (byte) rentStruct.getSelectedItemPosition();
-		rent.age = rentAge.getSelectedItemPosition();
+		rent.rentArchitecture = (byte) rentStruct.getSelectedItemPosition();
+		rent.rentAge = rentAge.getSelectedItemPosition();
 
 		if(!rentDesc.getText().toString().equals("")) {
-			rent.description = rentDesc.getText().toString();
+			rent.rentDescription = rentDesc.getText().toString();
 		}
 
-		rent.petsAllowed = petsAllowed.isChecked();
-		rent.phone = phone.getText().toString();
-		rent.creationDate = new Date();
-		rent.imageURIs = new ArrayList<String>(NO_OF_PICS);
+		rent.rentPetsAllowed = petsAllowed.isChecked();
+		rent.rentPhone = phone.getText().toString();
+		rent.rentAddDate = new Date();
+		rent.rentImageURIs = new ArrayList<String>(NO_OF_PICS);
 		
 		return rent;
 	}
@@ -328,21 +328,21 @@ public class AddRentActivity extends ActionBarActivity {
 		EditText ap = (EditText) findViewById(R.id.ap);
 		
 		if(!building.getText().toString().equals("")) {
-			address.building = building.getText().toString();
+			address.addressBuilding = building.getText().toString();
 		}
 		
 		if(!staircase.getText().toString().equals("")) {
-			address.staircase = staircase.getText().toString();
+			address.addressStaircase = staircase.getText().toString();
 		}
 		
 		if(!floor.getText().toString().equals("")) {
-			address.floor = Integer.parseInt(floor.getText().toString());
+			address.addressFloor = Integer.parseInt(floor.getText().toString());
 		}
 		
 		if(!ap.getText().toString().equals("")) {
-			address.ap = ap.getText().toString();
+			address.addressAp = ap.getText().toString();
 		}
 
-		address.country = getString(R.string.country);
+		address.addressCountry = getString(R.string.country);
 	}
 }

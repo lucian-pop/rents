@@ -9,13 +9,13 @@ public class UserAccountPreferencesManagerTest extends AndroidTestCase {
 	
 	public void testAddAccount() {
 		Account account = new Account();
-		account.setId(1);
+		account.accountId = 1;
 		
 		UserAccountPreferencesManager.addAccount(account, getContext());
 		SharedPreferences prefs = UserAccountPreferencesManager.getAccountPrefs(getContext());
 		int accountId = prefs.getInt(UserAccountPreferencesManager.ID, -1);
 		
-		assertTrue(account.getId() == accountId);
+		assertTrue(account.accountId == accountId);
 	}
 	
 	public void testGetAccount() {
@@ -28,7 +28,7 @@ public class UserAccountPreferencesManagerTest extends AndroidTestCase {
 		
 		Account account = UserAccountPreferencesManager.getAccount(getContext());
 		
-		assertTrue(account.getId() == accountId);
+		assertTrue(account.accountId == accountId);
 	}
 	
 	public void testGetUnexistingAccount() {
