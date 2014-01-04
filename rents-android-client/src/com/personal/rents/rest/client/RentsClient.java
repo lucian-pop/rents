@@ -1,12 +1,11 @@
 package com.personal.rents.rest.client;
 
-import java.util.List;
-
 import retrofit.RestAdapter;
 import retrofit.client.Response;
 import retrofit.mime.TypedByteArray;
 import retrofit.mime.TypedString;
 
+import com.personal.rents.dto.RentsCounter;
 import com.personal.rents.model.Account;
 import com.personal.rents.model.Rent;
 import com.personal.rents.rest.api.IAddRent;
@@ -21,7 +20,7 @@ import com.personal.rents.rest.util.WebserviceResponseStatus;
 
 public class RentsClient {
 	
-	private static final String BASE_URL = "http://192.168.1.5:8080/rents-server/ws";
+	private static final String BASE_URL = "http://192.168.1.3:8080/rents-server/ws";
 
 	private static final RestAdapter restAdapter;
 
@@ -57,6 +56,7 @@ public class RentsClient {
 	public static boolean isAuthorized(int accountId, String tokenKey) {
 		boolean authorized = true;
 		Response response = restAdapter.create(IAuthorization.class).authorize(accountId, tokenKey);
+
 		if(response.getStatus() != WebserviceResponseStatus.OK.getCode()) {
 			authorized = false;
 		}
@@ -80,7 +80,7 @@ public class RentsClient {
 		return rent;
 	}
 
-	public static List<Rent> getRentsByMapBoundaries(double minLatitude, double maxLatitude,
+	public static RentsCounter getRentsByMapBoundaries(double minLatitude, double maxLatitude,
 			double minLongitude, double maxLongitude) {
 		return restAdapter.create(IGetRents.class).getRentsByMapBoundaries(minLatitude, maxLatitude,
 				minLongitude, maxLongitude);

@@ -1,5 +1,6 @@
 package com.personal.rents.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -42,8 +43,6 @@ public class Rent implements Parcelable {
 	
 	public List<String> rentImageURIs;
 	
-	public transient int rentUploadStatus;
-	
 	public static final Parcelable.Creator<Rent> CREATOR;
     
     static {
@@ -78,6 +77,7 @@ public class Rent implements Parcelable {
 		rentPhone = source.readString();
 		rentAddDate = new Date(source.readLong());
 		rentStatus = source.readByte();
+		rentImageURIs = new ArrayList<String>();
 		source.readStringList(rentImageURIs);
 	}
 

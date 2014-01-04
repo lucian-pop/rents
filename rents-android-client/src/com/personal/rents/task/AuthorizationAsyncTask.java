@@ -1,22 +1,15 @@
 package com.personal.rents.task;
 
+import retrofit.RetrofitError;
+
 import com.personal.rents.logic.UserAccountManager;
 import com.personal.rents.model.Account;
 import com.personal.rents.rest.client.RentsClient;
-import com.personal.rents.task.listener.OnAuthorizationTaskFinishListener;
 
 import android.content.Context;
-import android.os.AsyncTask;
 
-public class AuthorizationAsyncTask extends AsyncTask<Context, Void, Boolean> {
+public class AuthorizationAsyncTask extends BaseAsyncTask<Context, Void, Boolean> {
 	
-	private OnAuthorizationTaskFinishListener onAuthorizationTaskFinishListener;
-	
-	public AuthorizationAsyncTask(OnAuthorizationTaskFinishListener 
-			onAuthorizationTaskFinishListener) {
-		this.onAuthorizationTaskFinishListener = onAuthorizationTaskFinishListener;
-	}
-
 	@Override
 	protected Boolean doInBackground(Context... params) {
 		Context context = params[0];
@@ -25,12 +18,19 @@ public class AuthorizationAsyncTask extends AsyncTask<Context, Void, Boolean> {
 			return false;
 		}
 
-		return RentsClient.isAuthorized(account.accountId, account.tokenKey);
+		boolean authorized = false;
+		try {
+			authorized = RentsClient.isAuthorized(account.accountId, account.tokenKey);
+		} catch(RetrofitError error) {
+			handleError(error, context);
+		}
+		
+		return authorized;
 	}
 
 	@Override
 	protected void onPostExecute(Boolean result) {
-		onAuthorizationTaskFinishListener.onTaskFinish(result);
+		onTaskFinishListener.onTaskFinish(result, getTaskId(), status);
 	}
 
 }

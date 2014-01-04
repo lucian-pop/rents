@@ -2,8 +2,8 @@ package com.personal.rents.task;
 
 import java.util.List;
 
-import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -16,19 +16,9 @@ import com.personal.rents.model.Rent;
 import com.personal.rents.util.RentMarkerBuilder;
 
 public class AddMarkersTask {
-	
-	private LayoutInflater inflater;
-	
-	private GoogleMap rentsMap;
-	
-	public AddMarkersTask(Context context, GoogleMap rentsMap) {
-		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		this.rentsMap = rentsMap;
-	}
 
-	public void addMarkers(List<Rent> rents) {
+	public static void addMarkers(List<Rent> rents, GoogleMap rentsMap, LayoutInflater inflater) {
 		rentsMap.clear();
-		
 		View rentMarkerView = inflater.inflate(R.layout.rent_marker_icon_layout, null);
 
 		Bitmap rentMarkerIcon = null;
@@ -44,4 +34,5 @@ public class AddMarkersTask {
 		rentsMap.addMarker(new MarkerOptions().position(rentsMap.getCameraPosition().target)
 				.icon(BitmapDescriptorFactory.fromBitmap(rentMarkerIcon)));
 	}
+
 }

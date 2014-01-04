@@ -1,18 +1,21 @@
 package com.personal.rents.task;
 
-import java.util.List;
+import retrofit.RetrofitError;
+
+import android.content.Context;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.VisibleRegion;
-import com.personal.rents.model.Rent;
+import com.personal.rents.dto.RentsCounter;
 import com.personal.rents.rest.client.RentsClient;
 
-public class GetRentsByMapBoundariesAsyncTask 
-	extends BaseAsyncTask<VisibleRegion, Void, List<Rent>> {
+public class GetRentsByMapBoundariesAsyncTask extends BaseAsyncTask<Object, Void, RentsCounter> {
 
 	@Override
-	protected List<Rent> doInBackground(VisibleRegion... params) {
-		VisibleRegion visibleRegion = params[0];
+	protected RentsCounter doInBackground(Object... params) {
+		VisibleRegion visibleRegion = (VisibleRegion) params[0];
+		Context context = (Context) params[1];
+		
 		LatLng southwest = visibleRegion.latLngBounds.southwest;
 		LatLng northeast = visibleRegion.latLngBounds.northeast;
 		double minLatitude = Math.min(southwest.latitude, northeast.latitude);
@@ -20,17 +23,29 @@ public class GetRentsByMapBoundariesAsyncTask
 		double minLongitude = Math.min(southwest.longitude, northeast.longitude);
 		double maxLongitude = Math.max(southwest.longitude, northeast.longitude);
 		
-		return RentsClient.getRentsByMapBoundaries(minLatitude, maxLatitude, minLongitude, maxLongitude);
+		if(isCancelled()) {
+			return null;
+		}
+		
+		RentsCounter rentsCounter = null;
+		try {
+			rentsCounter = RentsClient.getRentsByMapBoundaries(minLatitude, maxLatitude,
+					minLongitude, maxLongitude);
+		} catch(RetrofitError error) {
+			handleError(error, context);
+		} 
+		
+		return rentsCounter;
 	}
 
 	@Override
-	protected void onCancelled(List<Rent> result) {
-		onTaskFinishListener.onTaskFinish(null, getTaskId());
+	protected void onCancelled(RentsCounter result) {
+		onTaskFinishListener.onTaskFinish(null, getTaskId(), status);
 	}
 
 	@Override
-	protected void onPostExecute(List<Rent> result) {
-		onTaskFinishListener.onTaskFinish(result, getTaskId());
+	protected void onPostExecute(RentsCounter result) {
+		onTaskFinishListener.onTaskFinish(result, getTaskId(), status);
 	}
 
 }

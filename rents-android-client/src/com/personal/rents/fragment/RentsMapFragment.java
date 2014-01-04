@@ -26,6 +26,7 @@ public class RentsMapFragment extends SupportMapFragment {
 		View originalMapView = super.onCreateView(inflater, container, savedInstanceState);
 		rentsMapView = new TouchableMapView(getActivity());
 		rentsMapView.addView(originalMapView);
+
 		
 		return rentsMapView;
 	}

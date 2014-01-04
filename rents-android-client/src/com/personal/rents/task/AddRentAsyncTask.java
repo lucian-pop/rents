@@ -8,26 +8,18 @@ import com.personal.rents.logic.ImageManager;
 import com.personal.rents.logic.UserAccountManager;
 import com.personal.rents.model.Rent;
 import com.personal.rents.rest.client.RentsClient;
-import com.personal.rents.task.listener.OnAddRentTaskFinishListener;
-import com.personal.rents.util.ConnectionDetector;
 import com.personal.rents.util.GeneralConstants;
 
 import android.content.Context;
-import android.os.AsyncTask;
-import android.util.Log;
 
-public class AddRentAsyncTask extends AsyncTask<Object, Void, Rent> {
+public class AddRentAsyncTask extends BaseAsyncTask<Object, Void, Rent> {
 	
 	private static final String NULL_IMAGE_URI_ERROR = "Returned image URI is null";
 	
-	private OnAddRentTaskFinishListener onAddRentTaskFinishListener;
-	
 	private List<String> imagesPaths;
 	
-	public AddRentAsyncTask(List<String> imagesPaths, 
-			OnAddRentTaskFinishListener onAddRentTaskFinishListener) {
+	public AddRentAsyncTask(List<String> imagesPaths) {
 		this.imagesPaths = imagesPaths;
-		this.onAddRentTaskFinishListener = onAddRentTaskFinishListener;
 	}
 
 	@Override
@@ -42,24 +34,17 @@ public class AddRentAsyncTask extends AsyncTask<Object, Void, Rent> {
 			// Send rent to server.
 			rent = RentsClient.addRent(rent);
 		} catch(RetrofitError error) {
-			if(error.isNetworkError()) {
-				boolean internetConnected = ConnectionDetector.hasInternetConnectivity(context);
-				if(internetConnected) {
-					rent.rentUploadStatus = 1;
-				} else {
-					rent.rentUploadStatus = 2;
-				}
-			} else {
-				rent.rentUploadStatus = 3;
-			}
-		}
+			handleError(error, context);
+			
+			rent = null;
+		} 
 		
 		return rent;
 	}
 
 	@Override
 	protected void onPostExecute(Rent result) {
-		onAddRentTaskFinishListener.onTaskFinish(result);
+		onTaskFinishListener.onTaskFinish(result, getTaskId(), status);
 	}
 	
 	private void uploadImages(Rent rent, Context context) {
@@ -81,7 +66,6 @@ public class AddRentAsyncTask extends AsyncTask<Object, Void, Rent> {
 						new NullPointerException(NULL_IMAGE_URI_ERROR));
 			}
 
-			Log.e("TEST_TAG", "**********Image URI is: " + imageURI);
 			rent.rentImageURIs.add(imageURI);
 		}
 	}

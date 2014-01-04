@@ -1,11 +1,9 @@
 package com.personal.rents.rest.client;
 
-import java.util.List;
-
 import android.test.AndroidTestCase;
 import android.util.Log;
 
-import com.personal.rents.model.Rent;
+import com.personal.rents.dto.RentsCounter;
 
 public class RentsClientTest extends AndroidTestCase {
 
@@ -18,12 +16,12 @@ public class RentsClientTest extends AndroidTestCase {
 	private static final double MAX_LONGITUDE = 23.59537862241268;
 	
 	public void testGetLightRentsByMapBoundaries() {
-		List<Rent> rents = RentsClient.getRentsByMapBoundaries(MIN_LATITUDE, MAX_LATITUDE,
+		RentsCounter rentsCounter = RentsClient.getRentsByMapBoundaries(MIN_LATITUDE, MAX_LATITUDE,
 				MIN_LONGITUDE, MAX_LONGITUDE);
 		
-		Log.e("SMART_TAG", "No. of rents is " + rents.size());
+		Log.e("SMART_TAG", "No. of rents is " + rentsCounter.rents.size());
 		
-		assertTrue(rents.size() > 0);
+		assertTrue(rentsCounter.rents.size() > 0);
 	}
 
 }

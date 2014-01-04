@@ -16,6 +16,10 @@ public final class ActivitiesContract {
 	
 	public static final String RENT = "RENT";
 	
+	public static final String NO_OF_RENTS = "NO_OF_RENTS";
+	
+	public static final String RENTS = "RENTS";
+	
 	public static final String IMAGE_TYPE = "image/*";
 	
 	public static final int BROWSE_PIC_REQ_CODE = 1;
