@@ -3,9 +3,13 @@ package com.personal.rents.activity;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesClient;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -13,23 +17,32 @@ import com.google.android.gms.maps.model.VisibleRegion;
 import com.personal.rents.R;
 import com.personal.rents.adapter.RentMarkerInfoWindowAdapter;
 import com.personal.rents.dto.RentsCounter;
+import com.personal.rents.fragment.EnableLocationServicesDialogFragment;
 import com.personal.rents.fragment.ProgressBarFragment;
+import com.personal.rents.fragment.ProgressDialogFragment;
 import com.personal.rents.fragment.RentsMapFragment;
+import com.personal.rents.logic.CameraPositionPreferencesManager;
+import com.personal.rents.logic.LocationClientWrapper;
 import com.personal.rents.logic.LocationManagerWrapper;
+import com.personal.rents.logic.UserPreferencesManager;
 import com.personal.rents.model.Rent;
+import com.personal.rents.rest.util.NetworkErrorHandler;
 import com.personal.rents.rest.util.RetrofitResponseStatus;
 import com.personal.rents.task.AddMarkersTask;
 import com.personal.rents.task.GetRentsByMapBoundariesAsyncTask;
-import com.personal.rents.task.listener.OnTaskFinishListener;
+import com.personal.rents.task.listener.OnNetworkTaskFinishListener;
+import com.personal.rents.task.listener.OnProgressDialogDismissListener;
 import com.personal.rents.util.ActivitiesContract;
+import com.personal.rents.util.GeneralConstants;
+import com.personal.rents.util.GoogleServicesUtil;
 import com.personal.rents.view.TouchableMapView;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -37,165 +50,352 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-public class RentsMapActivity extends ActionBarActivity implements OnInfoWindowClickListener {
+public class RentsMapActivity extends BaseActivity implements OnInfoWindowClickListener, 
+		OnMyLocationButtonClickListener {
+	
+    private static final String PROGRESS_DIALOG_FRAGMENT_TAG = "PROGRESS_DIALOG_FRAGMENT_TAG";
+    
+    private static final String ENABLE_LOCATION_SERVICES_FRAGMENT_TAG = 
+    		"ENABLE_LOCATION_SERVICES_FRAGMENT_TAG";
+    
+    private static final String LOCATION_REQUEST_TIMEOUT_MSG = "Nu am reusit sa va localizam.";
 	
 	private int totalNoOfRents;
 	
 	private List<Rent> rents;
 	
-    private LatLng lastCenterPosition;
+    private LatLng previousCameraPosition;
 	
-    private float lastZoomLevel;
+    private float previousZoomLevel;
     
     private boolean isTouched = false;
     
-    /*Don't need to be retained in onSaveInstanceState*/
-    // This one should be nullified in onStop() and recreated during onStart();
-    private LayoutInflater inflater;
+    private boolean hasDelayedTasks = false;
     
-    // This next two should be nullified after dismiss pending tasks.
-	private GoogleMap rentsMap;
-	
-    private Marker lastClickedMarker;
+    private boolean taskInProgress = false;
     
-    // Pending task should be released during onStop() and re-added during onStart().
-    // Also nullify this two instances.
     private Handler handler;
     
     private OnCameraChangeTask onCameraChangeTask;
     
-    // Maybe it should be nullified in onDestroy.
+	private GoogleMap rentsMap;
+	
+    private Marker lastClickedMarker;
+    
+    private CameraPosition cameraPosition;
+    
+    private boolean locationServicesEnabled = false;
+    
+    private LocationManagerWrapper locationManager;
+    
+    private LocationClientWrapper locationClient;
+    
+    private LayoutInflater inflater;
+    
     private ProgressBarFragment progressBarFragment;
+    
+    private ProgressDialogFragment progressDialogFragment;
+    
+    private boolean servicesAvailable = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.rents_map_activity_layout);
-        
         Log.e("TEST_TAG", "**********On create called**********");
-		
-        // Think hardly on what to do whit this two.
-		handler = new Handler();
-		onCameraChangeTask = new OnCameraChangeTask();
-		
-		setupActionBar();
-		
-		setUpMapView();
-		
-		// definitely should stay in onCreate or onRestoreInstaceState
-		setupProgressBarFragment();
         
-		// should move in the implementation of the onRestoreInstanceState
-		restoreInstanceState(savedInstanceState);
+		setupActionBar();
+
+		servicesAvailable = GoogleServicesUtil.servicesConnected(this);
 		
-		// if reincarnated activity you do not need to setup map. just retrieve it.
-		if(rentsMap == null) {
-			setUpMap();
+		if(!servicesAvailable) {
+			return;
 		}
 		
-		// move this to on resume (maybe you should release inflater during onPause or onStop)
+		restoreSavedInstanceState(savedInstanceState);
+    }
+	
+	private void restoreSavedInstanceState(Bundle savedInstanceState) {
+		if(savedInstanceState == null) {
+			Log.e("TEST_TAG", "**********No saved instance state**********");
+	        return;
+		}
+		
+		cameraPosition = 
+				(CameraPosition) savedInstanceState.getParcelable(ActivitiesContract.CAMERA_POSITION);
+		previousCameraPosition = (LatLng) savedInstanceState
+				.getParcelable(ActivitiesContract.PREVIOUS_CAMERA_POSITION);
+		previousZoomLevel = savedInstanceState.getFloat(ActivitiesContract.PREVIOUS_ZOOM_LEVEL);
+		totalNoOfRents = savedInstanceState.getInt(ActivitiesContract.NO_OF_RENTS);
+		rents = savedInstanceState.getParcelableArrayList(ActivitiesContract.RENTS);
+		hasDelayedTasks = savedInstanceState.getBoolean(ActivitiesContract.HAS_DELAYED_TASKS);
+		taskInProgress = savedInstanceState.getBoolean(ActivitiesContract.TASK_IN_PROGRESS);
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		Log.e("TEST_TAG", "*********On ACTIVITY RESULT called**********");
+
+		setupLocationServices();
+		switch (requestCode) {
+			case  ActivitiesContract.LOCATION_SERVICES_REQ_CODE:
+				locationServicesEnabled = locationManager.isLocationServicesEnabled();
+				if(locationServicesEnabled) {
+					updateCameraPosition();
+				}
+
+				break;
+			case GoogleServicesUtil.CONNECTION_FAILURE_RESOLUTION_REQUEST:
+				if(resultCode != RESULT_OK) {
+					Toast.makeText(this, GoogleServicesUtil.UNABLE_TO_RESOLVE_ERROR_MSG, 
+							Toast.LENGTH_SHORT).show();
+				}
+
+				servicesAvailable = GoogleServicesUtil.checkServicesConnectedWithoutResolution(this);
+				if(servicesAvailable && locationServicesEnabled){
+					locationClient.connect();
+				}
+
+				break;
+			default:
+				break;
+		}
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		Log.e("TEST_TAG", "*********On START called**********");
+		if(!servicesAvailable){
+			return;
+		}
+        
+		setupMap();
+		setupProgressBarFragment();
+		setupProgressDialogFragment();
+		
+		// Initialize system resources.
 		inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		setupOnCameraChangeTaskHandler();
+		setupLocationServices();
+
+		if(hasDelayedTasks || taskInProgress) {
+			resetMapChangeTimer(GeneralConstants.SHORT_DELAY);
+			progressBarFragment.show();
+		}
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		if(!servicesAvailable) {
+			return;
+		}
+		
 		if(rents != null) {
 			AddMarkersTask.addMarkers(rents, rentsMap, inflater);
 		}
 		
-    }
+		if(UserPreferencesManager.getUserPreferences(this).showEnableLocationServices 
+				&& !locationServicesEnabled) {
+			(EnableLocationServicesDialogFragment.newInstance(true, false))
+					.show(getSupportFragmentManager(), ENABLE_LOCATION_SERVICES_FRAGMENT_TAG);
 
-	@Override
-	protected void onStop() {
-		super.onStop();
+			return;
+		}
 		
-		// release resources that are saved during onSavedInstanceState and the ones that might leak memory (rentsMap)
-		
-		Log.e("TEST_TAG", "********On STOP called********");
-	}
+		restoreCameraPosition();
 
-
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		
-		Log.e("TEST_TAG", "************On destroy called************");
 	}
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		Log.e("TEST_TAG", "*********On saved instance state called**********");
-		outState.putParcelable(ActivitiesContract.LAST_MAP_CENTER, lastCenterPosition);
-		outState.putFloat(ActivitiesContract.LAST_ZOOM_LEVEL, lastZoomLevel);
+
+		if(!servicesAvailable) {
+			return;
+		}
+
+		outState.putParcelable(ActivitiesContract.CAMERA_POSITION, rentsMap.getCameraPosition());
+		outState.putParcelable(ActivitiesContract.PREVIOUS_CAMERA_POSITION, previousCameraPosition);
+		outState.putFloat(ActivitiesContract.PREVIOUS_ZOOM_LEVEL, previousZoomLevel);
 		outState.putInt(ActivitiesContract.NO_OF_RENTS, totalNoOfRents);
 		outState.putParcelableArrayList(ActivitiesContract.RENTS, (ArrayList<Rent>)rents);
+		outState.putBoolean(ActivitiesContract.HAS_DELAYED_TASKS, handler.hasMessages(0));
 		
-		boolean hasDelayedTasks = handler.hasMessages(0);
-		outState.putBoolean(ActivitiesContract.HAS_DELAYED_TASKS, hasDelayedTasks);
-		if(hasDelayedTasks) {
-			handler.removeCallbacks(onCameraChangeTask);
-		}
-		
+		taskInProgress = progressBarFragment.getVisibility() == View.VISIBLE;
+		outState.putBoolean(ActivitiesContract.TASK_IN_PROGRESS, taskInProgress);
+
 		super.onSaveInstanceState(outState);
 	}
 
-	private void restoreInstanceState(Bundle savedInstanceState) {
-		if(savedInstanceState == null) {
-	        return;
-		}
-		
-		rentsMap = ((RentsMapFragment) getSupportFragmentManager().findFragmentById(R.id.rents_map))
-				.getMap();
-		lastCenterPosition = 
-				(LatLng) savedInstanceState.getParcelable(ActivitiesContract.LAST_MAP_CENTER);
-		lastZoomLevel = savedInstanceState.getFloat(ActivitiesContract.LAST_ZOOM_LEVEL);
-		totalNoOfRents = savedInstanceState.getInt(ActivitiesContract.NO_OF_RENTS);
-		rents = savedInstanceState.getParcelableArrayList(ActivitiesContract.RENTS);
+	@Override
+	protected void onStop() {
+		super.onStop();
+		Log.e("TEST_TAG", "********On STOP called********");
 
-		boolean hasDelayedTasks = 
-				savedInstanceState.getBoolean(ActivitiesContract.HAS_DELAYED_TASKS);
-		if(hasDelayedTasks) {
-			resetMapChangeTimer();
+		if(!servicesAvailable) {
+			return;
 		}
+
+		// Retain current camera position in order to be saved during onStop().
+		cameraPosition = rentsMap.getCameraPosition();
+		
+		// We reset all threads and listeners since we don't want to block the MAIN THREAD.
+		resetOnCameraChangeTaskHandler();
+		progressBarFragment.reset();
+		resetProgressDialogFragment();
+		locationClient.reset();
+		resetMap();
+
+		handler = null;
+		onCameraChangeTask = null;
+		rentsMap = null;
+		lastClickedMarker = null;
+		
+		// Release system resources
+		inflater = null;
+		locationManager = null;
+		locationClient = null;
 	}
 
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		Log.e("TEST_TAG", "************On destroy called************");
+
+		if(!servicesAvailable) {
+			return;
+		}
+		
+		CameraPositionPreferencesManager.addCameraPosition(cameraPosition,
+				this.getApplicationContext());
+
+		rents = null;
+		cameraPosition = null;
+		previousCameraPosition = null;
+		progressBarFragment = null;
+		progressDialogFragment = null;
+	}
+
+	private void setupOnCameraChangeTaskHandler() {
+		if(handler != null) {
+			return;
+		}
+
+		handler = new Handler();
+		onCameraChangeTask = new OnCameraChangeTask();
+	}
+	
+	private void resetOnCameraChangeTaskHandler() {
+		hasDelayedTasks = handler.hasMessages(0);
+		if(hasDelayedTasks) {
+			handler.removeCallbacks(onCameraChangeTask);
+		}
+	}
+	
 	private void setupActionBar() {
         getSupportActionBar().setTitle("Chirii");
 	}
+	
+	public void setupMap() {
+		if(rentsMap != null) {
+			return;
+		}
 
-	private void setUpMapView() {
 		RentsMapFragment rentsMapFragment = (RentsMapFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.rents_map);
+
+		// Sometimes mylocationbutton is null think for a fix when you have time.
 		View myLocationButton = rentsMapFragment.getView().findViewById(0x2);
-        myLocationButton.setBackgroundResource(R.drawable.app_my_location_btn_selector);
-        
+		if(myLocationButton != null) {
+	        myLocationButton.setBackgroundResource(R.drawable.app_my_location_btn_selector);
+		}
         ((TouchableMapView) rentsMapFragment.getView())
         	.setOnMapTouchListener(new RentsMapOnTouchListener());
-	}
 
-	private void setUpMap() {
-        rentsMap = ((RentsMapFragment) getSupportFragmentManager().findFragmentById(R.id.rents_map))
-        		.getMap();
-		rentsMap.setMyLocationEnabled(true);
+        rentsMap = rentsMapFragment.getMap();
+        rentsMap.setMyLocationEnabled(true);
 		rentsMap.getUiSettings().setMyLocationButtonEnabled(true);
 		rentsMap.getUiSettings().setCompassEnabled(true);
 		rentsMap.getUiSettings().setZoomControlsEnabled(false);
-        
         rentsMap.setInfoWindowAdapter(new RentMarkerInfoWindowAdapter(this));
         rentsMap.setOnCameraChangeListener(new RentsMapOnCameraChangeListener());
         rentsMap.setOnMarkerClickListener(new RentsMapOnMarkerClickListener());
         rentsMap.setOnInfoWindowClickListener(this);
-        
-    	LocationManagerWrapper locationHelper = new LocationManagerWrapper(this);
-        Location location = locationHelper.getLastKnownLocation();
-        if(location != null) {
-        	locationHelper.moveToLocation(location, rentsMap);
-        }
+        rentsMap.setOnMyLocationButtonClickListener(this);
+	}
+	
+	private void resetMap() {
+		rentsMap.setInfoWindowAdapter(null);
+		rentsMap.setOnCameraChangeListener(null);
+		rentsMap.setOnMarkerClickListener(null);
+		rentsMap.setOnInfoWindowClickListener(null);
+		rentsMap.setOnMyLocationButtonClickListener(null);
 	}
 
 	private void setupProgressBarFragment() {
-		progressBarFragment = (ProgressBarFragment) getSupportFragmentManager()
-				.findFragmentById(R.id.progressBarFragment);
+		if(progressBarFragment == null) {
+			progressBarFragment = (ProgressBarFragment) getSupportFragmentManager()
+					.findFragmentById(R.id.progressBarFragment);
+		}
+
+		progressBarFragment.setOnTaskFinishListener(new OnGetRentsTaskFinishListener());
+	}
+	
+	private void setupProgressDialogFragment() {
+		if(progressDialogFragment == null) {
+			progressDialogFragment = 
+					ProgressDialogFragment.newInstance(R.string.wait_for_location_msg,
+							LocationClientWrapper.REQUEST_TIMEOUT, 
+							new LocationProgressDialogDismissListener());
+		} else {
+			progressDialogFragment.setOnProgressDialogDismissListener(
+					new LocationProgressDialogDismissListener());
+		}
+
 		
-		if(progressBarFragment.getTask() != null) {
-			((GetRentsByMapBoundariesAsyncTask) progressBarFragment.getTask())
-				.setOnTaskFinishListener(new OnGetRentsTaskFinishListener());
+	}
+	
+	private void resetProgressDialogFragment() {
+		if(progressDialogFragment != null) {
+			progressDialogFragment.reset();
+		}
+	}
+	
+	private void setupLocationServices() {
+		if(locationClient == null) {
+			locationClient = new LocationClientWrapper(this, new ConnectionCallbacksImpl(),
+					new OnConnectionFailureListenerImpl());
+			locationClient.setLocationListener(new LocationListenerImpl());
+		}
+
+		if(locationManager == null) {
+			locationManager = new LocationManagerWrapper(this);
+			locationServicesEnabled = locationManager.isLocationServicesEnabled();
+		}
+	}
+	
+	private void restoreCameraPosition() {
+		if(cameraPosition != null) {
+			// Recreated activity or camera position updated by the location client.
+			return;
+		}
+
+		cameraPosition = CameraPositionPreferencesManager.getCameraPosition(this);
+		if(cameraPosition != null) {
+			locationManager.moveToLocation(cameraPosition, rentsMap);
+
+			return;
+		}
+		
+		updateCameraPosition();
+	}
+	
+	private void updateCameraPosition() {
+		if(!locationClient.isConnected()) {
+			locationClient.connect();
 		}
 	}
 
@@ -210,8 +410,8 @@ public class RentsMapActivity extends ActionBarActivity implements OnInfoWindowC
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if(item.getItemId() == R.id.search_action) {
 			Intent intent = new Intent(this, FilterSearchActivity.class);
-			intent.putExtra(ActivitiesContract.LATITUDE, lastCenterPosition.latitude);
-			intent.putExtra(ActivitiesContract.LONGITUDE, lastCenterPosition.longitude);
+			intent.putExtra(ActivitiesContract.LATITUDE, rentsMap.getCameraPosition().target.latitude);
+			intent.putExtra(ActivitiesContract.LONGITUDE, rentsMap.getCameraPosition().target.latitude);
 			intent.putExtra(ActivitiesContract.FROM_ACTIVITY, 
 					ActivitiesContract.RENTS_MAP_ACTIVITY);
 
@@ -220,8 +420,6 @@ public class RentsMapActivity extends ActionBarActivity implements OnInfoWindowC
 			return true;
 		} else if(item.getItemId() == R.id.list_rents_action) {
 			Intent intent = new Intent(this, RentsListActivity.class);
-			intent.putExtra(ActivitiesContract.LATITUDE, lastCenterPosition.latitude);
-			intent.putExtra(ActivitiesContract.LONGITUDE, lastCenterPosition.longitude);
 
 			startActivity(intent);
 			
@@ -247,9 +445,23 @@ public class RentsMapActivity extends ActionBarActivity implements OnInfoWindowC
 		startActivity(intent);
 	}
 	
+	@Override
+	public boolean onMyLocationButtonClick() {
+		if(!locationServicesEnabled) {
+			(EnableLocationServicesDialogFragment.newInstance(false, false))
+					.show(getSupportFragmentManager(), ENABLE_LOCATION_SERVICES_FRAGMENT_TAG);
+		} else if(!locationManager.isNetworkLocationServicesEnabled()) {
+			if(UserPreferencesManager.getUserPreferences(this).showEnableNetworkLocationService)
+			(EnableLocationServicesDialogFragment.newInstance(true, true))
+				.show(getSupportFragmentManager(), ENABLE_LOCATION_SERVICES_FRAGMENT_TAG);
+		}
+
+		return false;
+	}
+	
 	private void onChange(LatLng newCenter, LatLng oldCenter, float newZoom, float oldZoom) {
-		lastCenterPosition = newCenter;
-		lastZoomLevel = newZoom;
+		previousCameraPosition = newCenter;
+		previousZoomLevel = newZoom;
 
 		if ((!newCenter.equals(oldCenter)) && (newZoom != oldZoom)) {
 			Toast.makeText(RentsMapActivity.this, "Map Zoom + Pan", Toast.LENGTH_SHORT).show();
@@ -262,9 +474,9 @@ public class RentsMapActivity extends ActionBarActivity implements OnInfoWindowC
 		startGetRentsAsyncTask(rentsMap.getProjection().getVisibleRegion());
 	}
 	
-	private void resetMapChangeTimer() {
+	private void resetMapChangeTimer(long delay) {
 		handler.removeCallbacks(onCameraChangeTask);
-		handler.postDelayed(onCameraChangeTask, 1000L);
+		handler.postDelayed(onCameraChangeTask, delay);
 	}
     
 	private void startGetRentsAsyncTask(VisibleRegion visibleRegion) {
@@ -272,42 +484,44 @@ public class RentsMapActivity extends ActionBarActivity implements OnInfoWindowC
 		progressBarFragment.show();
 		
 		GetRentsByMapBoundariesAsyncTask getRentsTask = new GetRentsByMapBoundariesAsyncTask();
-		getRentsTask.setOnTaskFinishListener(new OnGetRentsTaskFinishListener());
 		progressBarFragment.setTask(getRentsTask);
-		getRentsTask.execute(visibleRegion, this);
+		getRentsTask.execute(visibleRegion);
 	}
 	
 	private class OnCameraChangeTask implements Runnable {
 		@Override
 		public void run() {
 			if(!isTouched) {
-				onChange(rentsMap.getCameraPosition().target, lastCenterPosition, 
-						rentsMap.getCameraPosition().zoom, lastZoomLevel);
+				onChange(rentsMap.getCameraPosition().target, previousCameraPosition, 
+						rentsMap.getCameraPosition().zoom, previousZoomLevel);
 			} else {
-				resetMapChangeTimer();
+				resetMapChangeTimer(GeneralConstants.LONG_DELAY);
 			}
 		}
 	}
 
     private class RentsMapOnCameraChangeListener implements GoogleMap.OnCameraChangeListener {
+
 		@Override
 		public void onCameraChange(CameraPosition center) {
 			if(isSpanChange(center.target) || isZoomChange(center.zoom)) {
-				resetMapChangeTimer();
+				Log.e("TEST_TAG", "********Camera CHANGED********");
+				resetMapChangeTimer(GeneralConstants.LONG_DELAY);
 				progressBarFragment.show();
 			}
 		}
     	
     	private boolean isSpanChange(LatLng newCenter) {
-    		return !newCenter.equals(lastCenterPosition);
+    		return !newCenter.equals(previousCameraPosition);
     	}
     	
     	private boolean isZoomChange(float newZoom) {
-    		return (newZoom != lastZoomLevel);
+    		return (newZoom != previousZoomLevel);
     	}
     }
     
     private class RentsMapOnTouchListener implements TouchableMapView.OnMapTouchListener {
+
 		@Override
 		public void onMapTouch(boolean touched) {
 			isTouched = touched;
@@ -315,6 +529,7 @@ public class RentsMapActivity extends ActionBarActivity implements OnInfoWindowC
     }
     
     private class RentsMapOnMarkerClickListener implements OnMarkerClickListener {
+
     	@Override
     	public boolean onMarkerClick(final Marker marker) {
     		if (lastClickedMarker != null && lastClickedMarker.equals(marker)) {
@@ -330,36 +545,104 @@ public class RentsMapActivity extends ActionBarActivity implements OnInfoWindowC
     	}
     }
     
-    private class OnGetRentsTaskFinishListener extends OnTaskFinishListener<RentsCounter> {
+    private class OnGetRentsTaskFinishListener implements OnNetworkTaskFinishListener {
+    	
 		@Override
-		public void onTaskFinish(RentsCounter result, int taskId, RetrofitResponseStatus status) {
-			handleResponse(result, taskId, status, RentsMapActivity.this);
+		public void onTaskFinish(Object result, int taskId, RetrofitResponseStatus status) {
+			Log.e("TEST_TAG", "************On task FINISH called**************");
+			if(!status.equals(RetrofitResponseStatus.OK)) {
+				NetworkErrorHandler.handleRetrofitError(status, RentsMapActivity.this);
 
-			if(progressBarFragment.isResumed() 
-					&& (progressBarFragment.getCurrentTaskId() == taskId)) {
-				progressBarFragment.dismiss();
+				return;
 			}
 			
-			progressBarFragment.setTask(null);
-		}
-
-		@Override
-		protected void handleOkStatus(RentsCounter result, int taskId) {
-			if(result != null) {
-				rents = result.rents;
-				totalNoOfRents = result.counter;
-
-				Toast.makeText(RentsMapActivity.this, "Rents have been successfully retrieved: " 
-						+ rents.size(), Toast.LENGTH_LONG).show();
-
-				AddMarkersTask.addMarkers(rents, rentsMap, inflater);
-
-				getSupportActionBar().setTitle(result.counter + " chirii au fost gasite");
-			} else {
+			if(result == null) {
 				Toast.makeText(RentsMapActivity.this, "Rents couldn't be retrieved", 
 						Toast.LENGTH_LONG).show();
+				
+				return;
 			}
+
+			rents = ((RentsCounter)result).rents;
+			totalNoOfRents = ((RentsCounter)result).counter;
+
+			Toast.makeText(RentsMapActivity.this, "Rents have been successfully retrieved: " 
+					+ rents.size(), Toast.LENGTH_LONG).show();
+
+			AddMarkersTask.addMarkers(rents, rentsMap, inflater);
+
+			getSupportActionBar().setTitle(totalNoOfRents + " chirii au fost gasite");
+		}
+    }
+    
+    private class LocationListenerImpl implements LocationListener{
+
+    	@Override
+		public void onLocationChanged(Location location) {
+			if(location == null) {
+				return;
+			}
+			
+			cameraPosition = CameraPosition.fromLatLngZoom(new LatLng(location.getLatitude(),
+					location.getLongitude()), GeneralConstants.DEFAULT_ZOOM_FACTOR);
+
+			locationManager.moveToLocation(cameraPosition, rentsMap);
+			if(progressDialogFragment.isResumed()) {
+				progressDialogFragment.dismiss();
+			}
+		}
+
+    }
+
+    private class LocationProgressDialogDismissListener implements OnProgressDialogDismissListener {
+
+		@Override
+		public void onDialogDismiss(boolean timeoutReached) {
+			locationClient.cancelRequestLocationUpdates();
+			
+			if(timeoutReached) {
+				Toast.makeText(RentsMapActivity.this, LOCATION_REQUEST_TIMEOUT_MSG,
+						Toast.LENGTH_LONG).show();
+				}
 		}
     }
 
+    private class ConnectionCallbacksImpl implements GooglePlayServicesClient.ConnectionCallbacks {
+
+		@Override
+		public void onConnected(Bundle connectionHint) {
+			locationClient.requestLocationUpdates();
+			progressDialogFragment.show(getSupportFragmentManager(), 
+					PROGRESS_DIALOG_FRAGMENT_TAG);
+		}
+
+		@Override
+		public void onDisconnected() {
+			if(progressDialogFragment.isResumed()) {
+				progressDialogFragment.dismiss();
+			}
+		}
+    }
+    
+    private class OnConnectionFailureListenerImpl 
+    		implements GooglePlayServicesClient.OnConnectionFailedListener {
+
+		@Override
+		public void onConnectionFailed(ConnectionResult result) {
+	        int errorCode = result.getErrorCode();
+	        
+	        if (result.hasResolution()) {
+	        	try {
+	        		result.startResolutionForResult(RentsMapActivity.this, 
+	        				GoogleServicesUtil.CONNECTION_FAILURE_RESOLUTION_REQUEST);
+	        	} catch(IntentSender.SendIntentException e) {
+	        		Toast.makeText(RentsMapActivity.this, GoogleServicesUtil.UNABLE_TO_RESOLVE_ERROR_MSG,
+	        				Toast.LENGTH_SHORT).show();
+	        	}
+
+	        } else {
+	        	GoogleServicesUtil.showErrorDialog(errorCode, RentsMapActivity.this);
+	        }
+		}
+    }
 }

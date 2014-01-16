@@ -7,13 +7,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.personal.rents.util.GeneralConstants;
 
 import android.content.Context;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 
 public class LocationManagerWrapper {
 
-	private static LocationManager locationManager;
+	private LocationManager locationManager;
 	
 	public LocationManagerWrapper(Context context) {
 		if(locationManager == null) {
@@ -21,36 +20,52 @@ public class LocationManagerWrapper {
 		}
 	}
 
-	public boolean isNetworkLocationEnabled() {
-		return locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+	public boolean isLocationServicesEnabled() {
+		return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) 
+				|| locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 	}
 	
-	public boolean isGPSLocationEnabled() {
+	public boolean isGPSLocationServicesEnabled() {
 		return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 	}
 	
-	public Location getLastKnownLocation() {
-		Criteria criteria = new Criteria();
-		String locationProvider = locationManager.getBestProvider(criteria, true);
-
-		return locationManager.getLastKnownLocation(locationProvider);
+	public boolean isNetworkLocationServicesEnabled() {
+		return locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 	}
 	
-	public void moveToLocation(Location location, GoogleMap map) {
-		double latitude = location.getLatitude();
-		double longitude = location.getLongitude();
-		LatLng position = new LatLng(latitude, longitude);
+	public Location getGPSLastKnownLocation() {
+		return locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+	}
+	
+	public Location getLastKnownLocation() {
+		Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		if(location == null) {
+			location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+		}
 
-		moveToLocation(position, map);
+		return location;
+	}
+
+	public void moveToLocation(Location location, GoogleMap map) {
+		CameraPosition cameraPosition = 
+				CameraPosition.fromLatLngZoom(new LatLng(location.getLatitude(), 
+						location.getLongitude()), GeneralConstants.DEFAULT_ZOOM_FACTOR);
+
+		moveToLocation(cameraPosition, map);
 	}
 	
 	public void moveToLocation(LatLng position, GoogleMap map) {
-		CameraPosition cameraPosition = new CameraPosition.Builder().target(position)
-				.zoom(GeneralConstants.DEFAULT_ZOOM_FACTOR).build();
-		map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+		moveToLocation(position, GeneralConstants.DEFAULT_ZOOM_FACTOR, map);
 	}
 	
-	public Location getCurrentLocation() {
-		return null;
+	public void moveToLocation(LatLng position, int zoomLevel, GoogleMap map) {
+		CameraPosition cameraPosition = new CameraPosition.Builder().target(position)
+				.zoom(zoomLevel).build();
+		map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 	}
+
+	public void moveToLocation(CameraPosition cameraPosition, GoogleMap map) {
+		map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+	}
+
 }

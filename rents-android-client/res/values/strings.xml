@@ -24,6 +24,13 @@
 	<string name="add_to_favorites_action_title">Salveaza</string>
 	<string name="signout_action_title">Iesire cont</string>
 	
+	<!--  Dialog messages -->
+	<string name="wait_for_location_msg">Localizare...</string>
+	<string name="enable_location_services_dialog_title">Serviciile de localizare sunt dezactivate</string>
+	<string name="enable_location_services_dialog_message">Rents are nevoie de locatia dumneavoastra.</string>
+	<string name="enable_nt_location_service_dialog_title">Localizarea prin WIFI/Reteaua mobila este dezactivata</string>
+	<string name="enable_nt_location_service_dialog_message">Pentru o localizare mai sigura, va rugam activati.</string>
+	
 	<!-- User added rents activity menu -->
 	<string name="add_rent_action_title">Adauga chirie</string>
 	<string name="edit_account_action_title">Editeaza cont</string>

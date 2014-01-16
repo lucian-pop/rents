@@ -7,7 +7,7 @@ import android.content.SharedPreferences;
 
 public class UserAccountPreferencesManager {
 	
-	protected static final String ACCOUNT_PREFS_FILE = "com.personal.rents.account.prefs";
+	private static final String PREFS_FILE = "com.personal.rents.account.prefs";
 	
 	protected static final String ID = "ID";
 	
@@ -24,39 +24,39 @@ public class UserAccountPreferencesManager {
 	protected static final String TOKEN_KEY = "tokenKey";
 	
 	public static void addAccount(Account account, Context context) {
-		SharedPreferences.Editor accountPrefsEditor = getAccountPrefs(context).edit();
-		accountPrefsEditor.putInt(ID, account.accountId);
-		accountPrefsEditor.putString(TOKEN_KEY, account.tokenKey);
-		accountPrefsEditor.commit();
+		SharedPreferences.Editor prefsEditor = getAccountPrefs(context).edit();
+		prefsEditor.putInt(ID, account.accountId);
+		prefsEditor.putString(TOKEN_KEY, account.tokenKey);
+		prefsEditor.commit();
 	}
 	
 	public static Account getAccount(Context context) {
-		SharedPreferences accountPrefs = getAccountPrefs(context);
-		if(accountPrefs.getAll().size() == 0) {
+		SharedPreferences prefs = getAccountPrefs(context);
+		if(prefs.getAll().size() == 0) {
 			// There are no account saved preferences.
 			return null;
 		}
 		
 		Account account = new Account();
-		account.accountId = accountPrefs.getInt(ID, -1);
-		account.tokenKey = accountPrefs.getString(TOKEN_KEY, null);
+		account.accountId = prefs.getInt(ID, -1);
+		account.tokenKey = prefs.getString(TOKEN_KEY, null);
 		
 		return account;
 	}
 	
 	public static void removeAccount(Context context) {
-		SharedPreferences.Editor accountPrefsEditor = getAccountPrefs(context).edit();
-		accountPrefsEditor.clear();
-		accountPrefsEditor.commit();
+		SharedPreferences.Editor prefsEditor = getAccountPrefs(context).edit();
+		prefsEditor.clear();
+		prefsEditor.commit();
 	}
 	
 	public static void replaceToken(String tokenKey, Context context) {
-		SharedPreferences.Editor accountPrefsEditor = getAccountPrefs(context).edit();
-		accountPrefsEditor.putString(TOKEN_KEY, tokenKey);
-		accountPrefsEditor.commit();
+		SharedPreferences.Editor prefsEditor = getAccountPrefs(context).edit();
+		prefsEditor.putString(TOKEN_KEY, tokenKey);
+		prefsEditor.commit();
 	}
 	
 	protected static SharedPreferences getAccountPrefs(Context context) {
-		return context.getSharedPreferences(ACCOUNT_PREFS_FILE, Context.MODE_PRIVATE);
+		return context.getSharedPreferences(PREFS_FILE, Context.MODE_PRIVATE);
 	}
 }

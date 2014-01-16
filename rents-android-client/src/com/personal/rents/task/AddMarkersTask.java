@@ -3,7 +3,6 @@ package com.personal.rents.task;
 import java.util.List;
 
 import android.graphics.Bitmap;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 

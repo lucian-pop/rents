@@ -18,7 +18,7 @@ public class UserAccountPreferencesManagerTest extends AndroidTestCase {
 		assertTrue(account.accountId == accountId);
 	}
 	
-	public void testGetAccount() {
+	public void testGetSavedAccount() {
 		int accountId = 1;
 
 		SharedPreferences.Editor prefsEditor = UserAccountPreferencesManager

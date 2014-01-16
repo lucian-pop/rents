@@ -9,12 +9,11 @@ import com.personal.rents.adapter.AdapterFactory;
 import com.personal.rents.adapter.ImageArrayAdapter;
 import com.personal.rents.logic.ImageManager;
 import com.personal.rents.logic.UserAccountManager;
+import com.personal.rents.model.Account;
 import com.personal.rents.model.Address;
 import com.personal.rents.model.Rent;
-import com.personal.rents.rest.util.RetrofitResponseStatus;
 import com.personal.rents.task.AddRentAsyncTask;
 import com.personal.rents.task.AuthorizationAsyncTask;
-import com.personal.rents.task.listener.OnTaskFinishListener;
 import com.personal.rents.util.ActivitiesContract;
 import com.personal.rents.util.MediaUtils;
 import com.personal.rents.view.DynamicGridView;
@@ -37,7 +36,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class AddRentActivity extends ActionBarActivity {
 	
@@ -172,9 +170,17 @@ public class AddRentActivity extends ActionBarActivity {
 	}
 	
 	public void onAddRentBtnClick(View view) {
+		Account account = UserAccountManager.getAccount(this);
+		if(account == null) {
+			Intent intent = new Intent(this, LoginActivity.class);
+			startActivity(intent);
+			
+			return;
+		}
+
 		AuthorizationAsyncTask authorizationTask = new AuthorizationAsyncTask();
-		authorizationTask.setOnTaskFinishListener(new OnAuthorizationTaskFinishListener());
-		authorizationTask.execute(this);
+		//authorizationTask.setOnTaskFinishListener(new OnAuthorizationTaskFinishListener());
+		authorizationTask.execute(account);
 	}
 	
 	private void init() {
@@ -265,7 +271,7 @@ public class AddRentActivity extends ActionBarActivity {
 		updateAddress();
 		Rent rent = initRent();
 		AddRentAsyncTask addRentTask = new AddRentAsyncTask(imagesPaths);
-		addRentTask.setOnTaskFinishListener(new OnAddRentTaskFinishListener());
+		//addRentTask.setOnTaskFinishListener(new OnAddRentTaskFinishListener());
 		addRentTask.execute(rent, this.getApplicationContext());
 	}
 	
@@ -331,43 +337,43 @@ public class AddRentActivity extends ActionBarActivity {
 		address.addressCountry = getString(R.string.country);
 	}
 	
-	private class OnAuthorizationTaskFinishListener extends OnTaskFinishListener<Boolean> {
-		@Override
-		public void onTaskFinish(Boolean authorized, int taskId, RetrofitResponseStatus status) {
-			handleResponse(authorized, taskId, status, AddRentActivity.this);
-		}
-
-		@Override
-		protected void handleOkStatus(Boolean authorized, int taskId) {
-			if(!authorized) {
-				Intent intent = new Intent(AddRentActivity.this, LoginActivity.class);
-				startActivity(intent);
-			} else {
-				addRent();
-			}
-		}
-	}
-	
-	private class OnAddRentTaskFinishListener extends OnTaskFinishListener<Rent> {
-
-		private static final String RENT_ADDED = "Chiria a fost adaugata cu success";
-		
-		private static final String RENT_NOT_ADDED = "Chiria nu a putut fi adaugata. Va rugam"
-				+ " incercati din nou.";
-
-		@Override
-		public void onTaskFinish(Rent result, int taskId, RetrofitResponseStatus status) {
-			handleResponse(result, taskId, status, AddRentActivity.this);
-		}
-
-		@Override
-		protected void handleOkStatus(Rent result, int taskId) {
-			if(result != null) {
-				Toast.makeText(AddRentActivity.this, RENT_ADDED, Toast.LENGTH_LONG).show();
-			} else {
-				Toast.makeText(AddRentActivity.this, RENT_NOT_ADDED, Toast.LENGTH_LONG).show();
-			}
-		}	
-	}
+//	private class OnAuthorizationTaskFinishListener extends OnNetworkTaskFinishListener<Boolean> {
+//		@Override
+//		public void onTaskFinish(Boolean authorized, int taskId, RetrofitResponseStatus status) {
+//			handleResponse(authorized, taskId, status, AddRentActivity.this);
+//		}
+//
+//		@Override
+//		protected void handleOkStatus(Boolean authorized, int taskId) {
+//			if(!authorized) {
+//				Intent intent = new Intent(AddRentActivity.this, LoginActivity.class);
+//				startActivity(intent);
+//			} else {
+//				addRent();
+//			}
+//		}
+//	}
+//	
+//	private class OnAddRentTaskFinishListener extends OnNetworkTaskFinishListener<Rent> {
+//
+//		private static final String RENT_ADDED = "Chiria a fost adaugata cu success";
+//		
+//		private static final String RENT_NOT_ADDED = "Chiria nu a putut fi adaugata. Va rugam"
+//				+ " incercati din nou.";
+//
+//		@Override
+//		public void onTaskFinish(Rent result, int taskId, RetrofitResponseStatus status) {
+//			handleResponse(result, taskId, status, AddRentActivity.this);
+//		}
+//
+//		@Override
+//		protected void handleOkStatus(Rent result, int taskId) {
+//			if(result != null) {
+//				Toast.makeText(AddRentActivity.this, RENT_ADDED, Toast.LENGTH_LONG).show();
+//			} else {
+//				Toast.makeText(AddRentActivity.this, RENT_NOT_ADDED, Toast.LENGTH_LONG).show();
+//			}
+//		}	
+//	}
 
 }

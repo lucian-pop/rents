@@ -20,7 +20,7 @@ import com.personal.rents.rest.util.WebserviceResponseStatus;
 
 public class RentsClient {
 	
-	private static final String BASE_URL = "http://192.168.1.3:8080/rents-server/ws";
+	private static final String BASE_URL = "http://192.168.1.5:8080/rents-server/ws";
 
 	private static final RestAdapter restAdapter;
 

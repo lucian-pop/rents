@@ -2,11 +2,15 @@ package com.personal.rents.util;
 
 public final class ActivitiesContract {
 
-	public static final String HAS_DELAYED_TASKS = "IN_PROGRESS";
+	public static final String HAS_DELAYED_TASKS = "HAS_DELAYED_TASKS";
 	
-	public static final String LAST_MAP_CENTER = "LAST_MAP_CENTER";
+	public static final String TASK_IN_PROGRESS = "TASK_IN_PROGRESS";
 	
-	public static final String LAST_ZOOM_LEVEL = "LAST_ZOOM_LEVEL";
+	public static final String CAMERA_POSITION = "CAMERA_POSITION";
+	
+	public static final String PREVIOUS_CAMERA_POSITION = "PREVIOUS_CAMERA_POSITION";
+	
+	public static final String PREVIOUS_ZOOM_LEVEL = "PREVIOUS_ZOOM_LEVEL";
 
 	public static final String LATITUDE = "LATITUDE";
 	
@@ -25,6 +29,8 @@ public final class ActivitiesContract {
 	public static final int BROWSE_PIC_REQ_CODE = 1;
 	
 	public static final int TAKE_PIC_REQ_CODE = 2;
+	
+	public static final int LOCATION_SERVICES_REQ_CODE = 101;
 	
 	public static final String SELECTED_PIC_POSITION = "SELECTED_PIC_POSITION";
 	

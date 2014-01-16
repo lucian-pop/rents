@@ -12,7 +12,7 @@ import com.personal.rents.util.GeneralConstants;
 
 import android.content.Context;
 
-public class AddRentAsyncTask extends BaseAsyncTask<Object, Void, Rent> {
+public class AddRentAsyncTask extends NetworkAsyncTask<Object, Void, Rent> {
 	
 	private static final String NULL_IMAGE_URI_ERROR = "Returned image URI is null";
 	
@@ -34,7 +34,7 @@ public class AddRentAsyncTask extends BaseAsyncTask<Object, Void, Rent> {
 			// Send rent to server.
 			rent = RentsClient.addRent(rent);
 		} catch(RetrofitError error) {
-			handleError(error, context);
+			handleError(error);
 			
 			rent = null;
 		} 
@@ -44,7 +44,7 @@ public class AddRentAsyncTask extends BaseAsyncTask<Object, Void, Rent> {
 
 	@Override
 	protected void onPostExecute(Rent result) {
-		onTaskFinishListener.onTaskFinish(result, getTaskId(), status);
+		progressBarFragment.taskFinished(result, taskId, status);
 	}
 	
 	private void uploadImages(Rent rent, Context context) {

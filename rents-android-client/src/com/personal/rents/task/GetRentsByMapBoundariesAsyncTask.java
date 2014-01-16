@@ -2,19 +2,16 @@ package com.personal.rents.task;
 
 import retrofit.RetrofitError;
 
-import android.content.Context;
-
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.VisibleRegion;
 import com.personal.rents.dto.RentsCounter;
 import com.personal.rents.rest.client.RentsClient;
 
-public class GetRentsByMapBoundariesAsyncTask extends BaseAsyncTask<Object, Void, RentsCounter> {
+public class GetRentsByMapBoundariesAsyncTask extends NetworkAsyncTask<VisibleRegion, Void, RentsCounter> {
 
 	@Override
-	protected RentsCounter doInBackground(Object... params) {
-		VisibleRegion visibleRegion = (VisibleRegion) params[0];
-		Context context = (Context) params[1];
+	protected RentsCounter doInBackground(VisibleRegion... params) {
+		VisibleRegion visibleRegion = params[0];
 		
 		LatLng southwest = visibleRegion.latLngBounds.southwest;
 		LatLng northeast = visibleRegion.latLngBounds.northeast;
@@ -32,7 +29,7 @@ public class GetRentsByMapBoundariesAsyncTask extends BaseAsyncTask<Object, Void
 			rentsCounter = RentsClient.getRentsByMapBoundaries(minLatitude, maxLatitude,
 					minLongitude, maxLongitude);
 		} catch(RetrofitError error) {
-			handleError(error, context);
+			handleError(error);
 		} 
 		
 		return rentsCounter;
@@ -40,12 +37,16 @@ public class GetRentsByMapBoundariesAsyncTask extends BaseAsyncTask<Object, Void
 
 	@Override
 	protected void onCancelled(RentsCounter result) {
-		onTaskFinishListener.onTaskFinish(null, getTaskId(), status);
+		if(progressBarFragment != null) {
+			progressBarFragment.taskFinished(null, taskId, status);
+		}
 	}
 
 	@Override
 	protected void onPostExecute(RentsCounter result) {
-		onTaskFinishListener.onTaskFinish(result, getTaskId(), status);
+		if(progressBarFragment != null) {
+			progressBarFragment.taskFinished(result, taskId, status); 
+		}
 	}
 
 }

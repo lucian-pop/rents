@@ -8,7 +8,7 @@ public final class GeneralConstants {
 	public static final String MINUS = "-";
 	
 	// Map related.
-	public static final int DEFAULT_ZOOM_FACTOR = 15;
+	public static final int DEFAULT_ZOOM_FACTOR = 14;
 	
 	public static final String ENABLE_NETWORK_LOCATION_TAG = "ENABLE_NETWORK_LOCATION_DIALOG";
 	
@@ -31,6 +31,14 @@ public final class GeneralConstants {
 	public static final int DEST_IMG_SIZE = 800;
 	
 	public static final String IMG_FILE_EXT = ".jpg";
+	
+	
+	// Task delays
+	
+	public static final long LONG_DELAY = 1000L;
+	
+	public static final long SHORT_DELAY = 250L;
 
 	private GeneralConstants() {}	
+	
 }
