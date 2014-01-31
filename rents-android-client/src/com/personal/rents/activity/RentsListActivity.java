@@ -1,12 +1,9 @@
 package com.personal.rents.activity;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.google.android.gms.maps.model.VisibleRegion;
 import com.personal.rents.R;
 import com.personal.rents.fragment.RentsListFragment;
-import com.personal.rents.model.Address;
-import com.personal.rents.model.Rent;
+import com.personal.rents.task.GetRentsNextPageByMapBoundariesAsyncTask;
 import com.personal.rents.util.ActivitiesContract;
 
 import android.content.Intent;
@@ -14,6 +11,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 public class RentsListActivity extends ActionBarActivity {
 	
@@ -21,7 +19,9 @@ public class RentsListActivity extends ActionBarActivity {
 	
 	private double mapCenterLongitude;
 	
-	private List<Rent> rents;
+	private VisibleRegion visibleRegion;
+	
+	private int totalNoOfRents;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -32,36 +32,41 @@ public class RentsListActivity extends ActionBarActivity {
 		if(savedInstanceState != null) {
 			bundle = savedInstanceState;
 		} else {
-			// get bundle from the intent (send by search activity or map activity).
 			bundle = getIntent().getExtras();
 		}
-		
+
+		init(bundle);
+	}
+	
+	private void init(Bundle bundle) {
 		if(bundle != null) {
 			mapCenterLatitude = bundle.getDouble(ActivitiesContract.LATITUDE);
 			mapCenterLongitude = bundle.getDouble(ActivitiesContract.LONGITUDE);
-			
-			// populate rents from the bundle
+			visibleRegion = bundle.getParcelable(ActivitiesContract.VISIBLE_REGION);		
+			totalNoOfRents = bundle.getInt(ActivitiesContract.NO_OF_RENTS);
 		}
 
-		init();
-	}
-	
-	private void init() {
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		getSupportActionBar().setTitle("305 oferte gasite");
-
-		rents = new ArrayList<Rent>(6);
-		Rent rent = new Rent();
-		rent.address = new Address();
-		rent.address.addressLatitude = 10;
-		rent.address.addressLongitude = 10;
-		rent.rentPrice = 160;
-		for(int i=0; i < 6; i++) {
-			rents.add(rent);
-		}
+		setupActionBar();
+		
 		RentsListFragment rentsListFragment = (RentsListFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.rents_list_fragment);
-		rentsListFragment.setRents(rents);
+		rentsListFragment.setLoadNextPageTask(
+				new GetRentsNextPageByMapBoundariesAsyncTask(visibleRegion));
+	}
+	
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		outState.putDouble(ActivitiesContract.LATITUDE, mapCenterLatitude);
+		outState.putDouble(ActivitiesContract.LONGITUDE, mapCenterLongitude);
+		outState.putParcelable(ActivitiesContract.VISIBLE_REGION, visibleRegion);
+		outState.putInt(ActivitiesContract.NO_OF_RENTS, totalNoOfRents);
+		
+		super.onSaveInstanceState(outState);
+	}
+
+	private void setupActionBar() {
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setTitle(totalNoOfRents +  " oferte gasite");
 	}
 	
 	@Override
@@ -77,6 +82,7 @@ public class RentsListActivity extends ActionBarActivity {
 			Intent intent = new Intent(this, FilterSearchActivity.class);
 			intent.putExtra(ActivitiesContract.LATITUDE, mapCenterLatitude);
 			intent.putExtra(ActivitiesContract.LONGITUDE, mapCenterLongitude);
+			intent.putExtra(ActivitiesContract.VISIBLE_REGION, visibleRegion);
 			intent.putExtra(ActivitiesContract.FROM_ACTIVITY, 
 					ActivitiesContract.RENTS_LIST_ACTIVITY);
 
@@ -94,5 +100,10 @@ public class RentsListActivity extends ActionBarActivity {
 		}
 		
 		return false;
+	}
+	
+	public void onRetryLoadNextPageBtnClick(View view) {
+		((RentsListFragment) getSupportFragmentManager().findFragmentById(R.id.rents_list_fragment))
+			.retryLoadingNextPage();
 	}
 }

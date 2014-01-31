@@ -4,6 +4,6 @@ import com.personal.rents.rest.util.RetrofitResponseStatus;
 
 public interface OnNetworkTaskFinishListener {
 	
-	public void onTaskFinish(Object result, int taskId, RetrofitResponseStatus status);
+	public void onTaskFinish(Object result, RetrofitResponseStatus status);
 
 }

@@ -11,7 +11,7 @@ public class LocationClientWrapper {
 	
 	private static final long REQUEST_NORMAL_FREQUENCY = 1000;
 	
-	private static final long REQUEST_FAST_FREQUENCY = 500;
+	private static final long REQUEST_FAST_FREQUENCY = 50;
 	
 	public static final long REQUEST_TIMEOUT = 15000;
 

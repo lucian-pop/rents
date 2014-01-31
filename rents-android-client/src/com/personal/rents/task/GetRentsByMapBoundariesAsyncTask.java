@@ -6,8 +6,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.VisibleRegion;
 import com.personal.rents.dto.RentsCounter;
 import com.personal.rents.rest.client.RentsClient;
+import com.personal.rents.util.GeneralConstants;
 
-public class GetRentsByMapBoundariesAsyncTask extends NetworkAsyncTask<VisibleRegion, Void, RentsCounter> {
+public class GetRentsByMapBoundariesAsyncTask 
+		extends ProgressBarFragmentAsyncTask<VisibleRegion, Void, RentsCounter> {
 
 	@Override
 	protected RentsCounter doInBackground(VisibleRegion... params) {
@@ -27,7 +29,7 @@ public class GetRentsByMapBoundariesAsyncTask extends NetworkAsyncTask<VisibleRe
 		RentsCounter rentsCounter = null;
 		try {
 			rentsCounter = RentsClient.getRentsByMapBoundaries(minLatitude, maxLatitude,
-					minLongitude, maxLongitude);
+					minLongitude, maxLongitude, GeneralConstants.PAGE_SIZE);
 		} catch(RetrofitError error) {
 			handleError(error);
 		} 

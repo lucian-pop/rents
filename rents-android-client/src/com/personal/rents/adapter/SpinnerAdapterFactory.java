@@ -3,9 +3,9 @@ package com.personal.rents.adapter;
 import android.content.Context;
 import android.widget.ArrayAdapter;
 
-public final class AdapterFactory {
+public final class SpinnerAdapterFactory {
 
-	private AdapterFactory() {
+	private SpinnerAdapterFactory() {
 	}
 	
 	public static ArrayAdapter<CharSequence> createSpinnerAdapter(Context context, 

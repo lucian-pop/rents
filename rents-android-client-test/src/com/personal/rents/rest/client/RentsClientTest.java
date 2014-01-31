@@ -4,6 +4,7 @@ import android.test.AndroidTestCase;
 import android.util.Log;
 
 import com.personal.rents.dto.RentsCounter;
+import com.personal.rents.util.GeneralConstants;
 
 public class RentsClientTest extends AndroidTestCase {
 
@@ -17,7 +18,7 @@ public class RentsClientTest extends AndroidTestCase {
 	
 	public void testGetLightRentsByMapBoundaries() {
 		RentsCounter rentsCounter = RentsClient.getRentsByMapBoundaries(MIN_LATITUDE, MAX_LATITUDE,
-				MIN_LONGITUDE, MAX_LONGITUDE);
+				MIN_LONGITUDE, MAX_LONGITUDE, GeneralConstants.PAGE_SIZE);
 		
 		Log.e("SMART_TAG", "No. of rents is " + rentsCounter.rents.size());
 		

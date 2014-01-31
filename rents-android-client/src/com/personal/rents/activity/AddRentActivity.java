@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import com.personal.rents.R;
-import com.personal.rents.adapter.AdapterFactory;
+import com.personal.rents.adapter.SpinnerAdapterFactory;
 import com.personal.rents.adapter.ImageArrayAdapter;
 import com.personal.rents.logic.ImageManager;
 import com.personal.rents.logic.UserAccountManager;
@@ -208,20 +208,20 @@ public class AddRentActivity extends ActionBarActivity {
 
 	private void setupSpinners() {
 		Spinner partiesSpinner = (Spinner) findViewById(R.id.rent_party);
-		ArrayAdapter<CharSequence> spinnerAdapter = AdapterFactory.createSpinnerAdapter(this, 
+		ArrayAdapter<CharSequence> spinnerAdapter = SpinnerAdapterFactory.createSpinnerAdapter(this, 
 				R.array.rent_parties);
 		partiesSpinner.setAdapter(spinnerAdapter);
 		
 		Spinner typesSpinner = (Spinner) findViewById(R.id.rent_type);
-		spinnerAdapter = AdapterFactory.createSpinnerAdapter(this, R.array.rent_types);
+		spinnerAdapter = SpinnerAdapterFactory.createSpinnerAdapter(this, R.array.rent_types);
 		typesSpinner.setAdapter(spinnerAdapter);
 		
 		Spinner structSpinner = (Spinner) findViewById(R.id.rent_structure);
-		spinnerAdapter = AdapterFactory.createSpinnerAdapter(this, R.array.rent_structures);
+		spinnerAdapter = SpinnerAdapterFactory.createSpinnerAdapter(this, R.array.rent_structures);
 		structSpinner.setAdapter(spinnerAdapter);
 		
 		Spinner ageSpinner = (Spinner) findViewById(R.id.rent_age);
-		spinnerAdapter = AdapterFactory.createSpinnerAdapter(this, R.array.rent_ages);
+		spinnerAdapter = SpinnerAdapterFactory.createSpinnerAdapter(this, R.array.rent_ages);
 		ageSpinner.setAdapter(spinnerAdapter);
 	}
 	

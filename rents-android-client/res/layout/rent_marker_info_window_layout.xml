@@ -30,7 +30,7 @@
 	       	style="@style/MarkerInfoWindowTextView"
 	    	android:layout_toRightOf="@id/rent_marker_img"
 	    	android:layout_below="@id/rent_price"
-	       	android:text="@string/rent_street_default_text"/>
+	       	android:text="@string/rent_address_default_text"/>
 		
 		<TextView android:id="@+id/rent_short_desc"
 			style="@style/MarkerInfoWindowTextView"

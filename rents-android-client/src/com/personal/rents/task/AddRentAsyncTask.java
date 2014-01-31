@@ -12,7 +12,7 @@ import com.personal.rents.util.GeneralConstants;
 
 import android.content.Context;
 
-public class AddRentAsyncTask extends NetworkAsyncTask<Object, Void, Rent> {
+public class AddRentAsyncTask extends ProgressBarFragmentAsyncTask<Object, Void, Rent> {
 	
 	private static final String NULL_IMAGE_URI_ERROR = "Returned image URI is null";
 	

@@ -30,8 +30,7 @@
         <activity
             android:name="com.personal.rents.activity.RentsMapActivity"
             android:configChanges="orientation|screenSize"
-            android:label="@string/app_name"
-            android:launchMode="singleTop">
+            android:label="@string/app_name">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -44,8 +43,7 @@
         
         <activity android:name="com.personal.rents.activity.FilterSearchActivity"/>
         
-		<activity android:name="com.personal.rents.activity.RentsListActivity"
-		    android:launchMode="singleTop">
+		<activity android:name="com.personal.rents.activity.RentsListActivity">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -88,7 +86,7 @@
             	android:value="com.personal.rents.activity.UserAddedRentsActivity"/>
 
         </activity>
-        
+
 		<activity android:name="com.personal.rents.activity.AddLocationActivity">
 
             <meta-data

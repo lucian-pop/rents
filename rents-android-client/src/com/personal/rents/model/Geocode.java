@@ -19,14 +19,5 @@ public class Geocode {
 		
 		public String[] types;
 	}
-	
-	public class Geometry {
-		public Coordinate location;
-	}
-	
-	public class Coordinate {
-		public double lat;
-		
-		public double lng;
-	}
+
 }

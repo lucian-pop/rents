@@ -33,7 +33,8 @@ public class ImageArrayAdapter extends ArrayAdapter<Bitmap> implements ListAdapt
 		ImageView imgView;
 	}
 
-	public ImageArrayAdapter(Context context, int imgLayoutId, ArrayList<Bitmap> imagesList, int initSize) {
+	public ImageArrayAdapter(Context context, int imgLayoutId, ArrayList<Bitmap> imagesList, 
+			int initSize) {
 		super(context, imgLayoutId);
 		this.initSize = initSize;
 		this.imgLayoutId = imgLayoutId;

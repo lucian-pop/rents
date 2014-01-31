@@ -16,7 +16,11 @@ public final class ActivitiesContract {
 	
 	public static final String LONGITUDE = "LONGITUDE";
 	
+	public static final String VISIBLE_REGION = "VISIBLE_REGION";
+	
 	public static final String ADDRESS = "ADDRESS";
+	
+	public static final String PLACE_DESCRIPTION = "PLACE_DESCRIPTION";
 	
 	public static final String RENT = "RENT";
 	

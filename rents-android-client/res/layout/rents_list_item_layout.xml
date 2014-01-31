@@ -13,7 +13,7 @@
 	    android:layout_marginLeft="10dp"
 	    android:layout_marginRight="10dp">
     
-		<ImageView android:id="@+id/rent_list_item_img" 
+		<com.android.volley.toolbox.NetworkImageView android:id="@+id/rent_list_item_img" 
 		    android:layout_width="match_parent"
 		    android:layout_height="match_parent"
 		    android:layout_gravity="top|left"
@@ -51,7 +51,7 @@
 		<TextView android:id="@+id/rent_list_item_address"
 	        style="@style/RentListItemTextViewStyle"
 	        android:layout_marginTop="5dp"
-	        android:text="@string/rent_street_default_text">
+	        android:text="@string/rent_address_default_text">
 		</TextView>
 		
 		<TextView android:id="@+id/rent_list_item_specs"

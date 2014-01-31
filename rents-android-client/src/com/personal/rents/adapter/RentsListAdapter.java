@@ -1,9 +1,15 @@
 package com.personal.rents.adapter;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
+import com.android.volley.toolbox.NetworkImageView;
 import com.personal.rents.R;
 import com.personal.rents.model.Rent;
+import com.personal.rents.rest.client.RentsImageClient;
+import com.personal.rents.util.GeneralConstants;
+import com.personal.rents.util.RentInfoBuilder;
 
 import android.app.Activity;
 import android.content.Context;
@@ -11,7 +17,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
@@ -23,9 +28,12 @@ public class RentsListAdapter extends ArrayAdapter<Rent> implements ListAdapter 
 	
 	private List<Rent> rents;
 	
+	SimpleDateFormat dateFormatter = new SimpleDateFormat(GeneralConstants.RO_DATE_FORMAT,
+			new Locale("ro", "RO"));
+	
 	private static class RentViewHolder {
 
-		private ImageView rentImg;
+		private NetworkImageView rentImg;
 
 		private TextView rentDate;
 
@@ -62,11 +70,17 @@ public class RentsListAdapter extends ArrayAdapter<Rent> implements ListAdapter 
 		if(convertView == null) {
 			convertView = inflater.inflate(layoutId, parent, false);
 			rentViewHolder = new RentViewHolder();
-			rentViewHolder.rentImg = (ImageView) convertView.findViewById(R.id.rent_list_item_img);
+			rentViewHolder.rentImg = (NetworkImageView) convertView
+					.findViewById(R.id.rent_list_item_img);
 			rentViewHolder.rentDate = (TextView) convertView.findViewById(R.id.rent_list_item_date);
-			rentViewHolder.rentPrice = (TextView) convertView.findViewById(R.id.rent_list_item_price);
-			rentViewHolder.rentSpecs = (TextView) convertView.findViewById(R.id.rent_list_item_specs);
-			rentViewHolder.rentTypeDesc = (TextView) convertView.findViewById(R.id.rent_list_item_type_desc);
+			rentViewHolder.rentPrice = (TextView) convertView
+					.findViewById(R.id.rent_list_item_price);
+			rentViewHolder.rentAddress = (TextView) convertView
+					.findViewById(R.id.rent_list_item_address);
+			rentViewHolder.rentSpecs = (TextView) convertView
+					.findViewById(R.id.rent_list_item_specs);
+			rentViewHolder.rentTypeDesc = (TextView) convertView
+					.findViewById(R.id.rent_list_item_type_desc);
 			
 			convertView.setTag(rentViewHolder);
 		} else {
@@ -74,6 +88,18 @@ public class RentsListAdapter extends ArrayAdapter<Rent> implements ListAdapter 
 		}
 		
 		// Set the values of the rentViewHolder fields to the values of rents.get(position).
+		// Nr. bai etc. will be moved in the layout.
+		Rent rent = rents.get(position);
+		rentViewHolder.rentImg.setImageUrl(GeneralConstants.BASE_URL + rent.rentImageURIs.get(0),
+				RentsImageClient.getImageLoader(getContext().getApplicationContext()));
+		rentViewHolder.rentDate.setText(dateFormatter.format(rent.rentAddDate).toString());
+		rentViewHolder.rentPrice.setText(Integer.toString(rent.rentPrice) + " €");
+		rentViewHolder.rentAddress.setText(rent.address.addressStreetName + " Nr. " 
+				+ rent.address.addressStreetNo);
+		rentViewHolder.rentSpecs.setText(rent.rentRooms + " cam., " + rent.rentBaths + " bai, "
+				+ rent.rentSurface + " mp");
+		rentViewHolder.rentTypeDesc.setText(RentInfoBuilder.buildRentTypeDesc(getContext(),
+				 rent.rentType, rent.rentAge));
 		
 		return convertView;
 	}

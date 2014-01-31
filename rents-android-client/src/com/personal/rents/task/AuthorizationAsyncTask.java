@@ -5,7 +5,7 @@ import retrofit.RetrofitError;
 import com.personal.rents.model.Account;
 import com.personal.rents.rest.client.RentsClient;
 
-public class AuthorizationAsyncTask extends NetworkAsyncTask<Account, Void, Boolean> {
+public class AuthorizationAsyncTask extends ProgressBarFragmentAsyncTask<Account, Void, Boolean> {
 	
 	@Override
 	protected Boolean doInBackground(Account... params) {

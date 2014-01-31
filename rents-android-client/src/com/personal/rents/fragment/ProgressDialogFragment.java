@@ -12,12 +12,21 @@ import android.support.v4.app.DialogFragment;
 import android.view.ContextThemeWrapper;
 
 public class ProgressDialogFragment extends DialogFragment {
+	
+	private static final String message = "Localizare";
 
 	private int messageId;
 	
 	private long timeout;
 	
 	private OnProgressDialogDismissListener onProgressDialogDismissListener;
+	
+	private OnProgressDialogDismissListener dummyOnProgressDialogDismissListener =
+			new OnProgressDialogDismissListener() {
+				@Override
+				public void onDialogDismiss(boolean timeoutReached) {
+				}
+			};
 	
 	private ProgressDialog progressDialog;
 	
@@ -61,9 +70,10 @@ public class ProgressDialogFragment extends DialogFragment {
 		ContextThemeWrapper context = new ContextThemeWrapper(getActivity(),
 				R.style.Theme_Background_Not_Dimmed);
 		progressDialog = new ProgressDialog(context);
+		progressDialog.setMessage(message);
+		//progressDialog.setMessage(getResources().getString(messageId));
 		progressDialog.setIndeterminate(true);
 		progressDialog.setCanceledOnTouchOutside(false);
-		progressDialog.setMessage(getResources().getString(messageId));
 		progressDialog.show();
 
 		return progressDialog;
@@ -100,12 +110,14 @@ public class ProgressDialogFragment extends DialogFragment {
 		super.onDismiss(dialog);
 
 		resetOnTimeoutTask();
-		onProgressDialogDismissListener.onDialogDismiss(timeoutReached);
+		if(onProgressDialogDismissListener != null) {
+			onProgressDialogDismissListener.onDialogDismiss(timeoutReached);
+		}
 	}
 	
 	public void reset() {
 		resetOnTimeoutTask();
-		onProgressDialogDismissListener = null;
+		onProgressDialogDismissListener = dummyOnProgressDialogDismissListener;
 	}
 	
 	private void resetOnTimeoutTask() {

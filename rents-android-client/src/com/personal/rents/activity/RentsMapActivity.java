@@ -3,8 +3,6 @@ package com.personal.rents.activity;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
@@ -19,11 +17,8 @@ import com.personal.rents.adapter.RentMarkerInfoWindowAdapter;
 import com.personal.rents.dto.RentsCounter;
 import com.personal.rents.fragment.EnableLocationServicesDialogFragment;
 import com.personal.rents.fragment.ProgressBarFragment;
-import com.personal.rents.fragment.ProgressDialogFragment;
 import com.personal.rents.fragment.RentsMapFragment;
 import com.personal.rents.logic.CameraPositionPreferencesManager;
-import com.personal.rents.logic.LocationClientWrapper;
-import com.personal.rents.logic.LocationManagerWrapper;
 import com.personal.rents.logic.UserPreferencesManager;
 import com.personal.rents.model.Rent;
 import com.personal.rents.rest.util.NetworkErrorHandler;
@@ -31,15 +26,14 @@ import com.personal.rents.rest.util.RetrofitResponseStatus;
 import com.personal.rents.task.AddMarkersTask;
 import com.personal.rents.task.GetRentsByMapBoundariesAsyncTask;
 import com.personal.rents.task.listener.OnNetworkTaskFinishListener;
-import com.personal.rents.task.listener.OnProgressDialogDismissListener;
 import com.personal.rents.util.ActivitiesContract;
 import com.personal.rents.util.GeneralConstants;
 import com.personal.rents.util.GoogleServicesUtil;
+import com.personal.rents.util.LocationUtil;
 import com.personal.rents.view.TouchableMapView;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
@@ -50,15 +44,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-public class RentsMapActivity extends BaseActivity implements OnInfoWindowClickListener, 
+public class RentsMapActivity extends LocationActivity implements OnInfoWindowClickListener, 
 		OnMyLocationButtonClickListener {
-	
-    private static final String PROGRESS_DIALOG_FRAGMENT_TAG = "PROGRESS_DIALOG_FRAGMENT_TAG";
-    
-    private static final String ENABLE_LOCATION_SERVICES_FRAGMENT_TAG = 
-    		"ENABLE_LOCATION_SERVICES_FRAGMENT_TAG";
-    
-    private static final String LOCATION_REQUEST_TIMEOUT_MSG = "Nu am reusit sa va localizam.";
 	
 	private int totalNoOfRents;
 	
@@ -84,17 +71,9 @@ public class RentsMapActivity extends BaseActivity implements OnInfoWindowClickL
     
     private CameraPosition cameraPosition;
     
-    private boolean locationServicesEnabled = false;
-    
-    private LocationManagerWrapper locationManager;
-    
-    private LocationClientWrapper locationClient;
-    
     private LayoutInflater inflater;
     
     private ProgressBarFragment progressBarFragment;
-    
-    private ProgressDialogFragment progressDialogFragment;
     
     private boolean servicesAvailable = false;
 
@@ -136,7 +115,7 @@ public class RentsMapActivity extends BaseActivity implements OnInfoWindowClickL
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		Log.e("TEST_TAG", "*********On ACTIVITY RESULT called**********");
 
-		setupLocationServices();
+		setupLocationServices(new LocationListenerImpl());
 		switch (requestCode) {
 			case  ActivitiesContract.LOCATION_SERVICES_REQ_CODE:
 				locationServicesEnabled = locationManager.isLocationServicesEnabled();
@@ -177,7 +156,7 @@ public class RentsMapActivity extends BaseActivity implements OnInfoWindowClickL
 		// Initialize system resources.
 		inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		setupOnCameraChangeTaskHandler();
-		setupLocationServices();
+		setupLocationServices(new LocationListenerImpl());
 
 		if(hasDelayedTasks || taskInProgress) {
 			resetMapChangeTimer(GeneralConstants.SHORT_DELAY);
@@ -239,7 +218,7 @@ public class RentsMapActivity extends BaseActivity implements OnInfoWindowClickL
 			return;
 		}
 
-		// Retain current camera position in order to be saved during onStop().
+		// Retain current camera position in order to be saved during onDestroy().
 		cameraPosition = rentsMap.getCameraPosition();
 		
 		// We reset all threads and listeners since we don't want to block the MAIN THREAD.
@@ -344,39 +323,6 @@ public class RentsMapActivity extends BaseActivity implements OnInfoWindowClickL
 		progressBarFragment.setOnTaskFinishListener(new OnGetRentsTaskFinishListener());
 	}
 	
-	private void setupProgressDialogFragment() {
-		if(progressDialogFragment == null) {
-			progressDialogFragment = 
-					ProgressDialogFragment.newInstance(R.string.wait_for_location_msg,
-							LocationClientWrapper.REQUEST_TIMEOUT, 
-							new LocationProgressDialogDismissListener());
-		} else {
-			progressDialogFragment.setOnProgressDialogDismissListener(
-					new LocationProgressDialogDismissListener());
-		}
-
-		
-	}
-	
-	private void resetProgressDialogFragment() {
-		if(progressDialogFragment != null) {
-			progressDialogFragment.reset();
-		}
-	}
-	
-	private void setupLocationServices() {
-		if(locationClient == null) {
-			locationClient = new LocationClientWrapper(this, new ConnectionCallbacksImpl(),
-					new OnConnectionFailureListenerImpl());
-			locationClient.setLocationListener(new LocationListenerImpl());
-		}
-
-		if(locationManager == null) {
-			locationManager = new LocationManagerWrapper(this);
-			locationServicesEnabled = locationManager.isLocationServicesEnabled();
-		}
-	}
-	
 	private void restoreCameraPosition() {
 		if(cameraPosition != null) {
 			// Recreated activity or camera position updated by the location client.
@@ -385,18 +331,12 @@ public class RentsMapActivity extends BaseActivity implements OnInfoWindowClickL
 
 		cameraPosition = CameraPositionPreferencesManager.getCameraPosition(this);
 		if(cameraPosition != null) {
-			locationManager.moveToLocation(cameraPosition, rentsMap);
+			LocationUtil.moveToLocation(cameraPosition, rentsMap);
 
 			return;
 		}
 		
 		updateCameraPosition();
-	}
-	
-	private void updateCameraPosition() {
-		if(!locationClient.isConnected()) {
-			locationClient.connect();
-		}
 	}
 
 	@Override
@@ -410,8 +350,12 @@ public class RentsMapActivity extends BaseActivity implements OnInfoWindowClickL
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if(item.getItemId() == R.id.search_action) {
 			Intent intent = new Intent(this, FilterSearchActivity.class);
-			intent.putExtra(ActivitiesContract.LATITUDE, rentsMap.getCameraPosition().target.latitude);
-			intent.putExtra(ActivitiesContract.LONGITUDE, rentsMap.getCameraPosition().target.latitude);
+			intent.putExtra(ActivitiesContract.LATITUDE, 
+					rentsMap.getCameraPosition().target.latitude);
+			intent.putExtra(ActivitiesContract.LONGITUDE, 
+					rentsMap.getCameraPosition().target.longitude);
+			intent.putExtra(ActivitiesContract.VISIBLE_REGION, 
+					rentsMap.getProjection().getVisibleRegion());
 			intent.putExtra(ActivitiesContract.FROM_ACTIVITY, 
 					ActivitiesContract.RENTS_MAP_ACTIVITY);
 
@@ -420,7 +364,14 @@ public class RentsMapActivity extends BaseActivity implements OnInfoWindowClickL
 			return true;
 		} else if(item.getItemId() == R.id.list_rents_action) {
 			Intent intent = new Intent(this, RentsListActivity.class);
-
+			intent.putExtra(ActivitiesContract.LATITUDE, 
+					rentsMap.getCameraPosition().target.latitude);
+			intent.putExtra(ActivitiesContract.LONGITUDE, 
+					rentsMap.getCameraPosition().target.longitude);
+			intent.putExtra(ActivitiesContract.VISIBLE_REGION, 
+					rentsMap.getProjection().getVisibleRegion());
+			intent.putExtra(ActivitiesContract.NO_OF_RENTS, totalNoOfRents);
+			intent.putParcelableArrayListExtra(ActivitiesContract.RENTS, (ArrayList<Rent>) rents);
 			startActivity(intent);
 			
 			return true;
@@ -501,7 +452,6 @@ public class RentsMapActivity extends BaseActivity implements OnInfoWindowClickL
 	}
 
     private class RentsMapOnCameraChangeListener implements GoogleMap.OnCameraChangeListener {
-
 		@Override
 		public void onCameraChange(CameraPosition center) {
 			if(isSpanChange(center.target) || isZoomChange(center.zoom)) {
@@ -521,7 +471,6 @@ public class RentsMapActivity extends BaseActivity implements OnInfoWindowClickL
     }
     
     private class RentsMapOnTouchListener implements TouchableMapView.OnMapTouchListener {
-
 		@Override
 		public void onMapTouch(boolean touched) {
 			isTouched = touched;
@@ -529,7 +478,6 @@ public class RentsMapActivity extends BaseActivity implements OnInfoWindowClickL
     }
     
     private class RentsMapOnMarkerClickListener implements OnMarkerClickListener {
-
     	@Override
     	public boolean onMarkerClick(final Marker marker) {
     		if (lastClickedMarker != null && lastClickedMarker.equals(marker)) {
@@ -548,7 +496,7 @@ public class RentsMapActivity extends BaseActivity implements OnInfoWindowClickL
     private class OnGetRentsTaskFinishListener implements OnNetworkTaskFinishListener {
     	
 		@Override
-		public void onTaskFinish(Object result, int taskId, RetrofitResponseStatus status) {
+		public void onTaskFinish(Object result, RetrofitResponseStatus status) {
 			Log.e("TEST_TAG", "************On task FINISH called**************");
 			if(!status.equals(RetrofitResponseStatus.OK)) {
 				NetworkErrorHandler.handleRetrofitError(status, RentsMapActivity.this);
@@ -576,7 +524,6 @@ public class RentsMapActivity extends BaseActivity implements OnInfoWindowClickL
     }
     
     private class LocationListenerImpl implements LocationListener{
-
     	@Override
 		public void onLocationChanged(Location location) {
 			if(location == null) {
@@ -586,63 +533,10 @@ public class RentsMapActivity extends BaseActivity implements OnInfoWindowClickL
 			cameraPosition = CameraPosition.fromLatLngZoom(new LatLng(location.getLatitude(),
 					location.getLongitude()), GeneralConstants.DEFAULT_ZOOM_FACTOR);
 
-			locationManager.moveToLocation(cameraPosition, rentsMap);
+			LocationUtil.moveToLocation(cameraPosition, rentsMap);
 			if(progressDialogFragment.isResumed()) {
 				progressDialogFragment.dismiss();
 			}
-		}
-
-    }
-
-    private class LocationProgressDialogDismissListener implements OnProgressDialogDismissListener {
-
-		@Override
-		public void onDialogDismiss(boolean timeoutReached) {
-			locationClient.cancelRequestLocationUpdates();
-			
-			if(timeoutReached) {
-				Toast.makeText(RentsMapActivity.this, LOCATION_REQUEST_TIMEOUT_MSG,
-						Toast.LENGTH_LONG).show();
-				}
-		}
-    }
-
-    private class ConnectionCallbacksImpl implements GooglePlayServicesClient.ConnectionCallbacks {
-
-		@Override
-		public void onConnected(Bundle connectionHint) {
-			locationClient.requestLocationUpdates();
-			progressDialogFragment.show(getSupportFragmentManager(), 
-					PROGRESS_DIALOG_FRAGMENT_TAG);
-		}
-
-		@Override
-		public void onDisconnected() {
-			if(progressDialogFragment.isResumed()) {
-				progressDialogFragment.dismiss();
-			}
-		}
-    }
-    
-    private class OnConnectionFailureListenerImpl 
-    		implements GooglePlayServicesClient.OnConnectionFailedListener {
-
-		@Override
-		public void onConnectionFailed(ConnectionResult result) {
-	        int errorCode = result.getErrorCode();
-	        
-	        if (result.hasResolution()) {
-	        	try {
-	        		result.startResolutionForResult(RentsMapActivity.this, 
-	        				GoogleServicesUtil.CONNECTION_FAILURE_RESOLUTION_REQUEST);
-	        	} catch(IntentSender.SendIntentException e) {
-	        		Toast.makeText(RentsMapActivity.this, GoogleServicesUtil.UNABLE_TO_RESOLVE_ERROR_MSG,
-	        				Toast.LENGTH_SHORT).show();
-	        	}
-
-	        } else {
-	        	GoogleServicesUtil.showErrorDialog(errorCode, RentsMapActivity.this);
-	        }
 		}
     }
 }

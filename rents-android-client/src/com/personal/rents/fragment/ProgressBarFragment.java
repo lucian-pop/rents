@@ -2,7 +2,7 @@ package com.personal.rents.fragment;
 
 import com.personal.rents.R;
 import com.personal.rents.rest.util.RetrofitResponseStatus;
-import com.personal.rents.task.NetworkAsyncTask;
+import com.personal.rents.task.ProgressBarFragmentAsyncTask;
 import com.personal.rents.task.listener.OnNetworkTaskFinishListener;
 
 import android.os.Bundle;
@@ -20,14 +20,14 @@ public class ProgressBarFragment extends Fragment {
 	
 	private int currentTaskId = -1;
 	
-	private NetworkAsyncTask<?, ?, ?> task;
+	private ProgressBarFragmentAsyncTask<?, ?, ?> task;
 	
 	private OnNetworkTaskFinishListener onTaskFinishListener;
 	
 	private static OnNetworkTaskFinishListener dummyTaskFinishListener =
 			new OnNetworkTaskFinishListener() {
 		@Override
-		public void onTaskFinish(Object result, int taskId, RetrofitResponseStatus status) {
+		public void onTaskFinish(Object result, RetrofitResponseStatus status) {
 		}
 	};
 	
@@ -35,7 +35,7 @@ public class ProgressBarFragment extends Fragment {
 		return visibility;
 	}
 
-	public void setTask(NetworkAsyncTask<?, ?, ?> task) {
+	public void setTask(ProgressBarFragmentAsyncTask<?, ?, ?> task) {
 		if(task != null) {
 			task.setTaskId(++currentTaskId);
 			task.setProgressBarFragment(this);
@@ -58,7 +58,7 @@ public class ProgressBarFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		progressBar = (ProgressBar) inflater.inflate(R.layout.progress_dialog_fragment_layout,
+		progressBar = (ProgressBar) inflater.inflate(R.layout.progress_bar_layout,
 				container, true);
 		progressBar.setVisibility(visibility);
 
@@ -114,7 +114,7 @@ public class ProgressBarFragment extends Fragment {
         task = null;
 
         // Tell the fragment(or in our case the activity) that we are done.
-        onTaskFinishListener.onTaskFinish(result, taskId, status);
+        onTaskFinishListener.onTaskFinish(result, status);
     }
 
 }

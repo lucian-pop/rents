@@ -8,8 +8,6 @@ import com.personal.rents.rest.util.GeocodingParser;
 import retrofit.RestAdapter;
 
 public class GeocodeClient {
-	
-	private static final String LOG_TAG = GeocodeClient.class.getSimpleName();
 			
 	private static final String MAPS_API = "http://maps.googleapis.com/maps/api";
 	
@@ -33,13 +31,21 @@ public class GeocodeClient {
 		Geocode response = getGeocodingService().getAddressFromAdress(
 				IGeocode.GPS_ENABLED, IGeocode.LANG_RO, address);
 
-		return GeocodingParser.parseAddressResult(response.results[0], LOG_TAG);
+		if(response.results.length > 0) {
+			return GeocodingParser.parseAddressResult(response.results[0]);
+		}
+
+		return null;
 	}
 	
 	public static Address getAddressFromLocation(double lat, double lng) {
 		Geocode response = getGeocodingService().getAddressFromLocation(
 				IGeocode.GPS_ENABLED, IGeocode.LANG_RO, lat + "," +lng);
 		
-		return GeocodingParser.parseAddressResult(response.results[0], LOG_TAG);
+		if(response.results.length > 0) {
+			return GeocodingParser.parseAddressResult(response.results[0]);
+		}
+		
+		return null;
 	}
 }

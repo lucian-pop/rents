@@ -1,5 +1,8 @@
 package com.personal.rents.rest.client;
 
+import java.util.Date;
+import java.util.List;
+
 import retrofit.RestAdapter;
 import retrofit.client.Response;
 import retrofit.mime.TypedByteArray;
@@ -17,10 +20,12 @@ import com.personal.rents.rest.api.IMyResource;
 import com.personal.rents.rest.api.ISignup;
 import com.personal.rents.rest.api.IUploadImage;
 import com.personal.rents.rest.util.WebserviceResponseStatus;
+import com.personal.rents.util.DateUtil;
+import com.personal.rents.util.GeneralConstants;
 
 public class RentsClient {
 	
-	private static final String BASE_URL = "http://192.168.1.5:8080/rents-server/ws";
+	private static final String BASE_URL = GeneralConstants.BASE_URL + "/ws";
 
 	private static final RestAdapter restAdapter;
 
@@ -81,9 +86,17 @@ public class RentsClient {
 	}
 
 	public static RentsCounter getRentsByMapBoundaries(double minLatitude, double maxLatitude,
-			double minLongitude, double maxLongitude) {
+			double minLongitude, double maxLongitude, int pageSize) {
 		return restAdapter.create(IGetRents.class).getRentsByMapBoundaries(minLatitude, maxLatitude,
-				minLongitude, maxLongitude);
+				minLongitude, maxLongitude, pageSize);
+	}
+	
+	public static List<Rent> getRentsNextPageByMapBoundaries(double minLatitude, double maxLatitude,
+			double minLongitude, double maxLongitude, Date lastRentDate, int lastRentId,
+			int pageSize) {
+		return restAdapter.create(IGetRents.class).getRentsNextPageByMapBoundaries(minLatitude,
+				maxLatitude, minLongitude, maxLongitude, DateUtil.standardFormat(lastRentDate),
+				lastRentId, pageSize);
 	}
 
 }

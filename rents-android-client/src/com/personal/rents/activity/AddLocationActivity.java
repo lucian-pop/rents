@@ -13,6 +13,7 @@ import com.personal.rents.task.GetGeolocationFromAddressAsyncTask;
 import com.personal.rents.task.GetGeolocationFromLocationAsyncTask;
 import com.personal.rents.task.listener.OnGetGeolocationTaskFinishListener;
 import com.personal.rents.util.ActivitiesContract;
+import com.personal.rents.util.LocationUtil;
 import com.personal.rents.view.DelayAutocompleteTextView;
 
 import android.content.Intent;
@@ -26,6 +27,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class AddLocationActivity extends ActionBarActivity {
 	
@@ -113,7 +115,13 @@ public class AddLocationActivity extends ActionBarActivity {
 		onGetGeolocationFromAddrTaskFinishListener = new OnGetGeolocationTaskFinishListener() {
 			@Override
 			public void onGetGeolocationTaskFinish(Address address) {
-				// If geolocation is not found (address is null), app crashes.
+				if(address == null) {
+					Toast.makeText(AddLocationActivity.this, "Adresa specificata nu a putut fi" +
+							" localizata", Toast.LENGTH_LONG).show();
+					
+					return;
+				}
+				
 				placeLatitude = address.addressLatitude;
 				placeLongitude = address.addressLongitude;
 				AddLocationActivity.this.address = address;
@@ -129,6 +137,13 @@ public class AddLocationActivity extends ActionBarActivity {
 		onGetGeolocationFromLocationTaskFinishListener = new OnGetGeolocationTaskFinishListener() {
 			@Override
 			public void onGetGeolocationTaskFinish(Address address) {
+				if(address == null) {
+					// show a location panel with empty fields.
+					addLocationDetailsPanel.setVisibility(View.VISIBLE);
+
+					return;
+				}
+
 				AddLocationActivity.this.address = address;
 				populateAddLocationDetailsPanel(address);
 			}
@@ -191,7 +206,7 @@ public class AddLocationActivity extends ActionBarActivity {
 	        if(lastKnownLocation != null) {
 	        	placeLatitude = lastKnownLocation.getLatitude();
 	        	placeLongitude = lastKnownLocation.getLongitude();
-	        	locationHelper.moveToLocation(lastKnownLocation, map);
+	        	LocationUtil.moveToLocation(lastKnownLocation, map);
 	        }
 		}
 	}
@@ -209,7 +224,7 @@ public class AddLocationActivity extends ActionBarActivity {
 		DelayAutocompleteTextView placesAutocompleteTextView = 
 				(DelayAutocompleteTextView) findViewById(R.id.autocomplete_places_input);
 		final PlacesSuggestionsAdapter placesAdapter = new PlacesSuggestionsAdapter(this, 
-				R.layout.places_suggestions_list_layout, placeLatitude, placeLongitude, false);
+				R.layout.places_suggestions_list_layout, false);
 		placesAutocompleteTextView.setAdapter(placesAdapter);
 		placesAutocompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
@@ -251,7 +266,7 @@ public class AddLocationActivity extends ActionBarActivity {
 		removeDroppedPin();
 
 		droppedPin = map.addMarker(new MarkerOptions().position(position));
-		locationHelper.moveToLocation(position, map);
+		LocationUtil.moveToLocation(position, map);
 		Log.e("TEST_TAG", "LATITUDE: " + position.latitude + " LONGITUDE: " + position.longitude);
 	}
 	

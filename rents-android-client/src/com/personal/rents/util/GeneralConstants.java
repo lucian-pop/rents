@@ -1,6 +1,9 @@
 package com.personal.rents.util;
 
 public final class GeneralConstants {
+	
+	// Server URL.
+	public static final String BASE_URL = "http://192.168.1.4:8080/rents-server";
 
 	// Characters.
 	public static final String SPACE = " ";
@@ -34,10 +37,17 @@ public final class GeneralConstants {
 	
 	
 	// Task delays
-	
 	public static final long LONG_DELAY = 1000L;
 	
 	public static final long SHORT_DELAY = 250L;
+	
+	// Pagination
+	public static final int PAGE_SIZE = 50;
+	
+	// Date
+	public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
+	
+	public static final String RO_DATE_FORMAT = "d MMM yyyy";
 
 	private GeneralConstants() {}	
 	

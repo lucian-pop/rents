@@ -3,7 +3,7 @@ package com.personal.rents.rest.util;
 import com.personal.rents.model.Address;
 import com.personal.rents.model.Geocode;
 import com.personal.rents.model.Geocode.AddressComponent;
-import com.personal.rents.model.Geocode.Coordinate;
+import com.personal.rents.model.Geometry.Coordinate;
 
 public final class GeocodingParser {
 	
@@ -23,7 +23,7 @@ public final class GeocodingParser {
 	private GeocodingParser() {
 	}
 
-	public static Address parseAddressResult(Geocode.Result result, String logTag) {
+	public static Address parseAddressResult(Geocode.Result result) {
 		Address address = new Address();
 		String addrCompType = null;
 		for(AddressComponent addrComp : result.address_components) {

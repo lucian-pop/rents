@@ -1,8 +1,12 @@
 package com.personal.rents.activity;
 
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.maps.model.VisibleRegion;
 import com.personal.rents.R;
-import com.personal.rents.adapter.AdapterFactory;
+import com.personal.rents.adapter.SpinnerAdapterFactory;
 import com.personal.rents.adapter.PlacesSuggestionsAdapter;
+import com.personal.rents.fragment.EnableLocationServicesDialogFragment;
+import com.personal.rents.logic.UserPreferencesManager;
 import com.personal.rents.model.Address;
 import com.personal.rents.task.GetGeolocationFromAddressAsyncTask;
 import com.personal.rents.task.listener.OnGetGeolocationTaskFinishListener;
@@ -13,9 +17,10 @@ import com.personal.rents.view.DelayAutocompleteTextView;
 import com.personal.rents.view.RangeSeekBarView;
 
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
-import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,8 +29,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class FilterSearchActivity extends ActionBarActivity {
+public class FilterSearchActivity extends LocationActivity {
 	
 	private double mapCenterLatitude;
 	
@@ -37,36 +43,88 @@ public class FilterSearchActivity extends ActionBarActivity {
 	
 	private int fromActivity;
 	
-	private OnGetGeolocationTaskFinishListener onGetGeolocationTaskFinishListener;
-
+	private VisibleRegion visibleRegion;
+	
+	private String placeDescription;
+	
+	private boolean taskInProgress;
+	
+	private GetGeolocationFromAddressAsyncTask getPlaceLocationFromAddressTask;;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.filter_search_activity_layout);
 		
-		Bundle bundle;
+		Bundle bundle = null;
 		if(savedInstanceState != null) {
 			bundle = savedInstanceState;
 		} else {
 			bundle = getIntent().getExtras();
 		}
 
+		restoreInstanceState(bundle);
+		
+		init();
+		
+		Log.e("TEST_TAG", "***********Latitude: " + mapCenterLatitude + ", longitude " + mapCenterLongitude);
+	}
+	
+	private void restoreInstanceState(Bundle bundle) {
 		if (bundle != null) {
 			mapCenterLatitude = bundle.getDouble(ActivitiesContract.LATITUDE);
 			mapCenterLongitude = bundle.getDouble(ActivitiesContract.LONGITUDE);
+			visibleRegion = bundle.getParcelable(ActivitiesContract.VISIBLE_REGION);
 			fromActivity = bundle.getInt(ActivitiesContract.FROM_ACTIVITY);
+			taskInProgress = bundle.getBoolean(ActivitiesContract.TASK_IN_PROGRESS, false);
+			placeDescription = bundle.getString(ActivitiesContract.PLACE_DESCRIPTION);
 		}
-		
-		init();
 	}
 	
+	@Override
+	protected void onStart() {
+		super.onStart();
+		
+		if(taskInProgress) {
+			startGetPlaceLocationFromAddressTask(placeDescription);
+		}
+		
+		setupProgressDialogFragment();
+		setupLocationServices(new LocationListenerImpl());
+	}
+
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		outState.putDouble(ActivitiesContract.LATITUDE, mapCenterLatitude);
 		outState.putDouble(ActivitiesContract.LONGITUDE, mapCenterLongitude);
+		outState.putParcelable(ActivitiesContract.VISIBLE_REGION, visibleRegion);
 		outState.putInt(ActivitiesContract.FROM_ACTIVITY, fromActivity);
+		outState.putBoolean(ActivitiesContract.TASK_IN_PROGRESS, taskInProgress);
+		outState.putString(ActivitiesContract.PLACE_DESCRIPTION, placeDescription);
 		
 		super.onSaveInstanceState(outState);
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		
+		resetGetPlaceLocationFromAddressTask();
+		resetProgressDialogFragment();
+		locationClient.reset();
+		
+		getPlaceLocationFromAddressTask = null;
+		locationManager = null;
+		locationClient = null;
+	}
+	
+	
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		
+		progressDialogFragment = null;
 	}
 
 	@Override
@@ -90,15 +148,6 @@ public class FilterSearchActivity extends ActionBarActivity {
 	private void init() {
 		setupActionBar();
 		
-		// add OnGetPlaceLocationTaskFinishListener
-		onGetGeolocationTaskFinishListener = new OnGetGeolocationTaskFinishListener() {
-			@Override
-			public void onGetGeolocationTaskFinish(Address address) {
-				placeLatitude = address.addressLatitude;
-				placeLongitude = address.addressLongitude;
-			}
-		};
-		
 		setupPlacesAutocomplete();
 
 		setupPriceChooser();
@@ -115,32 +164,39 @@ public class FilterSearchActivity extends ActionBarActivity {
 	}
 	
 	private void setupPlacesAutocomplete() {
-		DelayAutocompleteTextView placesAutocompleteTextView = 
+		final PlacesSuggestionsAdapter placesSuggestionsAdapter = new PlacesSuggestionsAdapter(
+				this, R.layout.places_suggestions_list_layout, true);
+		final DelayAutocompleteTextView placesAutocompleteTextView = 
 				(DelayAutocompleteTextView) findViewById(R.id.autocomplete_places_input);
-		final PlacesSuggestionsAdapter placesAdapter = new PlacesSuggestionsAdapter(this, 
-				R.layout.places_suggestions_list_layout, mapCenterLatitude, mapCenterLongitude, true);
-		placesAutocompleteTextView.setAdapter(placesAdapter);
+		placesAutocompleteTextView.setAdapter(placesSuggestionsAdapter);
 		placesAutocompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				placesAutocompleteTextView.setSelection(0);
+
 				if(position==0) {
 					placeLatitude = mapCenterLatitude;
 					placeLongitude = mapCenterLongitude;
 
 					return;
 				} else if(position==1) {
-					// Get user current location.
-					// Use module for getting current location (will be implemented).
+					getCurrentLocation();
+
 					return;
 				}
 				
-				GetGeolocationFromAddressAsyncTask getPlaceLocationTask = 
-						new GetGeolocationFromAddressAsyncTask(onGetGeolocationTaskFinishListener);
-				getPlaceLocationTask.execute(placesAdapter.getItem(position));
+				placeDescription = placesSuggestionsAdapter.getItem(position);
+				startGetPlaceLocationFromAddressTask(placeDescription);
+			}
+		});
+		placesAutocompleteTextView.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				placesAutocompleteTextView.showDropDown();
 			}
 		});
 	}
-	
+
 	private void setupPriceChooser() {
 		ViewGroup priceChooserWrapper = (ViewGroup) findViewById(R.id.rent_price_chooser);
 		final TextView selectedPriceRange = (TextView) findViewById(R.id.rent_price_range);
@@ -178,28 +234,89 @@ public class FilterSearchActivity extends ActionBarActivity {
 	
 	private void setupSpinners() {
 		Spinner partiesSpinner = (Spinner) findViewById(R.id.rent_party);
-		ArrayAdapter<CharSequence> spinnerAdapter = AdapterFactory.createSpinnerAdapter(this, 
+		ArrayAdapter<CharSequence> spinnerAdapter = SpinnerAdapterFactory.createSpinnerAdapter(this, 
 				R.array.rent_parties);
 		partiesSpinner.setAdapter(spinnerAdapter);
 		
 		Spinner typesSpinner = (Spinner) findViewById(R.id.rent_type);
-		spinnerAdapter = AdapterFactory.createSpinnerAdapter(this, R.array.rent_types);
+		spinnerAdapter = SpinnerAdapterFactory.createSpinnerAdapter(this, R.array.rent_types);
 		typesSpinner.setAdapter(spinnerAdapter);
 		
 		Spinner structSpinner = (Spinner) findViewById(R.id.rent_structure);
-		spinnerAdapter = AdapterFactory.createSpinnerAdapter(this, R.array.rent_structures);
+		spinnerAdapter = SpinnerAdapterFactory.createSpinnerAdapter(this, R.array.rent_structures);
 		structSpinner.setAdapter(spinnerAdapter);
 		
 		Spinner ageSpinner = (Spinner) findViewById(R.id.rent_age);
-		spinnerAdapter = AdapterFactory.createSpinnerAdapter(this, R.array.rent_ages);
+		spinnerAdapter = SpinnerAdapterFactory.createSpinnerAdapter(this, R.array.rent_ages);
 		ageSpinner.setAdapter(spinnerAdapter);
 		
 		Spinner roomsSpinner = (Spinner) findViewById(R.id.rent_rooms);
-		spinnerAdapter = AdapterFactory.createSpinnerAdapter(this, R.array.rent_rooms);
+		spinnerAdapter = SpinnerAdapterFactory.createSpinnerAdapter(this, R.array.rent_rooms);
 		roomsSpinner.setAdapter(spinnerAdapter);
 		
 		Spinner bathsSpinner = (Spinner) findViewById(R.id.rent_baths);
-		spinnerAdapter = AdapterFactory.createSpinnerAdapter(this, R.array.rent_baths);
+		spinnerAdapter = SpinnerAdapterFactory.createSpinnerAdapter(this, R.array.rent_baths);
 		bathsSpinner.setAdapter(spinnerAdapter);
 	}
+	
+	private void startGetPlaceLocationFromAddressTask(String placeDescription) {
+		resetGetPlaceLocationFromAddressTask();
+		
+		taskInProgress = true;
+		getPlaceLocationFromAddressTask = new GetGeolocationFromAddressAsyncTask(
+				new OnGetGeolocationTaskFinishListener() {
+					@Override
+					public void onGetGeolocationTaskFinish(Address address) {
+						taskInProgress = false;
+						if(address == null) {
+							return;
+						}
+
+						placeLatitude = address.addressLatitude;
+						placeLongitude = address.addressLongitude;
+						Toast.makeText(FilterSearchActivity.this, "Latitude: " + placeLatitude 
+								+ ", Longitude: " + placeLongitude, Toast.LENGTH_LONG).show();
+						
+					}
+				});
+		getPlaceLocationFromAddressTask.execute(placeDescription);
+	}
+	
+	private void resetGetPlaceLocationFromAddressTask() {
+		if(getPlaceLocationFromAddressTask != null) {
+			getPlaceLocationFromAddressTask.cancel(true);
+		}
+	}
+	
+	private void getCurrentLocation() {
+		if(!locationServicesEnabled) {
+			(EnableLocationServicesDialogFragment.newInstance(false, false))
+					.show(getSupportFragmentManager(), ENABLE_LOCATION_SERVICES_FRAGMENT_TAG);
+
+			return;
+		} else if(!locationManager.isNetworkLocationServicesEnabled()) {
+			if(UserPreferencesManager.getUserPreferences(this).showEnableNetworkLocationService)
+			(EnableLocationServicesDialogFragment.newInstance(true, true))
+				.show(getSupportFragmentManager(), ENABLE_LOCATION_SERVICES_FRAGMENT_TAG);
+			
+			return;
+		}
+		
+		updateCameraPosition();
+	}
+	
+    private class LocationListenerImpl implements LocationListener{
+    	@Override
+		public void onLocationChanged(Location location) {
+			if(location == null) {
+				return;
+			}
+			
+			placeLatitude = location.getLatitude();
+			placeLongitude = location.getLongitude();
+			if(progressDialogFragment.isResumed()) {
+				progressDialogFragment.dismiss();
+			}
+		}
+    }
 }

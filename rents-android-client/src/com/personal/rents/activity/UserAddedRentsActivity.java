@@ -1,6 +1,7 @@
 package com.personal.rents.activity;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.personal.rents.R;
@@ -128,7 +129,10 @@ public class UserAddedRentsActivity extends ActionBarActivity {
 		rent.address = new Address();
 		rent.address.addressLatitude = 10;
 		rent.address.addressLongitude = 10;
+		rent.address.addressStreetName = "Aleea fericirii";
+		rent.address.addressStreetNo = "11";
 		rent.rentPrice = 160;
+		rent.rentAddDate = new Date();
 		for(int i=0; i < 6; i++) {
 			rents.add(rent);
 		}
