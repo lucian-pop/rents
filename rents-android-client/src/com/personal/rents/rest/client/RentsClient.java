@@ -11,12 +11,14 @@ import retrofit.mime.TypedString;
 import com.personal.rents.dto.RentsCounter;
 import com.personal.rents.model.Account;
 import com.personal.rents.model.Rent;
+import com.personal.rents.model.RentSearch;
 import com.personal.rents.rest.api.IAddRent;
 import com.personal.rents.rest.api.IAuthorization;
 import com.personal.rents.rest.api.IChangePassword;
 import com.personal.rents.rest.api.IGetRents;
 import com.personal.rents.rest.api.ILogin;
 import com.personal.rents.rest.api.IMyResource;
+import com.personal.rents.rest.api.ISearchRents;
 import com.personal.rents.rest.api.ISignup;
 import com.personal.rents.rest.api.IUploadImage;
 import com.personal.rents.rest.util.WebserviceResponseStatus;
@@ -98,5 +100,12 @@ public class RentsClient {
 				maxLatitude, minLongitude, maxLongitude, DateUtil.standardFormat(lastRentDate),
 				lastRentId, pageSize);
 	}
+	
+	public static RentsCounter searchRents(RentSearch rentSearch) {
+		return restAdapter.create(ISearchRents.class).searchRents(rentSearch);
+	}
 
+	public static List<Rent> searchRentsNextPage(RentSearch rentSearch) {
+		return restAdapter.create(ISearchRents.class).searchRentsNextPage(rentSearch);
+	}
 }

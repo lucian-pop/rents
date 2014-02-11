@@ -66,6 +66,19 @@ public class EndlessAdapter<T> extends AdapterWrapper {
 		inflater = ((Activity) context).getLayoutInflater();
 	}
 	
+	public void setItems(List<T> items) {
+		this.items = items;
+	}
+
+	public void setTotalNoOfItems(int totalNoOfItems) {
+		this.totalNoOfItems = totalNoOfItems;
+	}
+
+	public void setLoadNextPageTask(
+			LoadNextPageAsyncTask<?, List<T>, T> loadNextPageTask) {
+		this.loadNextPageTask = loadNextPageTask;
+	}
+
 	/**
 	 * How many items are in the data set represented by this
 	 * Adapter.
@@ -197,7 +210,7 @@ public class EndlessAdapter<T> extends AdapterWrapper {
 		}
 	}
 
-	protected void onDataReady() {
+	public void onDataReady() {
 		pendingView = null;
 		notifyDataSetChanged();
 	}

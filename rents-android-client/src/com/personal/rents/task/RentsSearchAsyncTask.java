@@ -5,16 +5,16 @@ import retrofit.RetrofitError;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.VisibleRegion;
 import com.personal.rents.dto.RentsCounter;
+import com.personal.rents.model.RentSearch;
 import com.personal.rents.rest.client.RentsClient;
-import com.personal.rents.util.GeneralConstants;
 
-public class GetRentsByMapBoundariesAsyncTask 
-	extends ProgressBarFragmentAsyncTask<Object, Void, RentsCounter> {
+public class RentsSearchAsyncTask extends ProgressBarFragmentAsyncTask<Object, Void, RentsCounter> {
 
 	@Override
 	protected RentsCounter doInBackground(Object... params) {
-		VisibleRegion visibleRegion = (VisibleRegion) params[0];
-		
+		RentSearch rentSearch = (RentSearch) params[0];
+		VisibleRegion visibleRegion = (VisibleRegion) params[1];
+
 		LatLng southwest = visibleRegion.latLngBounds.southwest;
 		LatLng northeast = visibleRegion.latLngBounds.northeast;
 		double minLatitude = Math.min(southwest.latitude, northeast.latitude);
@@ -22,14 +22,14 @@ public class GetRentsByMapBoundariesAsyncTask
 		double minLongitude = Math.min(southwest.longitude, northeast.longitude);
 		double maxLongitude = Math.max(southwest.longitude, northeast.longitude);
 		
-		if(isCancelled()) {
-			return null;
-		}
+		rentSearch.lowRent.address.addressLatitude = minLatitude;
+		rentSearch.lowRent.address.addressLongitude = minLongitude;
+		rentSearch.highRent.address.addressLatitude = maxLatitude;
+		rentSearch.highRent.address.addressLongitude = maxLongitude;
 		
 		RentsCounter rentsCounter = null;
 		try {
-			rentsCounter = RentsClient.getRentsByMapBoundaries(minLatitude, maxLatitude,
-					minLongitude, maxLongitude, GeneralConstants.PAGE_SIZE);
+			rentsCounter = RentsClient.searchRents(rentSearch);
 		} catch(RetrofitError error) {
 			handleError(error);
 		} 

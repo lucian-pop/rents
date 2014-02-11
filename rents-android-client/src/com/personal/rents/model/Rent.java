@@ -19,9 +19,9 @@ public class Rent implements Parcelable {
 	
 	public int rentSurface;
 	
-	public int rentRooms;
+	public short rentRooms;
 	
-	public int rentBaths;
+	public short rentBaths;
 	
 	public byte rentParty;
 	
@@ -66,8 +66,8 @@ public class Rent implements Parcelable {
 		address = source.readParcelable(Address.class.getClassLoader());
 		rentPrice = source.readInt();
 		rentSurface = source.readInt();
-		rentRooms = source.readInt();
-		rentBaths = source.readInt();
+		rentRooms = (short) source.readInt();
+		rentBaths = (short) source.readInt();
 		rentParty = source.readByte();
 		rentType = source.readByte();
 		rentArchitecture = source.readByte();

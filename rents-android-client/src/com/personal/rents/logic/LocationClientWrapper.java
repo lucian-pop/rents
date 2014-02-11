@@ -2,26 +2,32 @@ package com.personal.rents.logic;
 
 import android.content.Context;
 
-import com.google.android.gms.common.GooglePlayServicesClient;
+import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
+import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 
 public class LocationClientWrapper {
 	
-	private static final long REQUEST_NORMAL_FREQUENCY = 1000;
+	private static final long REQUEST_NORMAL_FREQUENCY = 5000;
 	
-	private static final long REQUEST_FAST_FREQUENCY = 50;
-	
-	public static final long REQUEST_TIMEOUT = 15000;
+	private static final long REQUEST_FAST_FREQUENCY = 1000;
 
 	private LocationListener locationListener;
 	
 	private LocationClient locationClient;
 	
-	public LocationClientWrapper(Context context, 
-			GooglePlayServicesClient.ConnectionCallbacks connectionCallback,
-			GooglePlayServicesClient.OnConnectionFailedListener connectionFailedListener) {
+	private LocationRequest locationRequest;
+	
+	private ConnectionCallbacks connectionCallback;
+	
+	private OnConnectionFailedListener connectionFailedListener;
+	
+	public LocationClientWrapper(Context context, ConnectionCallbacks connectionCallback,
+			OnConnectionFailedListener connectionFailedListener) {
+		this.connectionCallback = connectionCallback;
+		this.connectionFailedListener = connectionFailedListener;
 		locationClient = new LocationClient(context, connectionCallback, connectionFailedListener);
 	}
 
@@ -42,25 +48,31 @@ public class LocationClientWrapper {
 	}
 	
 	public void requestLocationUpdates() {
-		LocationRequest locationRequest = new LocationRequest();
-		locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-		locationRequest.setInterval(REQUEST_NORMAL_FREQUENCY);
-		locationRequest.setFastestInterval(REQUEST_FAST_FREQUENCY);
-		locationRequest.setExpirationDuration(REQUEST_TIMEOUT);
+		if(locationRequest == null) {
+			locationRequest = LocationRequest.create();
+			locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+			locationRequest.setInterval(REQUEST_NORMAL_FREQUENCY);
+			locationRequest.setFastestInterval(REQUEST_FAST_FREQUENCY);
+		}
 		
 		locationClient.requestLocationUpdates(locationRequest, locationListener);
 	}
 	
-	public void cancelRequestLocationUpdates() {
-		if(locationClient.isConnected()) {
-			locationClient.removeLocationUpdates(locationListener);
-			locationClient.disconnect();
-		}
+	public void removeLocationUpdates() {
+		locationClient.removeLocationUpdates(locationListener);
 	}
 	
 	public void reset() {
-		cancelRequestLocationUpdates();
+		if(isConnected()) {
+			removeLocationUpdates();
+			disconnect();
+		}
+		
+		locationClient.unregisterConnectionCallbacks(connectionCallback);
+		locationClient.unregisterConnectionFailedListener(connectionFailedListener);
+
 		locationClient = null;
 		locationListener = null;
+		locationRequest = null;
 	}
 }

@@ -23,7 +23,6 @@ public class GetRentsNextPageByMapBoundariesAsyncTask
 	@Override
 	public LoadNextPageAsyncTask<Void, List<Rent>, Rent> newInstance(
 			OnLoadNextPageTaskFinishListener<Rent> onLoadNextPageTaskFinishListener) {
-		// TODO Auto-generated method stub
 		GetRentsNextPageByMapBoundariesAsyncTask instance = 
 				new GetRentsNextPageByMapBoundariesAsyncTask(visibleRegion);
 		instance.setOnLoadNextPageTaskFinishListener(onLoadNextPageTaskFinishListener);

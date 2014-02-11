@@ -13,9 +13,7 @@ import android.view.ContextThemeWrapper;
 
 public class ProgressDialogFragment extends DialogFragment {
 	
-	private static final String message = "Localizare";
-
-	private int messageId;
+	private static final String message = "Localizare...";
 	
 	private long timeout;
 	
@@ -42,11 +40,10 @@ public class ProgressDialogFragment extends DialogFragment {
 		}
 	};
 	
-	public static ProgressDialogFragment newInstance(int messageId, long timeout, 
+	public static ProgressDialogFragment newInstance(long timeout, 
 			OnProgressDialogDismissListener onProgressDialogDismissListener) {
 		
 		ProgressDialogFragment progressDialogFragment = new ProgressDialogFragment();
-		progressDialogFragment.messageId = messageId;
 		progressDialogFragment.timeout = timeout;
 		progressDialogFragment.onProgressDialogDismissListener = onProgressDialogDismissListener;
 

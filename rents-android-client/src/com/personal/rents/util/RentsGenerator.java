@@ -102,8 +102,8 @@ public final class RentsGenerator {
 		rent.address = createAddress(position);
 		rent.rentPrice = MIN_PRICE + random.nextInt(MAX_PRICE - MIN_PRICE);
 		rent.rentSurface = MIN_SURFACE + random.nextInt(MAX_SURFACE - MIN_SURFACE);
-		rent.rentRooms = 1 + random.nextInt(10);
-		rent.rentBaths = 1 + random.nextInt(rent.rentRooms);
+		rent.rentRooms = (short) (1 + random.nextInt(10));
+		rent.rentBaths = (short)( 1 + random.nextInt(rent.rentRooms));
 		rent.rentParty = (byte) random.nextInt(2);
 		rent.rentType = (byte) random.nextInt(3);
 		rent.rentArchitecture = (byte) random.nextInt(2);

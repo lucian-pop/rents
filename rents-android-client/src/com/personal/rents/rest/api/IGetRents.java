@@ -10,12 +10,12 @@ import retrofit.http.Query;
 
 public interface IGetRents {
 
-	@GET("/rents/light")
+	@GET("/rents/map")
 	public RentsCounter getRentsByMapBoundaries(@Query("minLatitude") double minLatitude,
 			@Query("maxLatitude") double maxLatitude, @Query("minLongitude") double minLongitude,
 			@Query("maxLongitude") double maxLongitude, @Query("pageSize") int pageSize);
 	
-	@GET("/rents/light/page")
+	@GET("/rents/map/page")
 	public List<Rent> getRentsNextPageByMapBoundaries(@Query("minLatitude") double minLatitude,
 			@Query("maxLatitude") double maxLatitude, @Query("minLongitude") double minLongitude,
 			@Query("maxLongitude") double maxLongitude, @Query("lastRentDate") String lastRentDate,

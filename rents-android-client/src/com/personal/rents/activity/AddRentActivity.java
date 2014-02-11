@@ -217,7 +217,8 @@ public class AddRentActivity extends ActionBarActivity {
 		typesSpinner.setAdapter(spinnerAdapter);
 		
 		Spinner structSpinner = (Spinner) findViewById(R.id.rent_structure);
-		spinnerAdapter = SpinnerAdapterFactory.createSpinnerAdapter(this, R.array.rent_structures);
+		spinnerAdapter = SpinnerAdapterFactory.createSpinnerAdapter(this,
+				R.array.rent_architectures);
 		structSpinner.setAdapter(spinnerAdapter);
 		
 		Spinner ageSpinner = (Spinner) findViewById(R.id.rent_age);
@@ -293,8 +294,8 @@ public class AddRentActivity extends ActionBarActivity {
 		rent.address = address;
 		rent.rentPrice = Integer.parseInt(rentPrice.getText().toString());
 		rent.rentSurface = Integer.parseInt(rentSurface.getText().toString());
-		rent.rentRooms = Integer.parseInt(rentRooms.getText().toString());
-		rent.rentBaths = Integer.parseInt(rentBaths.getText().toString());
+		rent.rentRooms = Short.parseShort(rentRooms.getText().toString());
+		rent.rentBaths = Short.parseShort(rentBaths.getText().toString());
 		rent.rentParty = (byte) rentParties.getSelectedItemPosition();
 		rent.rentType = (byte) rentTypes.getSelectedItemPosition();
 		rent.rentArchitecture = (byte) rentStruct.getSelectedItemPosition();

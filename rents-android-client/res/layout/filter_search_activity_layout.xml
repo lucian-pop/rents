@@ -11,12 +11,14 @@
 	
 		<Button android:id="@+id/search_reset_btn"
 			style="@style/BottomButtonsStyle"
-			android:text="@string/reset_btn_text"/>
+			android:text="@string/reset_btn_text"
+			android:onClick="onSearchResetBtnClick"/>
 		
 		<Button android:id="@+id/search_submit_btn"
 			style="@style/BottomButtonsStyle"
 			android:layout_marginLeft="1dp"
-			android:text="@string/search_submit_btn_text"/>
+			android:text="@string/search_submit_btn_text"
+			android:onClick="onSearchBtnClick"/>
 	</LinearLayout>
 
 	<ScrollView android:id="@+id/search_scrollable_part"
@@ -62,7 +64,7 @@
 		        style="@style/SearchPageRowStyle"
 		        android:orientation="horizontal">
 		
-				<Spinner android:id="@+id/rent_structure"
+				<Spinner android:id="@+id/rent_architecture"
 			        style="@style/SpinnerStyle" />
 			    
 			    <Spinner android:id="@+id/rent_age"
@@ -89,7 +91,7 @@
 		    <FrameLayout android:id="@+id/rent_surface_chooser"
 		        style="@style/SearchRangeSeekBarStyle"/>
 		    
-		    <CheckBox android:id="@+id/pets_allowed"
+		    <CheckBox android:id="@+id/rent_pets_allowed"
 		        style="@style/SearchPageRowStyle"
 		        android:button="@drawable/app_checkbox_selector"
 		        android:textAppearance="?android:attr/textAppearanceMedium"

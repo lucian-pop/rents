@@ -57,27 +57,32 @@
 	<string name="pets_allowed_text">Cu animale</string>
 	
 	<string-array name="rent_parties">
+	    <item>Tert</item>
+	    <item>Persoana fizica</item>
         <item>Agentie</item>
-        <item>Persoana fizica</item>
     </string-array>
     
 	<string-array name="rent_types">
+	    <item>Tip imobil</item>
         <item>Apartament</item>
         <item>Casa/Vila</item>
         <item>Spatii comerciale/birouri</item>
     </string-array>
     
-	<string-array name="rent_structures">
+	<string-array name="rent_architectures">
+	    <item>Compartimentare</item>
         <item>Decomadat</item>
         <item>Nedecomadat</item>
     </string-array>
     
 	<string-array name="rent_ages">
+	    <item>Vechime</item>
         <item>C-tie. noua</item>
         <item>C-tie. veche</item>
     </string-array>
     
 	<string-array name="rent_rooms">
+	    <item>Camere</item>
         <item>1 camera</item>
         <item>2 camere</item>
         <item>3 camere</item>
@@ -86,6 +91,7 @@
     </string-array>
 
 	<string-array name="rent_baths">
+	    <item>Bai</item>
         <item>1 baie</item>
         <item>2 bai</item>
         <item>3 bai</item>

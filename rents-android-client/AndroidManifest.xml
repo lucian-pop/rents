@@ -29,6 +29,7 @@
 
         <activity
             android:name="com.personal.rents.activity.RentsMapActivity"
+            android:launchMode="singleTop"
             android:configChanges="orientation|screenSize"
             android:label="@string/app_name">
 
@@ -43,8 +44,9 @@
         
         <activity android:name="com.personal.rents.activity.FilterSearchActivity"/>
         
-		<activity android:name="com.personal.rents.activity.RentsListActivity">
-
+		<activity android:name="com.personal.rents.activity.RentsListActivity"
+		    android:launchMode="singleTop">
+            
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
             	android:value="com.personal.rents.activity.RentsMapActivity"/>
@@ -52,11 +54,10 @@
         </activity>
         
 		<activity android:name="com.personal.rents.activity.LoginActivity">
-		    
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
             	android:value="com.personal.rents.activity.RentsMapActivity"/>
-
         </activity>
         
 		<activity android:name="com.personal.rents.activity.SignupActivity">
@@ -67,8 +68,7 @@
 
         </activity>
         
-		<activity android:name="com.personal.rents.activity.UserAddedRentsActivity"
-		    android:launchMode="singleTop"/>
+		<activity android:name="com.personal.rents.activity.UserAddedRentsActivity"/>
         
 		<activity android:name="com.personal.rents.activity.EditUserAccountActivity">
 
@@ -78,8 +78,7 @@
 
         </activity>
         
-		<activity android:name="com.personal.rents.activity.AddRentActivity"
-		    android:launchMode="singleTop">
+		<activity android:name="com.personal.rents.activity.AddRentActivity">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -98,9 +97,9 @@
         <meta-data
 		    android:name="com.google.android.maps.v2.API_KEY"
 		    android:value="AIzaSyB23eUc9Q-gRlSSRpNN9e9bHVpceCg6aCg"/>
-        
+        <!-- 
         <meta-data android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
+            android:value="@integer/google_play_services_version" /> -->
 
     </application>
 

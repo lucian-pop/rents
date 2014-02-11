@@ -32,6 +32,19 @@ public class RentsListFragment extends ListFragment {
 			LoadNextPageAsyncTask<Void, List<Rent>, Rent> loadNextPageTask) {
 		this.loadNextPageTask = loadNextPageTask;
 	}
+	
+	public void renewEndlessAdapter(List<Rent> rents, int totalNoOfRents,
+			LoadNextPageAsyncTask<Void, List<Rent>, Rent> loadNextPageTask) {
+		this.rents = rents;
+		this.totalNoOfRents = totalNoOfRents;
+		this.loadNextPageTask = loadNextPageTask;
+
+		endlessAdapter = new EndlessAdapter<Rent>(getActivity(), 
+				new RentsListAdapter(getActivity(), R.layout.rents_list_item_layout, rents),
+				R.layout.rents_list_footer_layout, R.layout.rents_list_error_footer_layout,
+				rents, totalNoOfRents, loadNextPageTask);
+		setListAdapter(endlessAdapter);
+	}
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
@@ -51,6 +64,7 @@ public class RentsListFragment extends ListFragment {
 				R.layout.rents_list_footer_layout, R.layout.rents_list_error_footer_layout,
 				rents, totalNoOfRents, loadNextPageTask);
 		setListAdapter(endlessAdapter);
+		
 	}
 
 	private void init(Bundle bundle) {
