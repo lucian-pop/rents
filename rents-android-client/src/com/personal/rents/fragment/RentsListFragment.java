@@ -114,6 +114,7 @@ public class RentsListFragment extends ListFragment {
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		Intent intent = new Intent(getActivity(), RentDetailsActivity.class);
+		intent.putExtra(ActivitiesContract.RENT_ID, rents.get(position).rentId);
 		intent.putExtra(ActivitiesContract.FROM_ACTIVITY,
 				ActivitiesContract.RENTS_LIST_ACTIVITY);
 

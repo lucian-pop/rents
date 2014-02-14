@@ -13,18 +13,18 @@ import android.view.ContextThemeWrapper;
 
 public class ProgressDialogFragment extends DialogFragment {
 	
-	private static final String message = "Localizare...";
+	private String message;
 	
 	private long timeout;
 	
 	private OnProgressDialogDismissListener onProgressDialogDismissListener;
 	
 	private OnProgressDialogDismissListener dummyOnProgressDialogDismissListener =
-			new OnProgressDialogDismissListener() {
-				@Override
-				public void onDialogDismiss(boolean timeoutReached) {
-				}
-			};
+		new OnProgressDialogDismissListener() {
+			@Override
+			public void onDialogDismiss(boolean timeoutReached) {
+			}
+		};
 	
 	private ProgressDialog progressDialog;
 	
@@ -58,6 +58,7 @@ public class ProgressDialogFragment extends DialogFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		message = getResources().getString(R.string.wait_for_location_msg);
 
 		setRetainInstance(true);
 	}
@@ -68,7 +69,6 @@ public class ProgressDialogFragment extends DialogFragment {
 				R.style.Theme_Background_Not_Dimmed);
 		progressDialog = new ProgressDialog(context);
 		progressDialog.setMessage(message);
-		//progressDialog.setMessage(getResources().getString(messageId));
 		progressDialog.setIndeterminate(true);
 		progressDialog.setCanceledOnTouchOutside(false);
 		progressDialog.show();
@@ -122,5 +122,4 @@ public class ProgressDialogFragment extends DialogFragment {
 			handler.removeCallbacks(onTimeoutTask);
 		}
 	}
-
 }

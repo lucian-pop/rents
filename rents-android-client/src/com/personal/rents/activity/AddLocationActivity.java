@@ -73,10 +73,25 @@ public class AddLocationActivity extends ActionBarActivity {
 		} else {
 			bundle = getIntent().getExtras();
 		}
-		address = bundle != null 
-				? (Address) bundle.getParcelable(ActivitiesContract.ADDRESS) : null;
+
+		restoreInstanceState(bundle);
 
 		init();
+	}
+	
+	private void restoreInstanceState(Bundle bundle) {
+		if(bundle == null) {
+			return;
+		}
+		
+		address = bundle.getParcelable(ActivitiesContract.ADDRESS);
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		outState.putParcelable(ActivitiesContract.ADDRESS, address);
+		
+		super.onSaveInstanceState(outState);
 	}
 
 	public void onResetBtnClick(View view) {

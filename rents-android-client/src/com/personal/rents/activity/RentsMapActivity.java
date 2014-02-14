@@ -1,7 +1,9 @@
 package com.personal.rents.activity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.GoogleMap;
@@ -52,6 +54,8 @@ public class RentsMapActivity extends LocationActivity implements OnInfoWindowCl
 	
 	private List<Rent> rents;
 	
+	private Map<String, Integer> markersRents = new HashMap<String, Integer>();
+	
     private LatLng previousCameraPosition;
 	
     private float previousZoomLevel;
@@ -99,6 +103,7 @@ public class RentsMapActivity extends LocationActivity implements OnInfoWindowCl
 		restoreSavedInstanceState(savedInstanceState);
     }
 	
+	@SuppressWarnings("unchecked")
 	private void restoreSavedInstanceState(Bundle savedInstanceState) {
 		if(savedInstanceState == null) {
 			Log.e("TEST_TAG", "**********No saved instance state**********");
@@ -115,6 +120,12 @@ public class RentsMapActivity extends LocationActivity implements OnInfoWindowCl
 		rentSearch = savedInstanceState.getParcelable(ActivitiesContract.RENT_SEARCH);
 		hasDelayedTasks = savedInstanceState.getBoolean(ActivitiesContract.HAS_DELAYED_TASKS);
 		taskInProgress = savedInstanceState.getBoolean(ActivitiesContract.TASK_IN_PROGRESS);
+		markersRents = (HashMap<String, Integer>) savedInstanceState.getSerializable(
+				ActivitiesContract.MARKERS_RENTS);
+		
+		if(markersRents == null) {
+			markersRents = new HashMap<String, Integer>();
+		}
 	}
 
 	@Override
@@ -195,7 +206,7 @@ public class RentsMapActivity extends LocationActivity implements OnInfoWindowCl
 		}
 
 		if(rents != null) {
-			AddMarkersTask.addMarkers(rents, rentsMap, inflater);
+			AddMarkersTask.addMarkers(inflater, rents, rentsMap, markersRents);
 		}
 		
 		if(UserPreferencesManager.getUserPreferences(this).showEnableLocationServices 
@@ -230,6 +241,8 @@ public class RentsMapActivity extends LocationActivity implements OnInfoWindowCl
 		outState.putParcelableArrayList(ActivitiesContract.RENTS, (ArrayList<Rent>)rents);
 		outState.putParcelable(ActivitiesContract.RENT_SEARCH, rentSearch);
 		outState.putBoolean(ActivitiesContract.HAS_DELAYED_TASKS, handler.hasMessages(0));
+		outState.putSerializable(ActivitiesContract.MARKERS_RENTS, 
+				(HashMap<String, Integer>) markersRents);
 		
 		taskInProgress = progressBarFragment.getVisibility() == View.VISIBLE;
 		outState.putBoolean(ActivitiesContract.TASK_IN_PROGRESS, taskInProgress);
@@ -281,6 +294,7 @@ public class RentsMapActivity extends LocationActivity implements OnInfoWindowCl
 				this.getApplicationContext());
 
 		rents = null;
+		markersRents = null;
 		cameraPosition = null;
 		previousCameraPosition = null;
 		progressBarFragment = null;
@@ -421,8 +435,10 @@ public class RentsMapActivity extends LocationActivity implements OnInfoWindowCl
 	}
 
 	@Override
-	public void onInfoWindowClick(Marker arg0) {
+	public void onInfoWindowClick(Marker marker) {
 		Intent intent = new Intent(this, RentDetailsActivity.class);
+		intent.putExtra(ActivitiesContract.RENT_ID, 
+				rents.get(markersRents.get(marker.getId())).rentId);
 		intent.putExtra(ActivitiesContract.FROM_ACTIVITY, ActivitiesContract.RENTS_MAP_ACTIVITY);
 
 		startActivity(intent);
@@ -562,10 +578,7 @@ public class RentsMapActivity extends LocationActivity implements OnInfoWindowCl
 			rents = ((RentsCounter)result).rents;
 			totalNoOfRents = ((RentsCounter)result).counter;
 
-			Toast.makeText(RentsMapActivity.this, "Rents have been successfully retrieved: " 
-					+ rents.size(), Toast.LENGTH_LONG).show();
-
-			AddMarkersTask.addMarkers(rents, rentsMap, inflater);
+			AddMarkersTask.addMarkers(inflater, rents, rentsMap, markersRents);
 
 			getSupportActionBar().setTitle(totalNoOfRents + " chirii au fost gasite");
 		}

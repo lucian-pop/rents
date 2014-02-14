@@ -83,6 +83,10 @@ public class ProgressBarFragment extends Fragment {
 	
 	public void reset() {
 		cancelCurrentlyAssociatedTask();
+		resetTaskFinishListener();
+	}
+	
+	public void resetTaskFinishListener() {
 		onTaskFinishListener = dummyTaskFinishListener;
 	}
 

@@ -12,10 +12,12 @@ public class RentMarkerBuilder {
 	
 	public static Bitmap createRentMarkerIcon(View v, int rentPrice) {
 		TextView priceText = (TextView) v.findViewById(R.id.rent_marker_price);
-		priceText.setText(String.valueOf(rentPrice) + GeneralConstants.SPACE + GeneralConstants.EURO);
+		priceText.setText(String.valueOf(rentPrice) + GeneralConstants.SPACE 
+				+ GeneralConstants.EURO);
 		
 		v.measure(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		Bitmap bitmap = Bitmap.createBitmap(v.getMeasuredWidth(), v.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+		Bitmap bitmap = Bitmap.createBitmap(v.getMeasuredWidth(), v.getMeasuredHeight(),
+				Bitmap.Config.ARGB_8888);
 		Canvas c = new Canvas(bitmap);
 		v.layout(0, 0, v.getMeasuredWidth(), v.getMeasuredHeight());
 		v.draw(c);

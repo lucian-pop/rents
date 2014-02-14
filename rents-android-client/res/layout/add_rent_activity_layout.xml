@@ -1,320 +1,328 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
-	<RelativeLayout 
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+	<ScrollView 
 	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:background="#1F939597">
-	    
-	    <TextView android:id="@+id/locate_rent_btn"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_alignParentTop="true"
-	        android:layout_marginTop="10dp"
-	        android:layout_marginLeft="10dp"
-	        android:layout_marginRight="10dp" 
-	        android:padding="10dp"
-	        android:gravity="center|left"
-	        android:background="@drawable/app_location_btn_selector"
-	        android:drawableLeft="@drawable/app_location_btn"
-	        android:drawablePadding="10dp"
-	        android:textAppearance="?android:attr/textAppearanceMedium"
-	        android:textColor="@color/blue"
-	        android:text="Localizeaza imobil"
-	        android:maxLines="1"
-	        android:ellipsize="end"
-	        android:clickable="true"
-	        android:onClick="onLocateRentBtnClick"/>
-	    
-	    <LinearLayout android:id="@+id/building_staircase"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_marginLeft="10dp"
-	        android:layout_marginRight="10dp"
-	        android:layout_below="@id/locate_rent_btn"
-	        android:background="@color/white"
-	        android:orientation="horizontal">
-	        
-	        <EditText android:id="@+id/building"
-	            android:layout_width="0dp"
-	            android:layout_height="wrap_content"
-	            android:layout_weight="1"
-	            android:layout_marginLeft="10dp"
-	            android:layout_marginBottom="10dp"
-	            android:textAppearance="?android:attr/textAppearanceMedium"
-	            android:hint="Bloc"
-				android:maxLines="1"
-				android:imeOptions="actionDone"/>
-	        
-	        <EditText android:id="@+id/staircase"
-	            android:layout_width="0dp"
-	            android:layout_height="wrap_content"
-	            android:layout_weight="1"
-	            android:layout_marginLeft="10dp"
-	            android:layout_marginRight="10dp"
-	            android:layout_marginBottom="10dp"
-	            android:textAppearance="?android:attr/textAppearanceMedium"
-	            android:hint="Scara"
-				android:maxLines="1"
-				android:imeOptions="actionDone"/>"
-	    </LinearLayout>
-	    
-	     <LinearLayout android:id="@+id/floor_ap"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_marginLeft="10dp"
-	        android:layout_marginRight="10dp"
-	        android:layout_below="@id/building_staircase"
-	        android:paddingBottom="10dp"
-	        android:background="@color/white"
-	        android:orientation="horizontal">
-	        
-	        <EditText android:id="@+id/floor"
-	            android:layout_width="0dp"
-	            android:layout_height="wrap_content"
-	            android:layout_weight="1"
-	            android:layout_marginLeft="10dp"
-	            android:layout_marginBottom="10dp"
-	            android:textAppearance="?android:attr/textAppearanceMedium"
-	            android:hint="Etaj"
-				android:maxLines="1"
-				android:inputType="number"
-				android:imeOptions="actionDone"/>
-	        
-	        <EditText android:id="@+id/ap"
-	            android:layout_width="0dp"
-	            android:layout_height="wrap_content"
-	            android:layout_weight="1"
-	            android:layout_marginLeft="10dp"
-	            android:layout_marginRight="10dp"
-	            android:layout_marginBottom="10dp"
-	            android:textAppearance="?android:attr/textAppearanceMedium"
-	            android:hint="Ap."
-				android:maxLines="1"
-				android:imeOptions="actionDone"/>
-	    </LinearLayout>
-
-	    <LinearLayout android:id="@+id/rent_price_surface"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_marginTop="10dp"
-	        android:layout_marginLeft="10dp"
-	        android:layout_marginRight="10dp"
-	        android:layout_below="@id/floor_ap"
-	        android:paddingTop="10dp"
-	        android:background="@color/white"
-	        android:orientation="horizontal">
-	        
-	        <EditText android:id="@+id/rent_price"
-	            android:layout_width="0dp"
-	            android:layout_height="wrap_content"
-	            android:layout_weight="1"
-	            android:layout_marginLeft="10dp"
-	            android:layout_marginBottom="10dp"
-	            android:textAppearance="?android:attr/textAppearanceMedium"
-	            android:hint="Pret"
-	            android:maxLines="1"
-	            android:inputType="number"
-	            android:imeOptions="actionDone" />
-	        
-	        <TextView android:id="@+id/price_currency"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_marginLeft="5dp"
-	            android:textAppearance="?android:attr/textAppearanceMedium"
-	            android:text="@string/currency"/>
-	        
-	        
-	        <EditText android:id="@+id/rent_surface"
-	            android:layout_width="0dp"
-	            android:layout_height="wrap_content"
-	            android:layout_weight="1"
-	            android:layout_marginLeft="10dp"
-	            android:layout_marginBottom="10dp"
-	            android:textAppearance="?android:attr/textAppearanceMedium"
-	            android:hint="Suprafata"
-	            android:maxLines="1"
-	            android:inputType="number"
-	            android:imeOptions="actionDone"/>
-	        
-	        <TextView android:id="@+id/square_metrics"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_marginLeft="5dp"
-	            android:layout_marginRight="10dp"
-	            android:textAppearance="?android:attr/textAppearanceMedium"
-	            android:text="@string/square_meters"/>
-
-		</LinearLayout>
-		
-	    <LinearLayout android:id="@+id/rent_rooms_baths"
-			android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_marginLeft="10dp"
-	        android:layout_marginRight="10dp"
-	        android:paddingBottom="10dp"
-	        android:layout_below="@id/rent_price_surface"
-	        android:background="@color/white"
-	        android:orientation="horizontal">
-		
-			<EditText android:id="@+id/rent_rooms"
-	            android:layout_width="0dp"
-	            android:layout_height="wrap_content"
-	            android:layout_weight="1"
-	            android:layout_marginLeft="10dp"
-	            android:textAppearance="?android:attr/textAppearanceMedium"
-	            android:hint="Nr."
-	            android:maxLines="1"
-	            android:inputType="number"
-	            android:imeOptions="actionDone" />
-	        
-	        <TextView android:id="@+id/rooms_label"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_marginLeft="5dp"
-	            android:textAppearance="?android:attr/textAppearanceMedium"
-	            android:text="@string/rooms_label"/>
-	        
-	        
-	        <EditText android:id="@+id/rent_baths"
-	            android:layout_width="0dp"
-	            android:layout_height="wrap_content"
-	            android:layout_weight="1"
-	            android:layout_marginLeft="10dp"
-	            android:textAppearance="?android:attr/textAppearanceMedium"
-	            android:hint="Nr."
-	            android:maxLines="1"
-	            android:inputType="number"
-	            android:imeOptions="actionDone"/>
-	        
-	        <TextView android:id="@+id/baths_label"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_marginLeft="5dp"
-	            android:layout_marginRight="10dp"
-	            android:textAppearance="?android:attr/textAppearanceMedium"
-	            android:text="@string/baths_label"/>
-
-		</LinearLayout>
-		
-	    <RelativeLayout android:id="@+id/rent_specs"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_marginTop="10dp"
-	        android:layout_marginLeft="10dp"
-	        android:layout_marginRight="10dp"
-	        android:paddingBottom="10dp"
-	        android:layout_below="@id/rent_rooms_baths"
-	        android:background="@color/white">
+	    android:layout_height="wrap_content">
+	
+		<RelativeLayout 
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:background="#1F939597">
 		    
-	        <LinearLayout android:id="@+id/rent_party_type"
-		        style="@style/SearchPageRowStyle"
+		    <TextView android:id="@+id/locate_rent_btn"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_alignParentTop="true"
 		        android:layout_marginTop="10dp"
-		        android:orientation="horizontal">
-		
-				<Spinner android:id="@+id/rent_party"
-			        style="@style/SpinnerStyle" />
-			    
-			    <Spinner android:id="@+id/rent_type"
-					style="@style/SpinnerStyle"
-			        android:layout_marginLeft="10dp"/>
-		    </LinearLayout>
+		        android:layout_marginLeft="10dp"
+		        android:layout_marginRight="10dp" 
+		        android:padding="10dp"
+		        android:gravity="center|left"
+		        android:background="@drawable/app_location_btn_selector"
+		        android:drawableLeft="@drawable/app_location_btn"
+		        android:drawablePadding="10dp"
+		        android:textAppearance="?android:attr/textAppearanceMedium"
+		        android:textColor="@color/blue"
+		        android:text="Localizeaza imobil"
+		        android:maxLines="1"
+		        android:ellipsize="end"
+		        android:clickable="true"
+		        android:onClick="onLocateRentBtnClick"/>
 		    
-	        <LinearLayout android:id="@+id/rent_struct_age"
-		        style="@style/SearchPageRowStyle"
-		        android:layout_below="@id/rent_party_type"
-		        android:orientation="horizontal">
-		
-				<Spinner android:id="@+id/rent_structure"
-			        style="@style/SpinnerStyle" />
-			    
-			    <Spinner android:id="@+id/rent_age"
-					style="@style/SpinnerStyle"
-			        android:layout_marginLeft="10dp" />
-		    </LinearLayout>
-		    
-	    </RelativeLayout>
-	    
-	    
-	    <RelativeLayout android:id="@+id/rent_desc_pets"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_marginTop="10dp"
-	        android:layout_marginLeft="10dp"
-	        android:layout_marginRight="10dp"
-	        android:paddingTop="10dp"
-	        android:paddingBottom="10dp"
-	        android:layout_below="@id/rent_specs"
-	        android:background="@color/white">
-	        
-		    <EditText android:id="@+id/rent_desc"
+		    <LinearLayout android:id="@+id/building_staircase"
 		        android:layout_width="match_parent"
 		        android:layout_height="wrap_content"
 		        android:layout_marginLeft="10dp"
 		        android:layout_marginRight="10dp"
-		        android:textAppearance="?android:attr/textAppearanceMedium"
-		        android:hint="Descriere"
-		        android:inputType="textMultiLine">
-		    </EditText>
+		        android:layout_below="@id/locate_rent_btn"
+		        android:background="@color/white"
+		        android:orientation="horizontal">
+		        
+		        <EditText android:id="@+id/building"
+		            android:layout_width="0dp"
+		            android:layout_height="wrap_content"
+		            android:layout_weight="1"
+		            android:layout_marginLeft="10dp"
+		            android:layout_marginBottom="10dp"
+		            android:textAppearance="?android:attr/textAppearanceMedium"
+		            android:hint="Bloc"
+					android:maxLines="1"
+					android:imeOptions="actionDone"/>
+		        
+		        <EditText android:id="@+id/staircase"
+		            android:layout_width="0dp"
+		            android:layout_height="wrap_content"
+		            android:layout_weight="1"
+		            android:layout_marginLeft="10dp"
+		            android:layout_marginRight="10dp"
+		            android:layout_marginBottom="10dp"
+		            android:textAppearance="?android:attr/textAppearanceMedium"
+		            android:hint="Scara"
+					android:maxLines="1"
+					android:imeOptions="actionDone"/>"
+		    </LinearLayout>
 		    
-		    <CheckBox android:id="@+id/pets_allowed"
-		        style="@style/SearchPageRowStyle"
-		        android:layout_marginBottom="10dp"
-		        android:layout_below="@id/rent_desc"
-		        android:button="@drawable/app_checkbox_selector"
+		     <LinearLayout android:id="@+id/floor_ap"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_marginLeft="10dp"
+		        android:layout_marginRight="10dp"
+		        android:layout_below="@id/building_staircase"
+		        android:paddingBottom="10dp"
+		        android:background="@color/white"
+		        android:orientation="horizontal">
+		        
+		        <EditText android:id="@+id/floor"
+		            android:layout_width="0dp"
+		            android:layout_height="wrap_content"
+		            android:layout_weight="1"
+		            android:layout_marginLeft="10dp"
+		            android:layout_marginBottom="10dp"
+		            android:textAppearance="?android:attr/textAppearanceMedium"
+		            android:hint="Etaj"
+					android:maxLines="1"
+					android:inputType="number"
+					android:imeOptions="actionDone"/>
+		        
+		        <EditText android:id="@+id/ap"
+		            android:layout_width="0dp"
+		            android:layout_height="wrap_content"
+		            android:layout_weight="1"
+		            android:layout_marginLeft="10dp"
+		            android:layout_marginRight="10dp"
+		            android:layout_marginBottom="10dp"
+		            android:textAppearance="?android:attr/textAppearanceMedium"
+		            android:hint="Ap."
+					android:maxLines="1"
+					android:imeOptions="actionDone"/>
+		    </LinearLayout>
+	
+		    <LinearLayout android:id="@+id/rent_price_surface"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_marginTop="10dp"
+		        android:layout_marginLeft="10dp"
+		        android:layout_marginRight="10dp"
+		        android:layout_below="@id/floor_ap"
+		        android:paddingTop="10dp"
+		        android:background="@color/white"
+		        android:orientation="horizontal">
+		        
+		        <EditText android:id="@+id/rent_price"
+		            android:layout_width="0dp"
+		            android:layout_height="wrap_content"
+		            android:layout_weight="1"
+		            android:layout_marginLeft="10dp"
+		            android:layout_marginBottom="10dp"
+		            android:textAppearance="?android:attr/textAppearanceMedium"
+		            android:hint="Pret"
+		            android:maxLines="1"
+		            android:inputType="number"
+		            android:imeOptions="actionDone" />
+		        
+		        <TextView android:id="@+id/price_currency"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_marginLeft="5dp"
+		            android:textAppearance="?android:attr/textAppearanceMedium"
+		            android:text="@string/currency"/>
+		        
+		        
+		        <EditText android:id="@+id/rent_surface"
+		            android:layout_width="0dp"
+		            android:layout_height="wrap_content"
+		            android:layout_weight="1"
+		            android:layout_marginLeft="10dp"
+		            android:layout_marginBottom="10dp"
+		            android:textAppearance="?android:attr/textAppearanceMedium"
+		            android:hint="Suprafata"
+		            android:maxLines="1"
+		            android:inputType="number"
+		            android:imeOptions="actionDone"/>
+		        
+		        <TextView android:id="@+id/square_metrics"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_marginLeft="5dp"
+		            android:layout_marginRight="10dp"
+		            android:textAppearance="?android:attr/textAppearanceMedium"
+		            android:text="@string/square_meters"/>
+	
+			</LinearLayout>
+			
+		    <LinearLayout android:id="@+id/rent_rooms_baths"
+				android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_marginLeft="10dp"
+		        android:layout_marginRight="10dp"
+		        android:paddingBottom="10dp"
+		        android:layout_below="@id/rent_price_surface"
+		        android:background="@color/white"
+		        android:orientation="horizontal">
+			
+				<EditText android:id="@+id/rent_rooms"
+		            android:layout_width="0dp"
+		            android:layout_height="wrap_content"
+		            android:layout_weight="1"
+		            android:layout_marginLeft="10dp"
+		            android:textAppearance="?android:attr/textAppearanceMedium"
+		            android:hint="Nr."
+		            android:maxLines="1"
+		            android:inputType="number"
+		            android:imeOptions="actionDone" />
+		        
+		        <TextView android:id="@+id/rooms_label"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_marginLeft="5dp"
+		            android:textAppearance="?android:attr/textAppearanceMedium"
+		            android:text="@string/rooms_label"/>
+		        
+		        
+		        <EditText android:id="@+id/rent_baths"
+		            android:layout_width="0dp"
+		            android:layout_height="wrap_content"
+		            android:layout_weight="1"
+		            android:layout_marginLeft="10dp"
+		            android:textAppearance="?android:attr/textAppearanceMedium"
+		            android:hint="Nr."
+		            android:maxLines="1"
+		            android:inputType="number"
+		            android:imeOptions="actionDone"/>
+		        
+		        <TextView android:id="@+id/baths_label"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_marginLeft="5dp"
+		            android:layout_marginRight="10dp"
+		            android:textAppearance="?android:attr/textAppearanceMedium"
+		            android:text="@string/baths_label"/>
+	
+			</LinearLayout>
+			
+		    <RelativeLayout android:id="@+id/rent_specs"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_marginTop="10dp"
+		        android:layout_marginLeft="10dp"
+		        android:layout_marginRight="10dp"
+		        android:paddingBottom="10dp"
+		        android:layout_below="@id/rent_rooms_baths"
+		        android:background="@color/white">
+			    
+		        <LinearLayout android:id="@+id/rent_party_type"
+			        style="@style/SearchPageRowStyle"
+			        android:layout_marginTop="10dp"
+			        android:orientation="horizontal">
+			
+					<Spinner android:id="@+id/rent_party"
+				        style="@style/SpinnerStyle" />
+				    
+				    <Spinner android:id="@+id/rent_type"
+						style="@style/SpinnerStyle"
+				        android:layout_marginLeft="10dp"/>
+			    </LinearLayout>
+			    
+		        <LinearLayout android:id="@+id/rent_struct_age"
+			        style="@style/SearchPageRowStyle"
+			        android:layout_below="@id/rent_party_type"
+			        android:orientation="horizontal">
+			
+					<Spinner android:id="@+id/rent_structure"
+				        style="@style/SpinnerStyle" />
+				    
+				    <Spinner android:id="@+id/rent_age"
+						style="@style/SpinnerStyle"
+				        android:layout_marginLeft="10dp" />
+			    </LinearLayout>
+			    
+		    </RelativeLayout>
+		    
+		    
+		    <RelativeLayout android:id="@+id/rent_desc_pets"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_marginTop="10dp"
+		        android:layout_marginLeft="10dp"
+		        android:layout_marginRight="10dp"
+		        android:paddingTop="10dp"
+		        android:paddingBottom="10dp"
+		        android:layout_below="@id/rent_specs"
+		        android:background="@color/white">
+		        
+			    <EditText android:id="@+id/rent_desc"
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content"
+			        android:layout_marginLeft="10dp"
+			        android:layout_marginRight="10dp"
+			        android:textAppearance="?android:attr/textAppearanceMedium"
+			        android:hint="Descriere"
+			        android:inputType="textMultiLine">
+			    </EditText>
+			    
+			    <CheckBox android:id="@+id/pets_allowed"
+			        style="@style/SearchPageRowStyle"
+			        android:layout_marginBottom="10dp"
+			        android:layout_below="@id/rent_desc"
+			        android:button="@drawable/app_checkbox_selector"
+			        android:textAppearance="?android:attr/textAppearanceMedium"
+			        android:textColor="@color/green"
+			        android:text="@string/pets_allowed_text"/>
+		        
+		    </RelativeLayout>
+		    
+		    <EditText android:id="@+id/rent_phone"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_marginTop="10dp"
+		        android:layout_marginLeft="10dp"
+		        android:layout_below="@id/rent_desc_pets"
+		        android:paddingTop="10dp"
+		        android:paddingBottom="10dp"
+		        android:paddingLeft="10dp"
 		        android:textAppearance="?android:attr/textAppearanceMedium"
-		        android:textColor="@color/green"
-		        android:text="@string/pets_allowed_text"/>
-	        
-	    </RelativeLayout>
-	    
-	    <EditText android:id="@+id/rent_phone"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_marginTop="10dp"
-	        android:layout_marginLeft="10dp"
-	        android:layout_below="@id/rent_desc_pets"
-	        android:paddingTop="10dp"
-	        android:paddingBottom="10dp"
-	        android:paddingLeft="10dp"
-	        android:textAppearance="?android:attr/textAppearanceMedium"
-	        android:background="@color/white"
-	        android:hint="Telefon"
-	        android:maxLines="1"
-	        android:inputType="textMultiLine"
-	        android:imeOptions="actionDone">
-		</EditText>
-	    
-		<com.personal.rents.view.DynamicGridView android:id="@+id/rent_pics"
-		    android:layout_width="match_parent"
-		    android:layout_height="match_parent"
-		    android:layout_marginTop="10dp"
-		    android:layout_marginLeft="10dp"
-		    android:layout_marginRight="10dp"
-		    android:layout_below="@id/rent_phone"
-		    android:padding="10dp"
-		    android:background="@color/white"
-		    android:numColumns="auto_fit"
-		    android:columnWidth="80dp"
-		    android:horizontalSpacing="10dp"
-		    android:verticalSpacing="10dp"
-		    android:stretchMode="none" />
-	    
-	    <Button android:id="@+id/add_rent_btn"
-	        android:layout_width="match_parent"
-	        android:layout_height="48dp"
-	        android:layout_marginTop="10dp"
-	        android:layout_marginLeft="10dp"
-	        android:layout_marginRight="10dp"
-	        android:layout_below="@id/rent_pics"
-	        android:background="@drawable/app_blue_btn_selector"
-	        android:textAppearance="?android:attr/textAppearanceMedium"
-	        android:textColor="@color/white"
-	        android:textStyle="bold"
-	        android:text="Adauga chirie" 
-	        android:onClick="onAddRentBtnClick"/>
+		        android:background="@color/white"
+		        android:hint="Telefon"
+		        android:maxLines="1"
+		        android:inputType="textMultiLine"
+		        android:imeOptions="actionDone">
+			</EditText>
+		    
+			<com.personal.rents.view.DynamicGridView android:id="@+id/rent_pics"
+			    android:layout_width="match_parent"
+			    android:layout_height="match_parent"
+			    android:layout_marginTop="10dp"
+			    android:layout_marginLeft="10dp"
+			    android:layout_marginRight="10dp"
+			    android:layout_below="@id/rent_phone"
+			    android:padding="10dp"
+			    android:background="@color/white"
+			    android:numColumns="auto_fit"
+			    android:columnWidth="80dp"
+			    android:horizontalSpacing="10dp"
+			    android:verticalSpacing="10dp"
+			    android:stretchMode="none" />
+		    
+		    <Button android:id="@+id/add_rent_btn"
+		        android:layout_width="match_parent"
+		        android:layout_height="48dp"
+		        android:layout_marginTop="10dp"
+		        android:layout_marginLeft="10dp"
+		        android:layout_marginRight="10dp"
+		        android:layout_below="@id/rent_pics"
+		        android:background="@drawable/app_blue_btn_selector"
+		        android:textAppearance="?android:attr/textAppearanceMedium"
+		        android:textColor="@color/white"
+		        android:textStyle="bold"
+		        android:text="Adauga chirie" 
+		        android:onClick="onAddRentBtnClick"/>
+	
+		</RelativeLayout>
+	</ScrollView>
 
-	</RelativeLayout>
-</ScrollView>
+	<fragment android:id="@+id/progressBarFragment"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_gravity="center"
+	    class="com.personal.rents.fragment.ProgressBarFragment"/>
+</merge>	

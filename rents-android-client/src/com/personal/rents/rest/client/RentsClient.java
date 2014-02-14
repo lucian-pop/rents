@@ -15,6 +15,7 @@ import com.personal.rents.model.RentSearch;
 import com.personal.rents.rest.api.IAddRent;
 import com.personal.rents.rest.api.IAuthorization;
 import com.personal.rents.rest.api.IChangePassword;
+import com.personal.rents.rest.api.IGetRent;
 import com.personal.rents.rest.api.IGetRents;
 import com.personal.rents.rest.api.ILogin;
 import com.personal.rents.rest.api.IMyResource;
@@ -107,5 +108,9 @@ public class RentsClient {
 
 	public static List<Rent> searchRentsNextPage(RentSearch rentSearch) {
 		return restAdapter.create(ISearchRents.class).searchRentsNextPage(rentSearch);
+	}
+	
+	public static Rent getDetailedRent(int rentId) {
+		return restAdapter.create(IGetRent.class).getDetailedRent(rentId);
 	}
 }

@@ -137,6 +137,7 @@ public class RentsListActivity extends ActionBarActivity {
 			progressBarFragment.reset();
 		}
 	}
+
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();

@@ -10,6 +10,8 @@ public final class GeneralConstants {
 	
 	public static final String MINUS = "-";
 	
+	public static final String COMMA = ", ";
+	
 	// Map related.
 	public static final int DEFAULT_ZOOM_FACTOR = 14;
 	
@@ -47,7 +49,13 @@ public final class GeneralConstants {
 	// Date
 	public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 	
+	public static final String RO_LOCALE = "ro";
+	
 	public static final String RO_DATE_FORMAT = "d MMM yyyy";
+	
+	// Address
+	
+	public static final int UNSPECIFIED_FLOOR_VALUE = -2;
 
 	private GeneralConstants() {}	
 	

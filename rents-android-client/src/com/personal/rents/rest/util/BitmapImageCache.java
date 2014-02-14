@@ -31,4 +31,8 @@ public class BitmapImageCache extends LruCache<String, Bitmap>  implements Image
 	public void putBitmap(String url, Bitmap bitmap) {
 		put(url, bitmap);
 	}
+	
+	public void removeBitmap(String url) {
+		remove(url);
+	}
 }

@@ -29,7 +29,7 @@ public class RentsListAdapter extends ArrayAdapter<Rent> implements ListAdapter 
 	private List<Rent> rents;
 	
 	SimpleDateFormat dateFormatter = new SimpleDateFormat(GeneralConstants.RO_DATE_FORMAT,
-			new Locale("ro", "RO"));
+			new Locale(GeneralConstants.RO_LOCALE, GeneralConstants.RO_LOCALE));
 	
 	private static class RentViewHolder {
 
@@ -97,7 +97,7 @@ public class RentsListAdapter extends ArrayAdapter<Rent> implements ListAdapter 
 		rentViewHolder.rentAddress.setText(rent.address.addressStreetName + " Nr. " 
 				+ rent.address.addressStreetNo);
 		rentViewHolder.rentSpecs.setText(rent.rentRooms + " cam., " + rent.rentBaths + " bai, "
-				+ rent.rentSurface + " mp");
+				+ rent.rentSurface + " " + GeneralConstants.SQUARE_METERS);
 		rentViewHolder.rentTypeDesc.setText(RentInfoBuilder.buildRentTypeDesc(getContext(),
 				 rent.rentType, rent.rentAge));
 		

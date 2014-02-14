@@ -7,13 +7,17 @@ import java.util.Date;
 import com.personal.rents.R;
 import com.personal.rents.adapter.SpinnerAdapterFactory;
 import com.personal.rents.adapter.ImageArrayAdapter;
+import com.personal.rents.fragment.ProgressBarFragment;
 import com.personal.rents.logic.ImageManager;
 import com.personal.rents.logic.UserAccountManager;
 import com.personal.rents.model.Account;
 import com.personal.rents.model.Address;
 import com.personal.rents.model.Rent;
+import com.personal.rents.rest.util.NetworkErrorHandler;
+import com.personal.rents.rest.util.RetrofitResponseStatus;
 import com.personal.rents.task.AddRentAsyncTask;
 import com.personal.rents.task.AuthorizationAsyncTask;
+import com.personal.rents.task.listener.OnNetworkTaskFinishListener;
 import com.personal.rents.util.ActivitiesContract;
 import com.personal.rents.util.MediaUtils;
 import com.personal.rents.view.DynamicGridView;
@@ -23,7 +27,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
@@ -36,8 +40,9 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class AddRentActivity extends ActionBarActivity {
+public class AddRentActivity extends BaseActivity {
 	
 	private static final int NO_OF_PICS = 5;
 
@@ -55,6 +60,12 @@ public class AddRentActivity extends ActionBarActivity {
 	
 	private ImageArrayAdapter imageAdapter;
 	
+	private boolean authorized;
+	
+	private boolean taskInProgress;
+	
+	private ProgressBarFragment progressBarFragment;
+	
 	/**
 	 * Recycle selectedBitmap and pics on onDestroy().
 	 * Recreate pics from paths using an AsyncTask.
@@ -67,32 +78,78 @@ public class AddRentActivity extends ActionBarActivity {
 		Bundle bundle = null;
 		if(savedInstanceState != null) {
 			bundle = savedInstanceState;
-			selectedPicPosition = savedInstanceState.getInt(
-					ActivitiesContract.SELECTED_PIC_POSITION);
-			selectedPicPath = savedInstanceState.getString(ActivitiesContract.SELECTED_PIC_PATH);
-			pics = savedInstanceState.getParcelableArrayList(ActivitiesContract.SELECTED_PICS);
-			imagesPaths = savedInstanceState.getStringArrayList(ActivitiesContract.IMAGES_PATHS);
 		} else {
 			bundle = getIntent().getExtras();
 		}
 
-		address = bundle != null 
-				? (Address) bundle.getParcelable(ActivitiesContract.ADDRESS) : null;
+		restoreInstanceState(bundle);
 
 		init();
 	}
 	
+	private void restoreInstanceState(Bundle bundle) {
+		if(bundle == null) {
+			return;
+		}
+		
+		address = bundle.getParcelable(ActivitiesContract.ADDRESS);
+		selectedPicPosition = bundle.getInt(ActivitiesContract.SELECTED_IMG_POSITION);
+		selectedPicPath = bundle.getString(ActivitiesContract.SELECTED_IMG_PATH);
+		pics = bundle.getParcelableArrayList(ActivitiesContract.SELECTED_IMAGES);
+		imagesPaths = bundle.getStringArrayList(ActivitiesContract.IMAGES_PATHS);
+		authorized = bundle.getBoolean(ActivitiesContract.AUTHORIZED, false);
+		taskInProgress = bundle.getBoolean(ActivitiesContract.TASK_IN_PROGRESS, false);
+		
+		if(imagesPaths == null) {
+			imagesPaths = new ArrayList<String>(NO_OF_PICS);
+		}
+	}
+	
+	@Override
+	protected void onStart() {
+		super.onStart();
+		
+		setupProgressBarFragment();
+		if(taskInProgress) {
+			progressBarFragment.setOnTaskFinishListener(new OnAddRentTaskFinishListener());
+		}
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		if(!authorized) {
+			authorize();
+		}
+	}
+
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		outState.putParcelable(ActivitiesContract.ADDRESS, address);
-		outState.putInt(ActivitiesContract.SELECTED_PIC_POSITION, selectedPicPosition);
-		outState.putString(ActivitiesContract.SELECTED_PIC_PATH, selectedPicPath);
-		outState.putParcelableArrayList(ActivitiesContract.SELECTED_PICS, imageAdapter.getImages());
+		outState.putInt(ActivitiesContract.SELECTED_IMG_POSITION, selectedPicPosition);
+		outState.putString(ActivitiesContract.SELECTED_IMG_PATH, selectedPicPath);
+		outState.putParcelableArrayList(ActivitiesContract.SELECTED_IMAGES,
+				imageAdapter.getImages());
 		outState.putStringArrayList(ActivitiesContract.IMAGES_PATHS, imagesPaths);
+		outState.putBoolean(ActivitiesContract.AUTHORIZED, authorized);
+		
+		taskInProgress = progressBarFragment.getVisibility() == View.VISIBLE;
+		outState.putBoolean(ActivitiesContract.TASK_IN_PROGRESS, taskInProgress);
 		
 		super.onSaveInstanceState(outState);
 	}
 	
+	@Override
+	protected void onStop() {
+		super.onStop();
+		Log.e("TEST_TAG", "*********On STOP called**************");
+		
+		if(progressBarFragment != null) {
+			progressBarFragment.resetTaskFinishListener();
+		}
+	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.add_rent_menu, menu);
@@ -170,6 +227,10 @@ public class AddRentActivity extends ActionBarActivity {
 	}
 	
 	public void onAddRentBtnClick(View view) {
+		addRent();
+	}
+	
+	private void authorize() {
 		Account account = UserAccountManager.getAccount(this);
 		if(account == null) {
 			Intent intent = new Intent(this, LoginActivity.class);
@@ -178,9 +239,13 @@ public class AddRentActivity extends ActionBarActivity {
 			return;
 		}
 
+		progressBarFragment.cancelCurrentlyAssociatedTask();
+		progressBarFragment.show();
+		
 		AuthorizationAsyncTask authorizationTask = new AuthorizationAsyncTask();
-		//authorizationTask.setOnTaskFinishListener(new OnAuthorizationTaskFinishListener());
-		authorizationTask.execute(account);
+		progressBarFragment.setOnTaskFinishListener(new OnAuthorizationTaskFinishListener());
+		progressBarFragment.setTask(authorizationTask);
+		 authorizationTask.execute(account);
 	}
 	
 	private void init() {
@@ -243,6 +308,15 @@ public class AddRentActivity extends ActionBarActivity {
 		
 		registerForContextMenu(picsGridView);
 	}
+	
+	private void setupProgressBarFragment() {
+		if(progressBarFragment == null) {
+			progressBarFragment = (ProgressBarFragment) getSupportFragmentManager()
+					.findFragmentById(R.id.progressBarFragment);
+		}
+
+		//progressBarFragment.setOnTaskFinishListener(new OnRentsSearchTaskFinishListener());
+	}
 
 	private void initiatePicBrowsing() {
 		Intent intent = new Intent();
@@ -271,8 +345,18 @@ public class AddRentActivity extends ActionBarActivity {
 	private void addRent() {
 		updateAddress();
 		Rent rent = initRent();
+		
+		setupProgressBarFragment();
+		startAddRentAsyncTask(rent);
+	}
+	
+	private void startAddRentAsyncTask(Rent rent) {
+		progressBarFragment.cancelCurrentlyAssociatedTask();
+		progressBarFragment.show();
+		
 		AddRentAsyncTask addRentTask = new AddRentAsyncTask(imagesPaths);
-		//addRentTask.setOnTaskFinishListener(new OnAddRentTaskFinishListener());
+		progressBarFragment.setTask(addRentTask);
+		progressBarFragment.setOnTaskFinishListener(new OnAddRentTaskFinishListener());
 		addRentTask.execute(rent, this.getApplicationContext());
 	}
 	
@@ -338,43 +422,54 @@ public class AddRentActivity extends ActionBarActivity {
 		address.addressCountry = getString(R.string.country);
 	}
 	
-//	private class OnAuthorizationTaskFinishListener extends OnNetworkTaskFinishListener<Boolean> {
-//		@Override
-//		public void onTaskFinish(Boolean authorized, int taskId, RetrofitResponseStatus status) {
-//			handleResponse(authorized, taskId, status, AddRentActivity.this);
-//		}
-//
-//		@Override
-//		protected void handleOkStatus(Boolean authorized, int taskId) {
-//			if(!authorized) {
-//				Intent intent = new Intent(AddRentActivity.this, LoginActivity.class);
-//				startActivity(intent);
-//			} else {
-//				addRent();
-//			}
-//		}
-//	}
-//	
-//	private class OnAddRentTaskFinishListener extends OnNetworkTaskFinishListener<Rent> {
-//
-//		private static final String RENT_ADDED = "Chiria a fost adaugata cu success";
-//		
-//		private static final String RENT_NOT_ADDED = "Chiria nu a putut fi adaugata. Va rugam"
-//				+ " incercati din nou.";
-//
-//		@Override
-//		public void onTaskFinish(Rent result, int taskId, RetrofitResponseStatus status) {
-//			handleResponse(result, taskId, status, AddRentActivity.this);
-//		}
-//
-//		@Override
-//		protected void handleOkStatus(Rent result, int taskId) {
-//			if(result != null) {
-//				Toast.makeText(AddRentActivity.this, RENT_ADDED, Toast.LENGTH_LONG).show();
-//			} else {
-//				Toast.makeText(AddRentActivity.this, RENT_NOT_ADDED, Toast.LENGTH_LONG).show();
-//			}
-//		}	
-//	}
+	private class OnAuthorizationTaskFinishListener implements OnNetworkTaskFinishListener {
+		
+		private static final String NOT_AUTHORIZED = "Operatia nu a putut fi autorizata.";
 
+		@Override
+		public void onTaskFinish(Object result, RetrofitResponseStatus status) {
+			if(!status.equals(RetrofitResponseStatus.OK)) {
+				NetworkErrorHandler.handleRetrofitError(status, AddRentActivity.this);
+
+				return;
+			}
+
+			if(result == null) {
+				Toast.makeText( AddRentActivity.this, NOT_AUTHORIZED, Toast.LENGTH_LONG).show();
+				
+				return;
+			}
+			
+			authorized = (Boolean) result;
+			if(!authorized) {
+				Intent intent = new Intent(AddRentActivity.this, LoginActivity.class);
+				startActivity(intent);
+			}
+		}
+	}
+	
+	private class OnAddRentTaskFinishListener implements OnNetworkTaskFinishListener {
+
+		private static final String RENT_ADDED = "Chiria a fost adaugata cu success";
+		
+		private static final String RENT_NOT_ADDED = "Chiria nu a putut fi adaugata. Va rugam"
+				+ " incercati din nou.";
+
+		@Override
+		public void onTaskFinish(Object result, RetrofitResponseStatus status) {
+			if(!status.equals(RetrofitResponseStatus.OK)) {
+				NetworkErrorHandler.handleRetrofitError(status, AddRentActivity.this);
+
+				return;
+			}
+
+			if(result == null) {
+				Toast.makeText( AddRentActivity.this, RENT_NOT_ADDED, Toast.LENGTH_LONG).show();
+				
+				return;
+			}
+			
+			Toast.makeText(AddRentActivity.this, RENT_ADDED, Toast.LENGTH_LONG).show();
+		}
+	}
 }

@@ -40,7 +40,8 @@
 
         </activity>
         
-        <activity android:name="com.personal.rents.activity.RentDetailsActivity"/>
+        <activity android:name="com.personal.rents.activity.RentDetailsActivity"
+            android:launchMode="singleTop"/>
         
         <activity android:name="com.personal.rents.activity.FilterSearchActivity"/>
         
@@ -93,6 +94,16 @@
             	android:value="com.personal.rents.activity.AddRentActivity"/>
 
         </activity>
+        
+		<activity android:name="com.personal.rents.activity.RentImageFullScreenActivity"
+		    android:theme="@style/NoActionBar"/>
+		
+		<activity android:name="com.personal.rents.activity.RentMapActivity">
+
+             <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+            	android:value="com.personal.rents.activity.RentDetailsActivity"/>
+		</activity>
 
         <meta-data
 		    android:name="com.google.android.maps.v2.API_KEY"

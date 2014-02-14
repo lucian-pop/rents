@@ -1,5 +1,7 @@
 package com.personal.rents.model;
 
+import com.personal.rents.util.AddressBuilder;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -29,7 +31,7 @@ public class Address implements Parcelable {
 	
 	public String addressStaircase;
 	
-	public int addressFloor;
+	public Integer addressFloor;
 	
 	public String addressAp;
 	
@@ -81,7 +83,7 @@ public class Address implements Parcelable {
 		dest.writeDouble(addressLongitude);
 		dest.writeString(addressBuilding);
 		dest.writeString(addressStaircase);
-		dest.writeInt(addressFloor);
+		dest.writeInt(addressFloor != null ? addressFloor : -2);
 		dest.writeString(addressAp);
 	}
 
@@ -92,8 +94,6 @@ public class Address implements Parcelable {
 
 	@Override
 	public String toString() {
-		return addressStreetName + " " + addressStreetNo + ", " + addressNeighbourhood + ", " 
-				+ addressLocality + ", " + addressAdmAreaL1 + ", " + addressCountry + ", " 
-				+ addressLatitude + ", " + addressLongitude;
+		return AddressBuilder.buildAddressString(this);
 	}
 }

@@ -28,11 +28,15 @@ public final class ActivitiesContract {
 	
 	public static final String REQUESTED_CURRENT_LOCATION = "REQUESTED_CURRENT_LOCATION";
 	
+	public static final String RENT_ID = "RENT_ID";
+	
 	public static final String RENT = "RENT";
 	
 	public static final String NO_OF_RENTS = "NO_OF_RENTS";
 	
 	public static final String RENTS = "RENTS";
+	
+	public static final String MARKERS_RENTS = "MARKERS_RENTS";
 	
 	public static final String RENT_SEARCH = "RENT_SEARCH";
 	
@@ -48,15 +52,19 @@ public final class ActivitiesContract {
 	
 	public static final int RENTS_SEARCH_REQ_CODE = 102;
 	
-	public static final String SELECTED_PIC_POSITION = "SELECTED_PIC_POSITION";
+	public static final String SELECTED_IMG_POSITION = "SELECTED_IMG_POSITION";
 	
-	public static final String SELECTED_PIC_PATH = "SELECTED_PIC_PATH";
+	public static final String SELECTED_IMG_PATH = "SELECTED_IMG_PATH";
 	
-	public static final String SELECTED_PICS = "SELECTED_PICS";
+	public static final String SELECTED_IMAGES = "SELECTED_IMAGES";
 	
 	public static final String IMAGES_PATHS = "IMAGES_PATHS";
 	
-	public static final String PICTURE_ID = "PICTURE_ID";
+	public static final String IMAGE_URI = "IMAGE_URI";
+	
+	public static final String IMAGE_URIS = "IMAGE_URIS";
+	
+	public static final String AUTHORIZED = "AUTHORIZED";
 	
 	public static final String FROM_ACTIVITY = "FROM_ACTIVITY";
 	

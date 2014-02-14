@@ -24,5 +24,4 @@ public class AuthorizationAsyncTask extends ProgressBarFragmentAsyncTask<Account
 	protected void onPostExecute(Boolean result) {
 		progressBarFragment.taskFinished(result, taskId, status);
 	}
-
 }
