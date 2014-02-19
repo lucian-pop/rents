@@ -5,10 +5,13 @@ import java.util.ArrayList;
 import com.personal.rents.R;
 import com.personal.rents.adapter.ImageViewPagerAdapter;
 import com.personal.rents.fragment.ProgressBarFragment;
+import com.personal.rents.logic.UserAccountManager;
+import com.personal.rents.model.Account;
 import com.personal.rents.model.Rent;
 import com.personal.rents.rest.util.GoogleMapsUtil;
 import com.personal.rents.rest.util.NetworkErrorHandler;
 import com.personal.rents.rest.util.RetrofitResponseStatus;
+import com.personal.rents.task.AddRentToFavoritesAsyncTask;
 import com.personal.rents.task.GetRentAsyncTask;
 import com.personal.rents.task.listener.OnNetworkTaskFinishListener;
 import com.personal.rents.util.ActivitiesContract;
@@ -21,7 +24,6 @@ import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
 import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,15 +34,17 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class RentDetailsActivity extends ActionBarActivity {
+public class RentDetailsActivity extends BaseActivity {
 	
 	private int rentId;
 	
 	private Rent rent;
 	
+	private int fromActivity;
+	
 	private static final int MAX_NO_LINES = 2;
 	
-	private int fromActivity;
+	private boolean addToFavoritesTaskInProgress;
 	
 	private ProgressBarFragment progressBarFragment;
 
@@ -61,96 +65,14 @@ public class RentDetailsActivity extends ActionBarActivity {
 		init();
 	}
 
-	private void restoreSavedInstanceState(Bundle bundle) {
-		if(bundle == null) {
-			return;
-		}
-		
-		rentId = bundle.getInt(ActivitiesContract.RENT_ID);
-		rent = bundle.getParcelable(ActivitiesContract.RENT);
-		fromActivity = bundle.getInt(ActivitiesContract.FROM_ACTIVITY);
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-		
-		if(rent == null) {
-			setupProgressBarFragment();
-			startGetRentAsyncTask();
-		} else {
-			showRentDetails();
-		}
-	}
-
-	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-		outState.putInt(ActivitiesContract.RENT_ID, rentId);
-		outState.putParcelable(ActivitiesContract.RENT, rent);
-		outState.putInt(ActivitiesContract.FROM_ACTIVITY, fromActivity);
-		
-		super.onSaveInstanceState(outState);
-	}
-	
-	@Override
-	protected void onStop() {
-		super.onStop();
-		
-		if(progressBarFragment != null) {
-			progressBarFragment.reset();
-		}
-	}
-
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		
-		progressBarFragment = null;
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.rent_details_menu, menu);
-
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		if(item.getItemId() == android.R.id.home) {
-			Intent intent;
-			if(fromActivity == ActivitiesContract.RENTS_LIST_ACTIVITY){
-				intent = new Intent(this, RentsListActivity.class);
-			} else if(fromActivity ==  ActivitiesContract.RENTS_MAP_ACTIVITY){
-				intent = new Intent(this, RentsMapActivity.class);
-			} else {
-				intent = new Intent(this, UserAddedRentsActivity.class);
-			}
-
-			NavUtils.navigateUpTo(this, intent);
-			
-			return true;
-		} else if(item.getItemId() == R.id.add_to_favorites_action) {
-			Toast.makeText(this, "Chiria a fost salvata", Toast.LENGTH_LONG).show();
-			
-			return true;
-		} else if(item.getItemId() == R.id.user_account_action) {
-			Intent intent = new Intent(this, LoginActivity.class);
-			
-			startActivity(intent);
-			
-			return true;
-		} 
-		
-		return false;
-	}
-
 	private void init() {
 		setupActionBar();
 		
 		setupPhoneNumberTextBtn();
 		
 		setupDescSection();
+		
+		setupProgressBarFragment();
 	}
 
 	private void setupActionBar() {
@@ -224,6 +146,102 @@ public class RentDetailsActivity extends ActionBarActivity {
 			}
 		});
 	}
+
+	private void restoreSavedInstanceState(Bundle bundle) {
+		if(bundle == null) {
+			return;
+		}
+		
+		rentId = bundle.getInt(ActivitiesContract.RENT_ID);
+		rent = bundle.getParcelable(ActivitiesContract.RENT);
+		fromActivity = bundle.getInt(ActivitiesContract.FROM_ACTIVITY);
+		addToFavoritesTaskInProgress = bundle.getBoolean(ActivitiesContract.TASK_IN_PROGRESS,
+				false);
+	}
+
+	
+	@Override
+	protected void onStart() {
+		super.onStart();
+		
+		if(addToFavoritesTaskInProgress) {
+			startAddRentToFavoritesAsyncTask();
+		}
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		if(rent == null) {
+			startGetRentAsyncTask();
+		} else {
+			showRentDetails();
+		}
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		outState.putInt(ActivitiesContract.RENT_ID, rentId);
+		outState.putParcelable(ActivitiesContract.RENT, rent);
+		outState.putInt(ActivitiesContract.FROM_ACTIVITY, fromActivity);
+		outState.putBoolean(ActivitiesContract.TASK_IN_PROGRESS, addToFavoritesTaskInProgress);
+		
+		super.onSaveInstanceState(outState);
+	}
+	
+	@Override
+	protected void onStop() {
+		super.onStop();
+		
+		if(progressBarFragment != null) {
+			progressBarFragment.reset();
+		}
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		
+		progressBarFragment = null;
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.rent_details_menu, menu);
+
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if(item.getItemId() == android.R.id.home) {
+			Intent intent;
+			if(fromActivity == ActivitiesContract.RENTS_LIST_ACTIVITY){
+				intent = new Intent(this, RentsListActivity.class);
+			} else if(fromActivity ==  ActivitiesContract.RENTS_MAP_ACTIVITY){
+				intent = new Intent(this, RentsMapActivity.class);
+			} else {
+				intent = new Intent(this, UserAddedRentsActivity.class);
+			}
+
+			NavUtils.navigateUpTo(this, intent);
+			
+			return true;
+		} else if(item.getItemId() == R.id.add_to_favorites_action) {
+			startAddRentToFavoritesAsyncTask();
+			
+			return true;
+		} else if(item.getItemId() == R.id.user_account_action) {
+			Intent intent = new Intent(this, LoginActivity.class);
+			
+			startActivity(intent);
+			
+			return true;
+		} 
+		
+		return false;
+	}
 	
 	private void setupProgressBarFragment() {
 		if(progressBarFragment == null) {
@@ -244,6 +262,26 @@ public class RentDetailsActivity extends ActionBarActivity {
 		GetRentAsyncTask getRentTask = new GetRentAsyncTask();
 		progressBarFragment.setTask(getRentTask);
 		getRentTask.execute(rentId);
+	}
+	
+	private void startAddRentToFavoritesAsyncTask() {
+		progressBarFragment.cancelCurrentlyAssociatedTask();
+		progressBarFragment.show();
+		
+		Account account = UserAccountManager.getAccount(this);
+		if(account == null) {
+			Intent intent = new Intent(this, LoginActivity.class);
+			startActivity(intent);
+			finish();
+			
+			return;
+		}
+
+		AddRentToFavoritesAsyncTask addRentToFavoritesAsyncTask = new AddRentToFavoritesAsyncTask();
+		progressBarFragment.setTask(addRentToFavoritesAsyncTask);
+		progressBarFragment.setOnTaskFinishListener(new OnAddRentToFavoritesTaskFinishListener());
+		addRentToFavoritesAsyncTask.execute(rent.rentId, account);
+		addToFavoritesTaskInProgress = true;
 	}
 	
 	private void showRentDetails() {
@@ -316,6 +354,32 @@ public class RentDetailsActivity extends ActionBarActivity {
 			rent = (Rent) result;
 			
 			showRentDetails();
+		}
+	}
+	
+	private class OnAddRentToFavoritesTaskFinishListener implements OnNetworkTaskFinishListener {
+		
+		private static final String SUCCESS_MSG = "Chiria a fost salvata";
+		
+		private static final String ALREADY_ADDED_MSG = "Chiria este deja salvata";
+
+		@Override
+		public void onTaskFinish(Object result, RetrofitResponseStatus status) {
+			addToFavoritesTaskInProgress = false;
+
+			if(!status.equals(RetrofitResponseStatus.OK)) {
+				NetworkErrorHandler.handleRetrofitError(status, RentDetailsActivity.this);
+
+				return;
+			}
+			
+			Boolean added = (Boolean) result;
+			if(added) {
+				Toast.makeText(RentDetailsActivity.this, SUCCESS_MSG, Toast.LENGTH_LONG).show();
+			} else {
+				Toast.makeText(RentDetailsActivity.this, ALREADY_ADDED_MSG, Toast.LENGTH_LONG)
+					.show();
+			}
 		}
 	}
 }

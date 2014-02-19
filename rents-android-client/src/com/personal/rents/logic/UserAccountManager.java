@@ -1,7 +1,6 @@
 package com.personal.rents.logic;
 
 import android.content.Context;
-
 import com.personal.rents.model.Account;
 
 /**

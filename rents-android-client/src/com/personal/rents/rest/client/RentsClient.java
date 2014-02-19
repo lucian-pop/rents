@@ -17,6 +17,7 @@ import com.personal.rents.rest.api.IAuthorization;
 import com.personal.rents.rest.api.IChangePassword;
 import com.personal.rents.rest.api.IGetRent;
 import com.personal.rents.rest.api.IGetRents;
+import com.personal.rents.rest.api.IRentFavorites;
 import com.personal.rents.rest.api.IUserAddedRents;
 import com.personal.rents.rest.api.ILogin;
 import com.personal.rents.rest.api.IMyResource;
@@ -128,7 +129,12 @@ public class RentsClient {
 	}
 	
 	public static int deleteUserAddedRents(List<Integer> rentIds, int accountId, String tokenKey) {
-		return restAdapter.create(IUserAddedRents.class).deleteUserAddedRents(rentIds,
+		return restAdapter.create(IUserAddedRents.class).deleteUserAddedRents(rentIds, 
+				Integer.toString(accountId), tokenKey);
+	}
+	
+	public static boolean addRentToFavorites(int rentId, int accountId, String tokenKey) {
+		return restAdapter.create(IRentFavorites.class).addRentToFavorites(rentId,
 				Integer.toString(accountId), tokenKey);
 	}
 }

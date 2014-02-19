@@ -14,10 +14,10 @@ public class AccountActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		verifyAccount();
+		verifyCredentials();
 	}
-
-	private void verifyAccount() {
+	
+	private void verifyCredentials() {
 		account = UserAccountManager.getAccount(this);
 		if(account == null) {
 			Intent intent = new Intent(this, LoginActivity.class);
