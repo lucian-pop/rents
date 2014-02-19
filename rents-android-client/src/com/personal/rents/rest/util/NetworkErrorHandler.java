@@ -1,8 +1,11 @@
 package com.personal.rents.rest.util;
 
+import com.personal.rents.activity.LoginActivity;
 import com.personal.rents.util.ConnectionDetector;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.widget.Toast;
 
 public final class NetworkErrorHandler {
@@ -25,6 +28,13 @@ public final class NetworkErrorHandler {
 					Toast.makeText(context, NETWORK_UNREACHABLE_ERROR_MSG,Toast.LENGTH_LONG).show();
 				}
 	
+				break;
+			
+			case UNAUTHORIZED_ERROR:
+				Activity activity = (Activity) context;
+				Intent intent = new Intent(activity, LoginActivity.class);
+				activity.startActivity(intent);
+				
 				break;
 
 			case UKNOWN_ERROR:

@@ -17,14 +17,16 @@ import com.personal.rents.rest.api.IAuthorization;
 import com.personal.rents.rest.api.IChangePassword;
 import com.personal.rents.rest.api.IGetRent;
 import com.personal.rents.rest.api.IGetRents;
+import com.personal.rents.rest.api.IUserAddedRents;
 import com.personal.rents.rest.api.ILogin;
 import com.personal.rents.rest.api.IMyResource;
 import com.personal.rents.rest.api.ISearchRents;
 import com.personal.rents.rest.api.ISignup;
 import com.personal.rents.rest.api.IUploadImage;
-import com.personal.rents.rest.util.WebserviceResponseStatus;
+import com.personal.rents.rest.error.ResponseErrorHandler;
 import com.personal.rents.util.DateUtil;
 import com.personal.rents.util.GeneralConstants;
+import com.personal.rents.webservice.response.WebserviceResponseStatus;
 
 public class RentsClient {
 	
@@ -33,7 +35,8 @@ public class RentsClient {
 	private static final RestAdapter restAdapter;
 
 	static {
-		restAdapter = new RestAdapter.Builder().setServer(BASE_URL).build();
+		restAdapter = new RestAdapter.Builder().setServer(BASE_URL)
+				.setErrorHandler(new ResponseErrorHandler()).build();
 	}
 	
 	public static String getResource() {
@@ -73,19 +76,17 @@ public class RentsClient {
 	}
 	
 	public static String uploadImage(byte[] image, String filename, String accountId, 
-			String datetime) {
+			String datetime, String tokenKey) {
 		TypedByteArray imagePart = new TypedByteArray("application/octet-stream", image);
 		String imageURI = restAdapter.create(IUploadImage.class).uploadImage(imagePart, 
-				new TypedString(filename), new TypedString(accountId), new TypedString(datetime));
-		
+				new TypedString(filename), new TypedString(accountId), new TypedString(datetime),
+				tokenKey);
 		
 		return imageURI;
 	}
 	
-	public static Rent addRent(Rent rent) {
-		rent = restAdapter.create(IAddRent.class).addRent(rent);
-
-		return rent;
+	public static Rent addRent(Rent rent, String tokenKey) {
+		return restAdapter.create(IAddRent.class).addRent(rent, tokenKey);
 	}
 
 	public static RentsCounter getRentsByMapBoundaries(double minLatitude, double maxLatitude,
@@ -112,5 +113,22 @@ public class RentsClient {
 	
 	public static Rent getDetailedRent(int rentId) {
 		return restAdapter.create(IGetRent.class).getDetailedRent(rentId);
+	}
+	
+	public static RentsCounter getUserAddedRents(int accountId, int pageSize, String tokenKey) {
+		return restAdapter.create(IUserAddedRents.class)
+				.getUserAddedRents(accountId, pageSize, tokenKey);
+	}
+	
+	public static List<Rent> getUserAddedRentsNextPage(int accountId, 
+			Date lastRentDate, int lastRentId, int pageSize, String tokenKey) {
+		return restAdapter.create(IUserAddedRents.class)
+				.getUserAddedRentsNextPage(accountId, DateUtil.standardFormat(lastRentDate),
+						lastRentId, pageSize, tokenKey);
+	}
+	
+	public static int deleteUserAddedRents(List<Integer> rentIds, int accountId, String tokenKey) {
+		return restAdapter.create(IUserAddedRents.class).deleteUserAddedRents(rentIds,
+				Integer.toString(accountId), tokenKey);
 	}
 }

@@ -46,7 +46,7 @@ public class GetRentsNextPageByMapBoundariesAsyncTask
 		List<Rent> result = null;
 		try {
 			result = RentsClient.getRentsNextPageByMapBoundaries(minLatitude, maxLatitude,
-					minLongitude, maxLongitude, lastRent.rentAddDate, lastRent.rentId, 
+					minLongitude, maxLongitude, lastRent.rentAddDate, lastRent.rentId,
 					GeneralConstants.PAGE_SIZE);
 		} catch(RetrofitError error) {
 			handleError(error);

@@ -18,5 +18,9 @@ public abstract class NetworkAsyncTask<Params, Progress, Result>
 			status = RetrofitResponseStatus.UKNOWN_ERROR;
 		}
 	}
+	
+	protected void handleUnauthorizedError() {
+		status = RetrofitResponseStatus.UNAUTHORIZED_ERROR;
+	}
 
 }

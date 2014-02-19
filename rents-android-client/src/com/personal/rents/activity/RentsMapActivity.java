@@ -559,6 +559,9 @@ public class RentsMapActivity extends LocationActivity implements OnInfoWindowCl
     
     private class OnGetRentsTaskFinishListener implements OnNetworkTaskFinishListener {
     	
+    	private static final String NO_RENTS_FOUND_MSG = 
+    			"Nu a fost gasita nici o chirie in aceasta zona.";
+    	
 		@Override
 		public void onTaskFinish(Object result, RetrofitResponseStatus status) {
 			Log.e("TEST_TAG", "************On task FINISH called**************");
@@ -569,8 +572,7 @@ public class RentsMapActivity extends LocationActivity implements OnInfoWindowCl
 			}
 			
 			if(result == null) {
-				Toast.makeText(RentsMapActivity.this, "Rents couldn't be retrieved", 
-						Toast.LENGTH_LONG).show();
+				Toast.makeText(RentsMapActivity.this, NO_RENTS_FOUND_MSG, Toast.LENGTH_LONG).show();
 				
 				return;
 			}

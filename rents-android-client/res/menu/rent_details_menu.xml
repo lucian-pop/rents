@@ -2,9 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     
-    <item android:id="@+id/search_action" 
-        android:icon="@drawable/ic_search"
-        android:title="@string/search_action_title"
+    <item android:id="@+id/add_to_favorites_action" 
+        android:icon="@drawable/ic_favorites"
+        android:title="@string/add_to_favorites_action_title"
         app:showAsAction="always"/>
     
 	<item android:id="@+id/user_account_action"

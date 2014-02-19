@@ -1,4 +1,4 @@
-package com.personal.rents.rest.util;
+package com.personal.rents.webservice.response;
 
 /**
  * Status codes that are used to construct web service responses

@@ -122,6 +122,12 @@ public class EndlessAdapter<T> extends AdapterWrapper {
 
 	    return super.getItem(position);
 	}
+	
+	public void remove(int position) {
+		items.remove(position);
+		--totalNoOfItems;
+		onDataReady();
+	}
 
 	@Override
 	public boolean areAllItemsEnabled() {

@@ -130,18 +130,17 @@ public class RentDetailsActivity extends ActionBarActivity {
 			NavUtils.navigateUpTo(this, intent);
 			
 			return true;
+		} else if(item.getItemId() == R.id.add_to_favorites_action) {
+			Toast.makeText(this, "Chiria a fost salvata", Toast.LENGTH_LONG).show();
+			
+			return true;
 		} else if(item.getItemId() == R.id.user_account_action) {
 			Intent intent = new Intent(this, LoginActivity.class);
 			
 			startActivity(intent);
 			
 			return true;
-		} else if(item.getItemId() == R.id.search_action) {
-			Intent intent = new Intent(this, FilterSearchActivity.class);
-			intent.putExtra(ActivitiesContract.FROM_ACTIVITY, fromActivity);
-			
-			startActivity(intent);
-		}
+		} 
 		
 		return false;
 	}

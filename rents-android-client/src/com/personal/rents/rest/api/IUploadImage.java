@@ -1,5 +1,6 @@
 package com.personal.rents.rest.api;
 
+import retrofit.http.Header;
 import retrofit.http.Multipart;
 import retrofit.http.POST;
 import retrofit.http.Part;
@@ -12,5 +13,5 @@ public interface IUploadImage {
 	@POST("/uploadimage")
 	public String uploadImage(@Part("image") TypedByteArray image, 
 			@Part("filename") TypedString filename, @Part("accountId") TypedString accountId,
-			@Part("datetime") TypedString datetime);
+			@Part("datetime") TypedString datetime, @Header("tokenKey") String tokenKey);
 }

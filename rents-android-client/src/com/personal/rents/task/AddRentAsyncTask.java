@@ -5,9 +5,10 @@ import java.util.List;
 import retrofit.RetrofitError;
 
 import com.personal.rents.logic.ImageManager;
-import com.personal.rents.logic.UserAccountManager;
+import com.personal.rents.model.Account;
 import com.personal.rents.model.Rent;
 import com.personal.rents.rest.client.RentsClient;
+import com.personal.rents.rest.error.UnauthorizedException;
 import com.personal.rents.util.GeneralConstants;
 
 import android.content.Context;
@@ -25,19 +26,24 @@ public class AddRentAsyncTask extends ProgressBarFragmentAsyncTask<Object, Void,
 	@Override
 	protected Rent doInBackground(Object... params) {
 		Rent rent = (Rent) params[0];
-		Context context = (Context) params[1];
+		Account account = (Account) params[1];
+		Context context = (Context) params[2];
 		
 		try {
 			// Upload images to server.
-			uploadImages(rent, context);
+			uploadImages(rent, account, context);
 			
 			// Send rent to server.
-			rent = RentsClient.addRent(rent);
+			rent = RentsClient.addRent(rent, account.tokenKey);
 		} catch(RetrofitError error) {
 			handleError(error);
 			
 			rent = null;
-		} 
+		} catch(UnauthorizedException unauthorizedError) {
+			handleUnauthorizedError();
+			
+			rent = null;
+		}
 		
 		return rent;
 	}
@@ -47,7 +53,7 @@ public class AddRentAsyncTask extends ProgressBarFragmentAsyncTask<Object, Void,
 		progressBarFragment.taskFinished(result, taskId, status);
 	}
 	
-	private void uploadImages(Rent rent, Context context) {
+	private void uploadImages(Rent rent, Account account, Context context) {
 		byte[] imageBytes = null;
 		String imageURI = null;
 		int i = 0;
@@ -57,8 +63,8 @@ public class AddRentAsyncTask extends ProgressBarFragmentAsyncTask<Object, Void,
 					GeneralConstants.DEST_IMG_SIZE);
 
 			imageURI = RentsClient.uploadImage(imageBytes, i + GeneralConstants.IMG_FILE_EXT, 
-					Integer.toString(UserAccountManager.getAccount(context).accountId),
-					Long.toString(rent.rentAddDate.getTime()));
+					Integer.toString(account.accountId), Long.toString(rent.rentAddDate.getTime()),
+					account.tokenKey);
 			
 			// Cancel task if an image failed to upload.
 			if(imageURI == null) {

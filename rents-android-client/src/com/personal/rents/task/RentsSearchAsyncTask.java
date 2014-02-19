@@ -38,13 +38,6 @@ public class RentsSearchAsyncTask extends ProgressBarFragmentAsyncTask<Object, V
 	}
 
 	@Override
-	protected void onCancelled(RentsCounter result) {
-		if(progressBarFragment != null) {
-			progressBarFragment.taskFinished(null, taskId, status);
-		}
-	}
-
-	@Override
 	protected void onPostExecute(RentsCounter result) {
 		if(progressBarFragment != null) {
 			progressBarFragment.taskFinished(result, taskId, status); 

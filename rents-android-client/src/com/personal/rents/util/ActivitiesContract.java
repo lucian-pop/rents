@@ -64,8 +64,6 @@ public final class ActivitiesContract {
 	
 	public static final String IMAGE_URIS = "IMAGE_URIS";
 	
-	public static final String AUTHORIZED = "AUTHORIZED";
-	
 	public static final String FROM_ACTIVITY = "FROM_ACTIVITY";
 	
 	public static final int RENTS_MAP_ACTIVITY = 0;

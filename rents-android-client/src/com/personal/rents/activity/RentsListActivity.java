@@ -56,23 +56,37 @@ public class RentsListActivity extends ActionBarActivity {
 			bundle = getIntent().getExtras();
 		}
 
-		init(bundle);
+		restoreInstanceState(bundle);
+		
+		init();
 	}
 	
-	private void init(Bundle bundle) {
-		if(bundle != null) {
-			mapCenterLatitude = bundle.getDouble(ActivitiesContract.LATITUDE);
-			mapCenterLongitude = bundle.getDouble(ActivitiesContract.LONGITUDE);
-			visibleRegion = bundle.getParcelable(ActivitiesContract.VISIBLE_REGION);		
-			totalNoOfRents = bundle.getInt(ActivitiesContract.NO_OF_RENTS);
-			startRentsSearch = bundle.getBoolean(ActivitiesContract.START_RENTS_SEARCH, false);
-			placeLatitude = bundle.getDouble(ActivitiesContract.PLACE_LATITUDE);
-			placeLongitude = bundle.getDouble(ActivitiesContract.PLACE_LONGITUDE);
-			rentSearch = bundle.getParcelable(ActivitiesContract.RENT_SEARCH);
+	private void restoreInstanceState(Bundle bundle) {
+		if(bundle == null) {
+			return;
 		}
 
+		mapCenterLatitude = bundle.getDouble(ActivitiesContract.LATITUDE);
+		mapCenterLongitude = bundle.getDouble(ActivitiesContract.LONGITUDE);
+		visibleRegion = bundle.getParcelable(ActivitiesContract.VISIBLE_REGION);		
+		totalNoOfRents = bundle.getInt(ActivitiesContract.NO_OF_RENTS);
+		startRentsSearch = bundle.getBoolean(ActivitiesContract.START_RENTS_SEARCH, false);
+		placeLatitude = bundle.getDouble(ActivitiesContract.PLACE_LATITUDE);
+		placeLongitude = bundle.getDouble(ActivitiesContract.PLACE_LONGITUDE);
+		rentSearch = bundle.getParcelable(ActivitiesContract.RENT_SEARCH);
+	}
+	
+	private void init() {
 		setupActionBar();
-		
+		setupListFragment();
+	}
+	
+	private void setupActionBar() {
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setTitle(totalNoOfRents +  " oferte gasite");
+	}
+	
+	private void setupListFragment() {
 		RentsListFragment rentsListFragment = (RentsListFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.rents_list_fragment);
 		rentsListFragment.setLoadNextPageTask(
@@ -145,11 +159,6 @@ public class RentsListActivity extends ActionBarActivity {
 		
 		progressBarFragment = null;
 	}
-
-	private void setupActionBar() {
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		getSupportActionBar().setTitle(totalNoOfRents +  " oferte gasite");
-	}
 	
 	private void setupProgressBarFragment() {
 		if(progressBarFragment == null) {
@@ -166,7 +175,7 @@ public class RentsListActivity extends ActionBarActivity {
 		
 		RentsSearchAsyncTask rentsSearchAsyncTask = new RentsSearchAsyncTask();
 		progressBarFragment.setTask(rentsSearchAsyncTask);
-		rentsSearchAsyncTask.execute(rentSearch);
+		rentsSearchAsyncTask.execute(rentSearch, visibleRegion);
 	}
 	
 	@Override
@@ -191,8 +200,8 @@ public class RentsListActivity extends ActionBarActivity {
 			return true;
 		} else if(item.getItemId() == R.id.user_account_action) {
 			Intent intent = new Intent(this, UserAddedRentsActivity.class);
-			intent.putExtra(ActivitiesContract.FROM_ACTIVITY, 
-					ActivitiesContract.RENTS_LIST_ACTIVITY);
+			intent.putExtra(ActivitiesContract.FROM_ACTIVITY,
+					ActivitiesContract.RENTS_MAP_ACTIVITY);
 
 			startActivity(intent);
 			
@@ -208,6 +217,9 @@ public class RentsListActivity extends ActionBarActivity {
 	}
 	
 	private class OnRentsSearchTaskFinishListener implements OnNetworkTaskFinishListener {
+		
+		private static final String NO_RENTS_FOUND_MSG = 
+				"Nu am gasit chirii corespunzatoare cautarii dvs.";
 		@Override
 		public void onTaskFinish(Object result, RetrofitResponseStatus status) {
 			startRentsSearch = false;
@@ -219,9 +231,8 @@ public class RentsListActivity extends ActionBarActivity {
 			}
 
 			if(result == null) {
-				Toast.makeText(RentsListActivity.this, 
-						"Nu am gasit oferte corespunzatoare cautarii dvs.", Toast.LENGTH_LONG)
-						.show();
+				Toast.makeText(RentsListActivity.this, NO_RENTS_FOUND_MSG, Toast.LENGTH_LONG)
+					.show();
 				
 				return;
 			}
@@ -231,7 +242,7 @@ public class RentsListActivity extends ActionBarActivity {
 
 			RentsListFragment rentsListFragment = (RentsListFragment) getSupportFragmentManager()
 					.findFragmentById(R.id.rents_list_fragment);
-			rentsListFragment.renewEndlessAdapter(((RentsCounter) result).rents, totalNoOfRents,
+			rentsListFragment.setupListAdapter(((RentsCounter) result).rents, totalNoOfRents,
 					new RentsSearchNextPageAsyncTask(rentSearch));
 		}
 	}

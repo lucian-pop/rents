@@ -9,14 +9,11 @@ import com.personal.rents.adapter.SpinnerAdapterFactory;
 import com.personal.rents.adapter.ImageArrayAdapter;
 import com.personal.rents.fragment.ProgressBarFragment;
 import com.personal.rents.logic.ImageManager;
-import com.personal.rents.logic.UserAccountManager;
-import com.personal.rents.model.Account;
 import com.personal.rents.model.Address;
 import com.personal.rents.model.Rent;
 import com.personal.rents.rest.util.NetworkErrorHandler;
 import com.personal.rents.rest.util.RetrofitResponseStatus;
 import com.personal.rents.task.AddRentAsyncTask;
-import com.personal.rents.task.AuthorizationAsyncTask;
 import com.personal.rents.task.listener.OnNetworkTaskFinishListener;
 import com.personal.rents.util.ActivitiesContract;
 import com.personal.rents.util.MediaUtils;
@@ -42,7 +39,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class AddRentActivity extends BaseActivity {
+public class AddRentActivity extends AccountActivity {
 	
 	private static final int NO_OF_PICS = 5;
 
@@ -59,8 +56,6 @@ public class AddRentActivity extends BaseActivity {
 	private ArrayList<String> imagesPaths = new ArrayList<String>(NO_OF_PICS);
 	
 	private ImageArrayAdapter imageAdapter;
-	
-	private boolean authorized;
 	
 	private boolean taskInProgress;
 	
@@ -87,6 +82,67 @@ public class AddRentActivity extends BaseActivity {
 		init();
 	}
 	
+	private void init() {
+		setupActionBar();
+		
+		setupLocateRentBtn();
+		
+		setupSpinners();
+		
+		setupPicsGridView();
+	}
+
+	private void setupActionBar() {
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setTitle("Adaugare chirie");
+		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+	}
+
+	private void setupLocateRentBtn() {
+		TextView locateRentBtn = (TextView) findViewById(R.id.locate_rent_btn);
+		if(address != null) {
+			locateRentBtn.setText(address.toString());
+		}
+	}
+
+	private void setupSpinners() {
+		Spinner partiesSpinner = (Spinner) findViewById(R.id.rent_party);
+		ArrayAdapter<CharSequence> spinnerAdapter = SpinnerAdapterFactory.createSpinnerAdapter(this, 
+				R.array.rent_parties);
+		partiesSpinner.setAdapter(spinnerAdapter);
+		
+		Spinner typesSpinner = (Spinner) findViewById(R.id.rent_type);
+		spinnerAdapter = SpinnerAdapterFactory.createSpinnerAdapter(this, R.array.rent_types);
+		typesSpinner.setAdapter(spinnerAdapter);
+		
+		Spinner structSpinner = (Spinner) findViewById(R.id.rent_structure);
+		spinnerAdapter = SpinnerAdapterFactory.createSpinnerAdapter(this,
+				R.array.rent_architectures);
+		structSpinner.setAdapter(spinnerAdapter);
+		
+		Spinner ageSpinner = (Spinner) findViewById(R.id.rent_age);
+		spinnerAdapter = SpinnerAdapterFactory.createSpinnerAdapter(this, R.array.rent_ages);
+		ageSpinner.setAdapter(spinnerAdapter);
+	}
+	
+	private void setupPicsGridView() {
+		DynamicGridView picsGridView = (DynamicGridView) findViewById(R.id.rent_pics);
+		imageAdapter = new ImageArrayAdapter(this, R.layout.add_picture_layout, pics, NO_OF_PICS);
+		picsGridView.setAdapter(imageAdapter);
+		
+		picsGridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, 
+					long id) {
+				selectedPicPosition = position;
+				
+				return false;
+			}
+		});
+		
+		registerForContextMenu(picsGridView);
+	}
+	
 	private void restoreInstanceState(Bundle bundle) {
 		if(bundle == null) {
 			return;
@@ -97,7 +153,6 @@ public class AddRentActivity extends BaseActivity {
 		selectedPicPath = bundle.getString(ActivitiesContract.SELECTED_IMG_PATH);
 		pics = bundle.getParcelableArrayList(ActivitiesContract.SELECTED_IMAGES);
 		imagesPaths = bundle.getStringArrayList(ActivitiesContract.IMAGES_PATHS);
-		authorized = bundle.getBoolean(ActivitiesContract.AUTHORIZED, false);
 		taskInProgress = bundle.getBoolean(ActivitiesContract.TASK_IN_PROGRESS, false);
 		
 		if(imagesPaths == null) {
@@ -114,15 +169,6 @@ public class AddRentActivity extends BaseActivity {
 			progressBarFragment.setOnTaskFinishListener(new OnAddRentTaskFinishListener());
 		}
 	}
-	
-	@Override
-	protected void onResume() {
-		super.onResume();
-		
-		if(!authorized) {
-			authorize();
-		}
-	}
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
@@ -132,7 +178,6 @@ public class AddRentActivity extends BaseActivity {
 		outState.putParcelableArrayList(ActivitiesContract.SELECTED_IMAGES,
 				imageAdapter.getImages());
 		outState.putStringArrayList(ActivitiesContract.IMAGES_PATHS, imagesPaths);
-		outState.putBoolean(ActivitiesContract.AUTHORIZED, authorized);
 		
 		taskInProgress = progressBarFragment.getVisibility() == View.VISIBLE;
 		outState.putBoolean(ActivitiesContract.TASK_IN_PROGRESS, taskInProgress);
@@ -145,6 +190,7 @@ public class AddRentActivity extends BaseActivity {
 		super.onStop();
 		Log.e("TEST_TAG", "*********On STOP called**************");
 		
+		// Test receiving call while adding rent.
 		if(progressBarFragment != null) {
 			progressBarFragment.resetTaskFinishListener();
 		}
@@ -227,86 +273,11 @@ public class AddRentActivity extends BaseActivity {
 	}
 	
 	public void onAddRentBtnClick(View view) {
-		addRent();
-	}
-	
-	private void authorize() {
-		Account account = UserAccountManager.getAccount(this);
-		if(account == null) {
-			Intent intent = new Intent(this, LoginActivity.class);
-			startActivity(intent);
-			
-			return;
-		}
-
-		progressBarFragment.cancelCurrentlyAssociatedTask();
-		progressBarFragment.show();
+		updateAddress();
+		Rent rent = initRent();
 		
-		AuthorizationAsyncTask authorizationTask = new AuthorizationAsyncTask();
-		progressBarFragment.setOnTaskFinishListener(new OnAuthorizationTaskFinishListener());
-		progressBarFragment.setTask(authorizationTask);
-		 authorizationTask.execute(account);
-	}
-	
-	private void init() {
-		setupActionBar();
-		
-		setupLocateRentBtn();
-		
-		setupSpinners();
-		
-		setupPicsGridView();
-	}
-
-	private void setupActionBar() {
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		getSupportActionBar().setTitle("Adaugare chirie");
-		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-	}
-
-	private void setupLocateRentBtn() {
-		TextView locateRentBtn = (TextView) findViewById(R.id.locate_rent_btn);
-		if(address != null) {
-			locateRentBtn.setText(address.toString());
-		}
-	}
-
-	private void setupSpinners() {
-		Spinner partiesSpinner = (Spinner) findViewById(R.id.rent_party);
-		ArrayAdapter<CharSequence> spinnerAdapter = SpinnerAdapterFactory.createSpinnerAdapter(this, 
-				R.array.rent_parties);
-		partiesSpinner.setAdapter(spinnerAdapter);
-		
-		Spinner typesSpinner = (Spinner) findViewById(R.id.rent_type);
-		spinnerAdapter = SpinnerAdapterFactory.createSpinnerAdapter(this, R.array.rent_types);
-		typesSpinner.setAdapter(spinnerAdapter);
-		
-		Spinner structSpinner = (Spinner) findViewById(R.id.rent_structure);
-		spinnerAdapter = SpinnerAdapterFactory.createSpinnerAdapter(this,
-				R.array.rent_architectures);
-		structSpinner.setAdapter(spinnerAdapter);
-		
-		Spinner ageSpinner = (Spinner) findViewById(R.id.rent_age);
-		spinnerAdapter = SpinnerAdapterFactory.createSpinnerAdapter(this, R.array.rent_ages);
-		ageSpinner.setAdapter(spinnerAdapter);
-	}
-	
-	private void setupPicsGridView() {
-		DynamicGridView picsGridView = (DynamicGridView) findViewById(R.id.rent_pics);
-		imageAdapter = new ImageArrayAdapter(this, R.layout.add_picture_layout, pics, NO_OF_PICS);
-		picsGridView.setAdapter(imageAdapter);
-		
-		picsGridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-			@Override
-			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, 
-					long id) {
-				selectedPicPosition = position;
-				
-				return false;
-			}
-		});
-		
-		registerForContextMenu(picsGridView);
+		setupProgressBarFragment();
+		startAddRentAsyncTask(rent);
 	}
 	
 	private void setupProgressBarFragment() {
@@ -314,8 +285,6 @@ public class AddRentActivity extends BaseActivity {
 			progressBarFragment = (ProgressBarFragment) getSupportFragmentManager()
 					.findFragmentById(R.id.progressBarFragment);
 		}
-
-		//progressBarFragment.setOnTaskFinishListener(new OnRentsSearchTaskFinishListener());
 	}
 
 	private void initiatePicBrowsing() {
@@ -342,14 +311,6 @@ public class AddRentActivity extends BaseActivity {
 		imageAdapter.replaceImage(null, selectedPicPosition);
 	}
 	
-	private void addRent() {
-		updateAddress();
-		Rent rent = initRent();
-		
-		setupProgressBarFragment();
-		startAddRentAsyncTask(rent);
-	}
-	
 	private void startAddRentAsyncTask(Rent rent) {
 		progressBarFragment.cancelCurrentlyAssociatedTask();
 		progressBarFragment.show();
@@ -357,7 +318,7 @@ public class AddRentActivity extends BaseActivity {
 		AddRentAsyncTask addRentTask = new AddRentAsyncTask(imagesPaths);
 		progressBarFragment.setTask(addRentTask);
 		progressBarFragment.setOnTaskFinishListener(new OnAddRentTaskFinishListener());
-		addRentTask.execute(rent, this.getApplicationContext());
+		addRentTask.execute(rent, account, this.getApplicationContext());
 	}
 	
 	private Rent initRent() {
@@ -374,7 +335,7 @@ public class AddRentActivity extends BaseActivity {
 		EditText phone = (EditText) findViewById(R.id.rent_phone);
 		
 		Rent rent = new Rent();
-		rent.accountId = UserAccountManager.getAccount(this).accountId;
+		rent.accountId = account.accountId;
 		rent.address = address;
 		rent.rentPrice = Integer.parseInt(rentPrice.getText().toString());
 		rent.rentSurface = Integer.parseInt(rentSurface.getText().toString());
@@ -420,32 +381,6 @@ public class AddRentActivity extends BaseActivity {
 		}
 
 		address.addressCountry = getString(R.string.country);
-	}
-	
-	private class OnAuthorizationTaskFinishListener implements OnNetworkTaskFinishListener {
-		
-		private static final String NOT_AUTHORIZED = "Operatia nu a putut fi autorizata.";
-
-		@Override
-		public void onTaskFinish(Object result, RetrofitResponseStatus status) {
-			if(!status.equals(RetrofitResponseStatus.OK)) {
-				NetworkErrorHandler.handleRetrofitError(status, AddRentActivity.this);
-
-				return;
-			}
-
-			if(result == null) {
-				Toast.makeText( AddRentActivity.this, NOT_AUTHORIZED, Toast.LENGTH_LONG).show();
-				
-				return;
-			}
-			
-			authorized = (Boolean) result;
-			if(!authorized) {
-				Intent intent = new Intent(AddRentActivity.this, LoginActivity.class);
-				startActivity(intent);
-			}
-		}
 	}
 	
 	private class OnAddRentTaskFinishListener implements OnNetworkTaskFinishListener {

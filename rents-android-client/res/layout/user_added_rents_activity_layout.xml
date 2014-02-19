@@ -1,12 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
-   	<LinearLayout android:id="@+id/delete_confirmation_btns"
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+	<FrameLayout android:id="@+id/user_added_rents"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
-	    android:layout_alignParentBottom="true"
+	    android:layout_gravity="fill_vertical">
+	    
+	    <fragment android:id="@+id/rents_list_fragment"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			class="com.personal.rents.fragment.SwipeDismissRentsListFragment"/>
+	    
+		<ImageButton android:id="@+id/add_rent_btn"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_marginTop="10dp"
+		    android:layout_marginRight="10dp"
+		    android:layout_gravity="right"
+		    android:background="@drawable/app_add_rent_btn_selector"
+		    android:onClick="onAddRentBtnClick"/>
+    </FrameLayout>
+
+	<fragment android:id="@+id/progressBarFragment"
+   		android:layout_width="wrap_content"
+   		android:layout_height="wrap_content"
+   		android:layout_gravity="center"
+   		class="com.personal.rents.fragment.ProgressBarFragment"/>
+
+    <LinearLayout android:id="@+id/delete_confirmation_btns"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_gravity="bottom"
 	    android:orientation="horizontal"
 	    android:visibility="gone">
 	    
@@ -21,8 +44,7 @@
 	        android:background="@color/blue"
 	        android:textAppearance="?android:attr/textAppearanceMedium"
 	        android:textStyle="bold"
-            android:textColor="@color/white"
-	        android:text="3"/>
+            android:textColor="@color/white"/>
 	    
 	    <Button android:id="@+id/undo_del_btn"
 	        android:layout_width="0dp"
@@ -47,25 +69,4 @@
 	        android:text="Salveaza"
 	        android:onClick="onConfirmDelBtnClick"/>
 	</LinearLayout>
-    
-	<FrameLayout android:id="@+id/user_added_rents"
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_alignParentTop="true"
-	    android:layout_above="@id/delete_confirmation_btns">
-	
-		<fragment android:id="@+id/rents_list_fragment"
-		    android:layout_width="match_parent"
-		    android:layout_height="wrap_content"
-		    class="com.personal.rents.fragment.SwipeDismissRentsListFragment"/>
-		
-		<ImageButton android:id="@+id/share_app_btn"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:layout_marginTop="10dp"
-		    android:layout_marginRight="10dp"
-		    android:layout_gravity="right"
-		    android:background="@drawable/app_add_rent_btn_selector"
-		    android:onClick="onAddRentBtnClick"/>
-	</FrameLayout>
-</RelativeLayout>
+</merge>
