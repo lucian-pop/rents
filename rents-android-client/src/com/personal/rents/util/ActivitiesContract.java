@@ -66,11 +66,5 @@ public final class ActivitiesContract {
 	
 	public static final String FROM_ACTIVITY = "FROM_ACTIVITY";
 	
-	public static final int RENTS_MAP_ACTIVITY = 0;
-	
-	public static final int RENTS_LIST_ACTIVITY = 1;
-	
-	public static final int USER_ACCOUNT_ACTIVITY = 2;
-	
 	private ActivitiesContract() {}
 }

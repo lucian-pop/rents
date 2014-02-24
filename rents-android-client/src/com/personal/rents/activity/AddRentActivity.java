@@ -335,16 +335,15 @@ public class AddRentActivity extends AccountActivity {
 		EditText phone = (EditText) findViewById(R.id.rent_phone);
 		
 		Rent rent = new Rent();
-		rent.accountId = account.accountId;
 		rent.address = address;
 		rent.rentPrice = Integer.parseInt(rentPrice.getText().toString());
 		rent.rentSurface = Integer.parseInt(rentSurface.getText().toString());
 		rent.rentRooms = Short.parseShort(rentRooms.getText().toString());
 		rent.rentBaths = Short.parseShort(rentBaths.getText().toString());
-		rent.rentParty = (byte) rentParties.getSelectedItemPosition();
-		rent.rentType = (byte) rentTypes.getSelectedItemPosition();
-		rent.rentArchitecture = (byte) rentStruct.getSelectedItemPosition();
-		rent.rentAge = rentAge.getSelectedItemPosition();
+		rent.rentParty = (byte) (rentParties.getSelectedItemPosition() - 1);
+		rent.rentType = (byte) (rentTypes.getSelectedItemPosition() - 1);
+		rent.rentArchitecture = (byte) (rentStruct.getSelectedItemPosition() - 1);
+		rent.rentAge = rentAge.getSelectedItemPosition() - 1;
 
 		if(!rentDesc.getText().toString().equals("")) {
 			rent.rentDescription = rentDesc.getText().toString();

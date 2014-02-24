@@ -9,37 +9,40 @@ import android.widget.ListView;
 import com.personal.rents.R;
 import com.personal.rents.activity.RentDetailsActivity;
 import com.personal.rents.adapter.EndlessAdapter;
-import com.personal.rents.adapter.RentsListAdapter;
+import com.personal.rents.adapter.RentsViewsListAdapter;
 import com.personal.rents.model.Rent;
+import com.personal.rents.model.view.RentFavoriteView;
 import com.personal.rents.task.LoadNextPageAsyncTask;
 import com.personal.rents.util.ActivitiesContract;
 
-public class SwipeDismissRentsListFragment extends SwipeDismissRentsListFragmentTemplate<Rent>{
+public class SwipeDismissRentFavoriteViewsListFragment 
+		extends SwipeDismissRentsListFragmentTemplate<RentFavoriteView> {
 
 	@Override
-	protected void setupEndlessAdapter(List<Rent> items, int totalNoOfItems,
-			LoadNextPageAsyncTask<Void, List<Rent>, Rent> loadNextPageTask,
+	protected void setupEndlessAdapter(List<RentFavoriteView> items, int totalNoOfItems,
+			LoadNextPageAsyncTask<Void, List<RentFavoriteView>, RentFavoriteView> loadNextPageTask,
 			int listItemLayoutId) {
-		endlessAdapter = new EndlessAdapter<Rent>(getActivity(), new RentsListAdapter(getActivity(),
-				listItemLayoutId, items), R.layout.rents_list_footer_layout,
-				R.layout.rents_list_error_footer_layout, items, totalNoOfItems, loadNextPageTask);
+		endlessAdapter = new EndlessAdapter<RentFavoriteView>(getActivity(), 
+				new RentsViewsListAdapter<RentFavoriteView>(getActivity(), listItemLayoutId, items),
+				R.layout.rents_list_footer_layout, R.layout.rents_list_error_footer_layout, items,
+				totalNoOfItems, loadNextPageTask);
 
 		setListAdapter(endlessAdapter);
 	}
-	
+
 	@Override
 	protected Rent getRentFromAdapter(int position) {
-		return (Rent) endlessAdapter.getItem(position);
+		RentFavoriteView rentFavoriteView = (RentFavoriteView) endlessAdapter.getItem(position);
+		return rentFavoriteView.rent;
 	}
 	
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		Intent intent = new Intent(getActivity(), RentDetailsActivity.class);
 		intent.putExtra(ActivitiesContract.RENT_ID, 
-				((Rent) endlessAdapter.getItem(position)).rentId);
+				((RentFavoriteView) endlessAdapter.getItem(position)).rent.rentId);
 		intent.putExtra(ActivitiesContract.FROM_ACTIVITY, getActivity().getClass().getSimpleName());
 		
 		startActivity(intent);
 	}
-
 }

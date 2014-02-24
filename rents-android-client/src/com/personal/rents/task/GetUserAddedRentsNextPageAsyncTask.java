@@ -35,8 +35,8 @@ public class GetUserAddedRentsNextPageAsyncTask
 		Rent lastRent = (Rent) params[0];
 		List<Rent> result = null;
 		try {
-			result = RentsClient.getUserAddedRentsNextPage(account.accountId, lastRent.rentAddDate,
-					lastRent.rentId, GeneralConstants.PAGE_SIZE, account.tokenKey);
+			result = RentsClient.getUserAddedRentsNextPage(lastRent.rentAddDate, lastRent.rentId,
+					GeneralConstants.PAGE_SIZE, account.tokenKey);
 		} catch(RetrofitError error) {
 			handleError(error);
 		} catch(UnauthorizedException unauthorizedError) {

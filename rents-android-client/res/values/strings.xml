@@ -31,7 +31,7 @@
 	<string name="enable_nt_location_service_dialog_title">Localizarea prin WIFI/Reteaua mobila este dezactivata</string>
 	<string name="enable_nt_location_service_dialog_message">Pentru o localizare mai sigura, va rugam activati.</string>
 	
-	<!-- User added rents activity menu -->
+	<!-- User rents activity menu -->
 	<string name="add_rent_action_title">Adauga chirie</string>
 	<string name="edit_account_action_title">Editeaza cont</string>
 	
@@ -97,5 +97,8 @@
         <item>3 bai</item>
         <item>4+ bai</item>
     </string-array>
+    
+	<string name="rent_status_available">Disponibila</string>
+	<string name="rent_status_unavailable">Indisponibila</string>
 
 </resources>

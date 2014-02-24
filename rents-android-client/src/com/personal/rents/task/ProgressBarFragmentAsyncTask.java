@@ -1,5 +1,7 @@
 package com.personal.rents.task;
 
+import android.util.Log;
+
 import com.personal.rents.fragment.ProgressBarFragment;
 
 public abstract class ProgressBarFragmentAsyncTask<Params, Progress, Result> 
@@ -17,4 +19,18 @@ public abstract class ProgressBarFragmentAsyncTask<Params, Progress, Result>
 		this.progressBarFragment = progressBarFragment;
 	}
 
+	@Override
+	protected void onCancelled(Result result) {
+		Log.e("TEST_TAG", "*********On CANCELED Task called");
+		if(progressBarFragment != null) {
+			progressBarFragment.taskFinished(null, taskId, status); 
+		}
+	}
+	
+	@Override
+	protected void onPostExecute(Result result) {
+		if(progressBarFragment != null) {
+			progressBarFragment.taskFinished(result, taskId, status); 
+		}
+	}
 }

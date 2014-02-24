@@ -7,6 +7,7 @@ import com.personal.rents.task.listener.OnNetworkTaskFinishListener;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -106,9 +107,11 @@ public class ProgressBarFragment extends Fragment {
     		RetrofitResponseStatus status) {
     	// ProgressBarFragment is associated with a different task.
     	if(taskId != currentTaskId) {
+    		Log.e("TEST_TAG", "***********DIFFERENT Task ids");
     		return;
     	}
 
+    	Log.e("TEST_TAG", "***********SAME Task ids");
         if (isResumed()) {
             dismiss();
         }

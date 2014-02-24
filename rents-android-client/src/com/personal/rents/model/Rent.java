@@ -106,5 +106,4 @@ public class Rent implements Parcelable {
 	public int describeContents() {
 		return this.hashCode();
 	}
-
 }

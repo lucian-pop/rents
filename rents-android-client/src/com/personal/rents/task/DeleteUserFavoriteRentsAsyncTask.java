@@ -8,12 +8,12 @@ import com.personal.rents.model.Account;
 import com.personal.rents.rest.client.RentsClient;
 import com.personal.rents.rest.error.UnauthorizedException;
 
-public class DeleteUserAddedRentsAsyncTask 
+public class DeleteUserFavoriteRentsAsyncTask 
 		extends ProgressBarFragmentAsyncTask<Object, Void, Integer> {
 	
 	private List<Integer> rentIds;
 	
-	public DeleteUserAddedRentsAsyncTask(List<Integer> rentIds) {
+	public DeleteUserFavoriteRentsAsyncTask(List<Integer> rentIds) {
 		this.rentIds = rentIds;
 	}
 
@@ -21,15 +21,15 @@ public class DeleteUserAddedRentsAsyncTask
 	protected Integer doInBackground(Object... params) {
 		Account account  = (Account) params[0];
 
-		int noOfDeletedRents = 0;
+		int deletesCount = 0;
 		try {
-			noOfDeletedRents = RentsClient.deleteUserAddedRents(rentIds, account.tokenKey);
+			deletesCount = RentsClient.deleteUserFavoriteRents(rentIds, account.tokenKey);
 		} catch(RetrofitError error) {
 			handleError(error);
 		} catch (UnauthorizedException unauthorizedError) {
 			handleUnauthorizedError();
-		}
+		} 
 
-		return noOfDeletedRents;
+		return deletesCount;
 	}
 }

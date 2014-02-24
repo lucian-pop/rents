@@ -9,8 +9,6 @@ public class UserAccountPreferencesManager {
 	
 	private static final String PREFS_FILE = "com.personal.rents.account.prefs";
 	
-	protected static final String ID = "ID";
-	
 	protected static final String ACCOUNT_TYPE = "accountType";
 	
 	protected static final String EMAIL = "email";
@@ -25,7 +23,6 @@ public class UserAccountPreferencesManager {
 	
 	public static void addAccount(Account account, Context context) {
 		SharedPreferences.Editor prefsEditor = getAccountPrefs(context).edit();
-		prefsEditor.putInt(ID, account.accountId);
 		prefsEditor.putString(TOKEN_KEY, account.tokenKey);
 		prefsEditor.commit();
 	}
@@ -38,7 +35,6 @@ public class UserAccountPreferencesManager {
 		}
 		
 		Account account = new Account();
-		account.accountId = prefs.getInt(ID, -1);
 		account.tokenKey = prefs.getString(TOKEN_KEY, null);
 		
 		return account;

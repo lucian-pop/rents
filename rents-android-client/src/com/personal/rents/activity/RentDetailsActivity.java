@@ -40,7 +40,7 @@ public class RentDetailsActivity extends BaseActivity {
 	
 	private Rent rent;
 	
-	private int fromActivity;
+	private String fromActivity;
 	
 	private static final int MAX_NO_LINES = 2;
 	
@@ -154,7 +154,7 @@ public class RentDetailsActivity extends BaseActivity {
 		
 		rentId = bundle.getInt(ActivitiesContract.RENT_ID);
 		rent = bundle.getParcelable(ActivitiesContract.RENT);
-		fromActivity = bundle.getInt(ActivitiesContract.FROM_ACTIVITY);
+		fromActivity = bundle.getString(ActivitiesContract.FROM_ACTIVITY);
 		addToFavoritesTaskInProgress = bundle.getBoolean(ActivitiesContract.TASK_IN_PROGRESS,
 				false);
 	}
@@ -184,7 +184,7 @@ public class RentDetailsActivity extends BaseActivity {
 	protected void onSaveInstanceState(Bundle outState) {
 		outState.putInt(ActivitiesContract.RENT_ID, rentId);
 		outState.putParcelable(ActivitiesContract.RENT, rent);
-		outState.putInt(ActivitiesContract.FROM_ACTIVITY, fromActivity);
+		outState.putString(ActivitiesContract.FROM_ACTIVITY, fromActivity);
 		outState.putBoolean(ActivitiesContract.TASK_IN_PROGRESS, addToFavoritesTaskInProgress);
 		
 		super.onSaveInstanceState(outState);
@@ -217,12 +217,14 @@ public class RentDetailsActivity extends BaseActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if(item.getItemId() == android.R.id.home) {
 			Intent intent;
-			if(fromActivity == ActivitiesContract.RENTS_LIST_ACTIVITY){
+			if(fromActivity.equals(RentsListActivity.class.getSimpleName())){
 				intent = new Intent(this, RentsListActivity.class);
-			} else if(fromActivity ==  ActivitiesContract.RENTS_MAP_ACTIVITY){
+			} else if(fromActivity.equals(RentsMapActivity.class.getSimpleName())){
 				intent = new Intent(this, RentsMapActivity.class);
-			} else {
+			} else if(fromActivity.equals(UserAddedRentsActivity.class.getSimpleName())){
 				intent = new Intent(this, UserAddedRentsActivity.class);
+			} else {
+				intent = new Intent(this, UserFavoriteRentsActivity.class);
 			}
 
 			NavUtils.navigateUpTo(this, intent);

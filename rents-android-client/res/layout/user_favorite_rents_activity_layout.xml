@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+	    
+    <fragment android:id="@+id/rents_list_fragment"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_gravity="fill_vertical"
+		class="com.personal.rents.fragment.SwipeDismissRentFavoriteViewsListFragment"/>
+
+	<fragment android:id="@+id/progressBarFragment"
+   		android:layout_width="wrap_content"
+   		android:layout_height="wrap_content"
+   		android:layout_gravity="center"
+   		class="com.personal.rents.fragment.ProgressBarFragment"/>
+
+    <LinearLayout android:id="@+id/delete_confirmation_btns"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_gravity="bottom"
+	    android:orientation="horizontal"
+	    android:visibility="gone">
+	    
+	    <TextView android:id="@+id/no_of_del_rents"
+	        android:layout_width="wrap_content"
+	        android:layout_height="48dp"
+	        android:layout_marginRight="1dp"
+	        android:layout_gravity="center_vertical"
+	        android:gravity="center"
+	        android:paddingLeft="10dp"
+	        android:paddingRight="10dp"
+	        android:background="@color/blue"
+	        android:textAppearance="?android:attr/textAppearanceMedium"
+	        android:textStyle="bold"
+            android:textColor="@color/white"/>
+	    
+	    <Button android:id="@+id/undo_del_btn"
+	        android:layout_width="0dp"
+	        android:layout_height="48dp"
+	        android:layout_weight="1"
+	        android:background="@drawable/app_blue_btn_selector"
+	        android:textAppearance="?android:attr/textAppearanceMedium"
+	        android:textStyle="bold"
+            android:textColor="@color/white"
+	        android:text="@string/reset_btn_text"
+	        android:onClick="onUndoDelBtnClick"/>
+	    
+	     <Button android:id="@+id/confirm_del_btn"
+	        android:layout_width="0dp"
+	        android:layout_height="48dp"
+	        android:layout_weight="1"
+	        android:layout_marginLeft="1dp"
+	        android:background="@drawable/app_blue_btn_selector"
+	        android:textAppearance="?android:attr/textAppearanceMedium"
+	        android:textStyle="bold"
+            android:textColor="@color/white"
+	        android:text="Salveaza"
+	        android:onClick="onConfirmDelBtnClick"/>
+	</LinearLayout>
+</merge>

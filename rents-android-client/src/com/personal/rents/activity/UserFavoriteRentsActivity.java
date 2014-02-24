@@ -1,29 +1,28 @@
 package com.personal.rents.activity;
 
 import com.personal.rents.R;
-import com.personal.rents.dto.RentsCounter;
-import com.personal.rents.fragment.SwipeDismissRentsListFragment;
+import com.personal.rents.dto.RentFavoriteViewsCounter;
+import com.personal.rents.fragment.SwipeDismissRentFavoriteViewsListFragment;
 import com.personal.rents.rest.util.NetworkErrorHandler;
 import com.personal.rents.rest.util.RetrofitResponseStatus;
-import com.personal.rents.task.DeleteUserAddedRentsAsyncTask;
-import com.personal.rents.task.GetUserAddedRentsAsyncTask;
-import com.personal.rents.task.GetUserAddedRentsNextPageAsyncTask;
+import com.personal.rents.task.DeleteUserFavoriteRentsAsyncTask;
+import com.personal.rents.task.GetUserFavoriteRentsAsyncTask;
+import com.personal.rents.task.GetUserFavoriteRentsNextPageAsyncTask;
 import com.personal.rents.task.listener.OnNetworkTaskFinishListener;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Toast;
 
-public class UserAddedRentsActivity extends UserRentsActivity {
+public class UserFavoriteRentsActivity extends UserRentsActivity {
 	
-	private SwipeDismissRentsListFragment rentsListFragment;
-
+	private SwipeDismissRentFavoriteViewsListFragment rentsListFragment;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.user_added_rents_activity_layout);
+		setContentView(R.layout.user_favorite_rents_activity_layout);
 		
 		Bundle bundle;
 		if(savedInstanceState != null) {
@@ -39,31 +38,31 @@ public class UserAddedRentsActivity extends UserRentsActivity {
 	
 	@Override
 	protected void setupListFragment() {
-		rentsListFragment = (SwipeDismissRentsListFragment) getSupportFragmentManager()
+		rentsListFragment = (SwipeDismissRentFavoriteViewsListFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.rents_list_fragment);
 		rentsListFragment.setOnListViewItemDismissListener(new OnListItemDismissListenerImpl());
 	}
-
+	
 	@Override
 	protected void onResume() {
 		super.onResume();
-
+		
 		if(rentsListFragment.getItems().size() == 0) {
 			setupProgressBarFragment();
-			startGetUserAddedRentsAsyncTask();
+			startGetUserFavoriteRentsAsyncTask();
 		}
 	}
-
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.user_added_rents_menu, menu);
+		getMenuInflater().inflate(R.menu.user_favorite_rents_menu, menu);
 
 		return true;
 	}
-	
+
 	public void onConfirmDelBtnClick(View view) {
 		setupProgressBarFragment();
-		startDeleteUserAddedRentsAsyncTask();
+		startDeleteUserFavoriteRentsAsyncTask();
 	}
 	
 	@Override
@@ -76,75 +75,75 @@ public class UserAddedRentsActivity extends UserRentsActivity {
 	public void onRetryLoadNextPageBtnClick(View view) {
 		rentsListFragment.retryLoadingNextPage();
 	}
-	
-	public void onAddRentBtnClick(View view) {
-		Intent intent = new Intent(this, AddRentActivity.class);
-		startActivity(intent);
-	}
-	
-	private void startGetUserAddedRentsAsyncTask() {
+
+	private void startGetUserFavoriteRentsAsyncTask() {
 		progressBarFragment.cancelCurrentlyAssociatedTask();
 		progressBarFragment.show();
 		
-		GetUserAddedRentsAsyncTask getUserAddedRentsTask = new GetUserAddedRentsAsyncTask();
-		progressBarFragment.setTask(getUserAddedRentsTask);
-		progressBarFragment.setOnTaskFinishListener(new OnGetUserAddedRentsTaskFinishListener());
-		getUserAddedRentsTask.execute(account);
+		GetUserFavoriteRentsAsyncTask getUserFavoriteRentsTask 
+			= new GetUserFavoriteRentsAsyncTask();
+		progressBarFragment.setTask(getUserFavoriteRentsTask);
+		progressBarFragment.setOnTaskFinishListener(new OnGetUserFavoriteRentsTaskFinishListener());
+		getUserFavoriteRentsTask.execute(account);
 	}
 	
-	private void startDeleteUserAddedRentsAsyncTask() {
+	private void startDeleteUserFavoriteRentsAsyncTask() {
 		progressBarFragment.cancelCurrentlyAssociatedTask();
 		progressBarFragment.show();
 		
-		DeleteUserAddedRentsAsyncTask deleteUserAddedRentsTask = 
-				new DeleteUserAddedRentsAsyncTask(rentsListFragment.getRentsToDelete());
+		DeleteUserFavoriteRentsAsyncTask deleteUserAddedRentsTask = 
+				new DeleteUserFavoriteRentsAsyncTask(rentsListFragment.getRentsToDelete());
 		progressBarFragment.setTask(deleteUserAddedRentsTask);
-		progressBarFragment.setOnTaskFinishListener(new OnDeleteUserAddedRentsTaskFinishListener());
+		progressBarFragment.setOnTaskFinishListener(
+				new OnDeleteUserFavoriteRentsTaskFinishListener());
 		deleteUserAddedRentsTask.execute(account);
 	}
-
-	private class OnGetUserAddedRentsTaskFinishListener implements OnNetworkTaskFinishListener {
+	
+	private class OnGetUserFavoriteRentsTaskFinishListener implements OnNetworkTaskFinishListener {
 		
-		private static final String NO_RESULTS_FOUND_MSG = "Nu aveti nici o chirie adaugata.";
+		private static final String NO_RESULTS_FOUND_MSG = "Nu aveti nici o chirie salvata.";
 
 		@Override
 		public void onTaskFinish(Object result, RetrofitResponseStatus status) {
 			if(!status.equals(RetrofitResponseStatus.OK)) {
-				NetworkErrorHandler.handleRetrofitError(status, UserAddedRentsActivity.this);
+				NetworkErrorHandler.handleRetrofitError(status, UserFavoriteRentsActivity.this);
 
 				return;
 			}
 
 			if(result == null) {
-				Toast.makeText(UserAddedRentsActivity.this, NO_RESULTS_FOUND_MSG, Toast.LENGTH_LONG)
-						.show();
+				Toast.makeText(UserFavoriteRentsActivity.this, NO_RESULTS_FOUND_MSG,
+						Toast.LENGTH_LONG).show();
 				
 				return;
 			}
 			
-			totalNoOfItems = ((RentsCounter) result).counter;
+			totalNoOfItems = ((RentFavoriteViewsCounter) result).counter;
 			getSupportActionBar().setTitle(totalNoOfItems + " chirii aveti adaugate");
-			rentsListFragment.setupListAdapter(((RentsCounter) result).rents, totalNoOfItems,
-					new GetUserAddedRentsNextPageAsyncTask(account),
-					R.layout.rents_list_item_layout);
+			rentsListFragment.setupListAdapter(
+					((RentFavoriteViewsCounter) result).rentFavoriteViews, totalNoOfItems,
+					new GetUserFavoriteRentsNextPageAsyncTask(account),
+					R.layout.rents_favorite_list_item_layout);
+
 		}
 	}
-	
-	private class OnDeleteUserAddedRentsTaskFinishListener implements OnNetworkTaskFinishListener {
+
+	private class OnDeleteUserFavoriteRentsTaskFinishListener 
+			implements OnNetworkTaskFinishListener {
 
 		private static final String NO_RESULTS_FOUND_MSG = "Chiriile nu au putut fi sterse.";
 		
 		@Override
 		public void onTaskFinish(Object result, RetrofitResponseStatus status) {
 			if(!status.equals(RetrofitResponseStatus.OK)) {
-				NetworkErrorHandler.handleRetrofitError(status, UserAddedRentsActivity.this);
+				NetworkErrorHandler.handleRetrofitError(status, UserFavoriteRentsActivity.this);
 
 				return;
 			}
 			
 			Integer deletesCount = (Integer) result;
 			if(!(deletesCount > 0)) {
-				Toast.makeText(UserAddedRentsActivity.this, NO_RESULTS_FOUND_MSG, Toast.LENGTH_LONG)
+				Toast.makeText(UserFavoriteRentsActivity.this, NO_RESULTS_FOUND_MSG, Toast.LENGTH_LONG)
 					.show();
 		
 				return;

@@ -36,11 +36,4 @@ public class RentsSearchAsyncTask extends ProgressBarFragmentAsyncTask<Object, V
 		
 		return rentsCounter;
 	}
-
-	@Override
-	protected void onPostExecute(RentsCounter result) {
-		if(progressBarFragment != null) {
-			progressBarFragment.taskFinished(result, taskId, status); 
-		}
-	}
 }

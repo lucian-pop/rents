@@ -7,15 +7,17 @@ import android.test.AndroidTestCase;
 
 public class UserAccountPreferencesManagerTest extends AndroidTestCase {
 	
+	private static final String TOKEN_KEY = "dsadasdasda21123qdsadad";
+	
 	public void testAddAccount() {
 		Account account = new Account();
-		account.accountId = 1;
-		
+		account.tokenKey = TOKEN_KEY;
+
 		UserAccountPreferencesManager.addAccount(account, getContext());
 		SharedPreferences prefs = UserAccountPreferencesManager.getAccountPrefs(getContext());
-		int accountId = prefs.getInt(UserAccountPreferencesManager.ID, -1);
+		String tokenKey = prefs.getString(UserAccountPreferencesManager.TOKEN_KEY, "");
 		
-		assertTrue(account.accountId == accountId);
+		assertEquals(tokenKey, TOKEN_KEY);
 	}
 	
 	public void testGetSavedAccount() {
@@ -23,12 +25,12 @@ public class UserAccountPreferencesManagerTest extends AndroidTestCase {
 
 		SharedPreferences.Editor prefsEditor = UserAccountPreferencesManager
 				.getAccountPrefs(getContext()).edit();
-		prefsEditor.putInt(UserAccountPreferencesManager.ID, accountId);
+		prefsEditor.putString(UserAccountPreferencesManager.TOKEN_KEY, TOKEN_KEY);
 		prefsEditor.commit();
 		
 		Account account = UserAccountPreferencesManager.getAccount(getContext());
 		
-		assertTrue(account.accountId == accountId);
+		assertTrue(account.tokenKey == TOKEN_KEY);
 	}
 	
 	public void testGetUnexistingAccount() {
@@ -42,11 +44,9 @@ public class UserAccountPreferencesManagerTest extends AndroidTestCase {
 	}
 	
 	public void testRemoveAccount() {
-		int accountId = 1;
-
 		SharedPreferences prefs = UserAccountPreferencesManager.getAccountPrefs(getContext());
 		SharedPreferences.Editor prefsEditor = prefs.edit();
-		prefsEditor.putInt(UserAccountPreferencesManager.ID, accountId);
+		prefsEditor.putString(UserAccountPreferencesManager.TOKEN_KEY, TOKEN_KEY);
 		prefsEditor.commit();
 		
 		UserAccountPreferencesManager.removeAccount(getContext());

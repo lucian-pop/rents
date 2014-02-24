@@ -36,11 +36,4 @@ public class GetRentsByMapBoundariesAsyncTask
 		
 		return rentsCounter;
 	}
-
-	@Override
-	protected void onPostExecute(RentsCounter result) {
-		if(progressBarFragment != null) {
-			progressBarFragment.taskFinished(result, taskId, status); 
-		}
-	}
 }

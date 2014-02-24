@@ -47,13 +47,9 @@ public class AddRentAsyncTask extends ProgressBarFragmentAsyncTask<Object, Void,
 		
 		return rent;
 	}
-
-	@Override
-	protected void onPostExecute(Rent result) {
-		progressBarFragment.taskFinished(result, taskId, status);
-	}
 	
-	private void uploadImages(Rent rent, Account account, Context context) {
+	private void uploadImages(Rent rent, Account account, Context context)
+			throws UnauthorizedException {
 		byte[] imageBytes = null;
 		String imageURI = null;
 		int i = 0;
@@ -63,8 +59,7 @@ public class AddRentAsyncTask extends ProgressBarFragmentAsyncTask<Object, Void,
 					GeneralConstants.DEST_IMG_SIZE);
 
 			imageURI = RentsClient.uploadImage(imageBytes, i + GeneralConstants.IMG_FILE_EXT, 
-					Integer.toString(account.accountId), Long.toString(rent.rentAddDate.getTime()),
-					account.tokenKey);
+					Long.toString(rent.rentAddDate.getTime()), account.tokenKey);
 			
 			// Cancel task if an image failed to upload.
 			if(imageURI == null) {

@@ -72,14 +72,12 @@
 		<activity android:name="com.personal.rents.activity.UserAddedRentsActivity"
 		    android:configChanges="orientation|screenSize"
 		    android:launchMode="singleTop"/>
+		
+		<activity android:name="com.personal.rents.activity.UserFavoriteRentsActivity"
+		    android:configChanges="orientation|screenSize"
+		    android:launchMode="singleTop"/>
         
-		<activity android:name="com.personal.rents.activity.EditUserAccountActivity">
-
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-            	android:value="com.personal.rents.activity.UserAddedRentsActivity"/>
-
-        </activity>
+		<activity android:name="com.personal.rents.activity.EditUserAccountActivity"/>
         
 		<activity android:name="com.personal.rents.activity.AddRentActivity">
 

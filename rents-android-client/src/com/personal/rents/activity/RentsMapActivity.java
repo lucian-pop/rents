@@ -47,7 +47,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-public class RentsMapActivity extends LocationActivity implements OnInfoWindowClickListener, 
+public class RentsMapActivity extends LocationActivity implements OnInfoWindowClickListener,
 		OnMyLocationButtonClickListener {
 	
 	private int totalNoOfRents;
@@ -403,7 +403,7 @@ public class RentsMapActivity extends LocationActivity implements OnInfoWindowCl
 			intent.putExtra(ActivitiesContract.VISIBLE_REGION, 
 					rentsMap.getProjection().getVisibleRegion());
 			intent.putExtra(ActivitiesContract.FROM_ACTIVITY, 
-					ActivitiesContract.RENTS_MAP_ACTIVITY);
+					this.getClass().getSimpleName());
 
 			startActivityForResult(intent, ActivitiesContract.RENTS_SEARCH_REQ_CODE);
 
@@ -423,8 +423,7 @@ public class RentsMapActivity extends LocationActivity implements OnInfoWindowCl
 			return true;
 		} else if(item.getItemId() == R.id.user_account_action) {
 			Intent intent = new Intent(this, UserAddedRentsActivity.class);
-			intent.putExtra(ActivitiesContract.FROM_ACTIVITY, 
-					ActivitiesContract.RENTS_MAP_ACTIVITY);
+			intent.putExtra(ActivitiesContract.FROM_ACTIVITY, this.getClass().getSimpleName());
 
 			startActivity(intent);
 			
@@ -439,7 +438,7 @@ public class RentsMapActivity extends LocationActivity implements OnInfoWindowCl
 		Intent intent = new Intent(this, RentDetailsActivity.class);
 		intent.putExtra(ActivitiesContract.RENT_ID, 
 				rents.get(markersRents.get(marker.getId())).rentId);
-		intent.putExtra(ActivitiesContract.FROM_ACTIVITY, ActivitiesContract.RENTS_MAP_ACTIVITY);
+		intent.putExtra(ActivitiesContract.FROM_ACTIVITY, this.getClass().getSimpleName());
 
 		startActivity(intent);
 	}

@@ -16,14 +16,13 @@ import com.personal.rents.util.ActivitiesContract;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-public class RentsListActivity extends ActionBarActivity {
+public class RentsListActivity extends BaseActivity {
 	
 	private double mapCenterLatitude;
 	
@@ -89,6 +88,7 @@ public class RentsListActivity extends ActionBarActivity {
 	private void setupListFragment() {
 		RentsListFragment rentsListFragment = (RentsListFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.rents_list_fragment);
+		rentsListFragment.setListItemLayoutId(R.layout.rents_list_item_layout);
 		rentsListFragment.setLoadNextPageTask(
 				new GetRentsNextPageByMapBoundariesAsyncTask(visibleRegion));
 	}
@@ -149,6 +149,7 @@ public class RentsListActivity extends ActionBarActivity {
 		
 		if(progressBarFragment != null) {
 			progressBarFragment.reset();
+			progressBarFragment.dismiss();
 		}
 	}
 
@@ -193,15 +194,14 @@ public class RentsListActivity extends ActionBarActivity {
 			intent.putExtra(ActivitiesContract.LONGITUDE, mapCenterLongitude);
 			intent.putExtra(ActivitiesContract.VISIBLE_REGION, visibleRegion);
 			intent.putExtra(ActivitiesContract.FROM_ACTIVITY, 
-					ActivitiesContract.RENTS_LIST_ACTIVITY);
+					this.getClass().getSimpleName());
 
 			startActivityForResult(intent, ActivitiesContract.RENTS_SEARCH_REQ_CODE);
 
 			return true;
 		} else if(item.getItemId() == R.id.user_account_action) {
-			Intent intent = new Intent(this, UserAddedRentsActivity.class);
-			intent.putExtra(ActivitiesContract.FROM_ACTIVITY,
-					ActivitiesContract.RENTS_MAP_ACTIVITY);
+			Intent intent = new Intent(this, UserFavoriteRentsActivity.class);
+			intent.putExtra(ActivitiesContract.FROM_ACTIVITY, this.getClass().getSimpleName());
 
 			startActivity(intent);
 			
@@ -243,7 +243,7 @@ public class RentsListActivity extends ActionBarActivity {
 			RentsListFragment rentsListFragment = (RentsListFragment) getSupportFragmentManager()
 					.findFragmentById(R.id.rents_list_fragment);
 			rentsListFragment.setupListAdapter(((RentsCounter) result).rents, totalNoOfRents,
-					new RentsSearchNextPageAsyncTask(rentSearch));
+					new RentsSearchNextPageAsyncTask(rentSearch), R.layout.rents_list_item_layout);
 		}
 	}
 }

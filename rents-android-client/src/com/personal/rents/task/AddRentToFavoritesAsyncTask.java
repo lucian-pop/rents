@@ -15,7 +15,7 @@ public class AddRentToFavoritesAsyncTask
 		Account account = (Account) params[1];
 		boolean added = false;
 		try {
-			added = RentsClient.addRentToFavorites(rentId, account.accountId, account.tokenKey);
+			added = RentsClient.addRentToFavorites(rentId, account.tokenKey);
 		} catch (RetrofitError error) {
 			handleError(error);
 		} catch (UnauthorizedException unauthorizedError) {
@@ -23,12 +23,5 @@ public class AddRentToFavoritesAsyncTask
 		}
 		
 		return added;
-	}
-	
-	@Override
-	protected void onPostExecute(Boolean result) {
-		if(progressBarFragment != null) {
-			progressBarFragment.taskFinished(result, taskId, status); 
-		}
 	}
 }

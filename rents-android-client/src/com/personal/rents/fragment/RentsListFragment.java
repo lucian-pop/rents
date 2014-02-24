@@ -1,7 +1,10 @@
 package com.personal.rents.fragment;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import android.content.Intent;
+import android.view.View;
+import android.widget.ListView;
 
 import com.personal.rents.R;
 import com.personal.rents.activity.RentDetailsActivity;
@@ -11,131 +14,26 @@ import com.personal.rents.model.Rent;
 import com.personal.rents.task.LoadNextPageAsyncTask;
 import com.personal.rents.util.ActivitiesContract;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.v4.app.ListFragment;
-import android.util.Log;
-import android.view.View;
-import android.widget.ListView;
-
-public class RentsListFragment extends ListFragment {
-	
-	protected List<Rent> rents;
-
-	protected int totalNoOfRents;
-
-	protected LoadNextPageAsyncTask<Void, List<Rent>, Rent> loadNextPageTask;
-	
-	protected EndlessAdapter<Rent> endlessAdapter;
-	
-	public List<Rent> getRents() {
-		return rents;
-	}
-
-	public void setLoadNextPageTask(
-			LoadNextPageAsyncTask<Void, List<Rent>, Rent> loadNextPageTask) {
-		this.loadNextPageTask = loadNextPageTask;
-	}
+public class RentsListFragment extends RentsListFragmentTemplate<Rent>{
 
 	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
+	protected void setupEndlessAdapter(List<Rent> items, int totalNoOfItems,
+			LoadNextPageAsyncTask<Void, List<Rent>, Rent> loadNextPageTask,
+			int listItemLayoutId) {
+		endlessAdapter = new EndlessAdapter<Rent>(getActivity(), new RentsListAdapter(getActivity(),
+				listItemLayoutId, items), R.layout.rents_list_footer_layout,
+				R.layout.rents_list_error_footer_layout, items, totalNoOfItems, loadNextPageTask);
 
-		Bundle bundle;
-		if(savedInstanceState != null) {
-			bundle = savedInstanceState;
-		} else {
-			bundle = getActivity().getIntent().getExtras();
-		}
-		
-		restoreInstanceState(bundle);
-		
-		init();
-	}
-
-	protected void init() {
-		setupListAdapter(rents, totalNoOfRents, loadNextPageTask);
-	}
-	
-	public void setupListAdapter(List<Rent> rents, int totalNoOfRents,
-			LoadNextPageAsyncTask<Void, List<Rent>, Rent> loadNextPageTask) {
-		buildEndlessAdapter(rents, totalNoOfRents, loadNextPageTask);
-		storeEndlessAdapterConfig(rents, totalNoOfRents, loadNextPageTask);
-	}
-	
-	protected void buildEndlessAdapter(List<Rent> rents, int totalNoOfRents,
-			LoadNextPageAsyncTask<Void, List<Rent>, Rent> loadNextPageTask) {
-		endlessAdapter = new EndlessAdapter<Rent>(getActivity(), 
-				new RentsListAdapter(getActivity(), R.layout.rents_list_item_layout, rents),
-				R.layout.rents_list_footer_layout, R.layout.rents_list_error_footer_layout,
-				rents, totalNoOfRents, loadNextPageTask);
 		setListAdapter(endlessAdapter);
-	}
-	
-	protected void storeEndlessAdapterConfig(List<Rent> rents, int totalNoOfRents,
-			LoadNextPageAsyncTask<Void, List<Rent>, Rent> loadNextPageTask) {
-		this.rents = rents;
-		this.totalNoOfRents = totalNoOfRents;
-		this.loadNextPageTask = loadNextPageTask;
-	}
-
-	private void restoreInstanceState(Bundle bundle) {
-		if(bundle == null) {
-			return;
-		}
-
-		rents = bundle.getParcelableArrayList(ActivitiesContract.RENTS);
-		totalNoOfRents = bundle.getInt(ActivitiesContract.NO_OF_RENTS);
-
-		if (rents == null) {
-			rents = new ArrayList<Rent>();
-		}
-	}
-
-	@Override
-	public void onSaveInstanceState(Bundle outState) {
-		outState.putParcelableArrayList(ActivitiesContract.RENTS,
-				(ArrayList<Rent>) rents);
-		outState.putInt(ActivitiesContract.NO_OF_RENTS, totalNoOfRents);
-
-		super.onSaveInstanceState(outState);
-	}
-
-	@Override
-	public void onStart() {
-		super.onStart();
-		
-		endlessAdapter.restartTaskIfLoading();
-	}
-
-	@Override
-	public void onStop() {
-		Log.e("TEST_TAG", "*****************On fragment STOP executed****************");
-		super.onStop();
-
-		endlessAdapter.resetTask();
-	}
-
-	@Override
-	public void onDestroy() {
-		Log.e("TEST_TAG", "*****************On fragment DESTROY executed****************");
-		super.onDestroy();
-
-		endlessAdapter = null;
-		rents = null;
 	}
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		Intent intent = new Intent(getActivity(), RentDetailsActivity.class);
-		intent.putExtra(ActivitiesContract.RENT_ID, rents.get(position).rentId);
-		intent.putExtra(ActivitiesContract.FROM_ACTIVITY,
-				ActivitiesContract.RENTS_LIST_ACTIVITY);
-
+		intent.putExtra(ActivitiesContract.RENT_ID, 
+				((Rent) endlessAdapter.getItem(position)).rentId);
+		intent.putExtra(ActivitiesContract.FROM_ACTIVITY, getActivity().getClass().getSimpleName());
+		
 		startActivity(intent);
-	}
-	
-	public void retryLoadingNextPage() {
-		endlessAdapter.retryLoadingNextPage();
 	}
 }

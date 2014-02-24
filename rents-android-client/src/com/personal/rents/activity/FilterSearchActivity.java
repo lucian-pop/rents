@@ -52,7 +52,7 @@ public class FilterSearchActivity extends LocationActivity {
 	
 	private double placeLongitude;
 	
-	private int fromActivity;
+	private String fromActivity;
 	
 	private VisibleRegion visibleRegion;
 	
@@ -94,7 +94,7 @@ public class FilterSearchActivity extends LocationActivity {
 			placeLatitude = bundle.getDouble(ActivitiesContract.PLACE_LATITUDE, -200);
 			placeLongitude = bundle.getDouble(ActivitiesContract.PLACE_LONGITUDE, -200);
 			visibleRegion = bundle.getParcelable(ActivitiesContract.VISIBLE_REGION);
-			fromActivity = bundle.getInt(ActivitiesContract.FROM_ACTIVITY);
+			fromActivity = bundle.getString(ActivitiesContract.FROM_ACTIVITY);
 			taskInProgress = bundle.getBoolean(ActivitiesContract.TASK_IN_PROGRESS, false);
 			placeDescription = bundle.getString(ActivitiesContract.PLACE_DESCRIPTION);
 			requestedCurrentLocation = bundle.getBoolean(
@@ -150,7 +150,7 @@ public class FilterSearchActivity extends LocationActivity {
 		outState.putDouble(ActivitiesContract.PLACE_LATITUDE, placeLatitude);
 		outState.putDouble(ActivitiesContract.PLACE_LONGITUDE, placeLongitude);
 		outState.putParcelable(ActivitiesContract.VISIBLE_REGION, visibleRegion);
-		outState.putInt(ActivitiesContract.FROM_ACTIVITY, fromActivity);
+		outState.putString(ActivitiesContract.FROM_ACTIVITY, fromActivity);
 		outState.putBoolean(ActivitiesContract.TASK_IN_PROGRESS, taskInProgress);
 		outState.putString(ActivitiesContract.PLACE_DESCRIPTION, placeDescription);
 		outState.putBoolean(ActivitiesContract.REQUESTED_CURRENT_LOCATION, 
@@ -189,7 +189,7 @@ public class FilterSearchActivity extends LocationActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if(item.getItemId() == android.R.id.home) {
 			Intent intent;
-			if(fromActivity == ActivitiesContract.RENTS_LIST_ACTIVITY){
+			if(fromActivity.equals(RentsListActivity.class.getSimpleName())){
 				intent = new Intent(this, RentsListActivity.class);
 			} else {
 				intent = new Intent(this, RentsMapActivity.class);

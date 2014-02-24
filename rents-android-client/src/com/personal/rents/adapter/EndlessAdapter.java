@@ -13,7 +13,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -178,7 +177,6 @@ public class EndlessAdapter<T> extends AdapterWrapper {
 			return;
 		}
 
-		Log.e("TEST_TAG", "*****************On task LAUNCHED executed****************");
 		cancelTaskIfLoading();
 		loading = true;
 		loadError = false;
@@ -205,9 +203,10 @@ public class EndlessAdapter<T> extends AdapterWrapper {
 	}
 	
 	public void resetTask() {
-		Log.e("TEST_TAG", "*****************On task RESET executed****************");
-		cancelTaskIfLoading();
-		loadNextPageTask.setOnLoadNextPageTaskFinishListener(dummyTaskFinishListener);
+		if(loadNextPageTask != null) {
+			cancelTaskIfLoading();
+			loadNextPageTask.setOnLoadNextPageTaskFinishListener(dummyTaskFinishListener);
+		}
 	}
 	
 	private void cancelTaskIfLoading() {
@@ -226,7 +225,6 @@ public class EndlessAdapter<T> extends AdapterWrapper {
 
 		@Override
 		public void onTaskFinish(List<T> nextPageItems, RetrofitResponseStatus status) {
-			Log.e("TEST_TAG", "*****************On task FINISH executed****************");
 			loading = false;
 
 			if(!status.equals(RetrofitResponseStatus.OK)) {
