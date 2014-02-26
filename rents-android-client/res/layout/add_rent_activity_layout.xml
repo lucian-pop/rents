@@ -287,21 +287,15 @@
 		        android:inputType="textMultiLine"
 		        android:imeOptions="actionDone">
 			</EditText>
-		    
-			<com.personal.rents.view.DynamicGridView android:id="@+id/rent_pics"
-			    android:layout_width="match_parent"
-			    android:layout_height="match_parent"
-			    android:layout_marginTop="10dp"
-			    android:layout_marginLeft="10dp"
-			    android:layout_marginRight="10dp"
-			    android:layout_below="@id/rent_phone"
-			    android:padding="10dp"
-			    android:background="@color/white"
-			    android:numColumns="auto_fit"
-			    android:columnWidth="80dp"
-			    android:horizontalSpacing="10dp"
-			    android:verticalSpacing="10dp"
-			    android:stretchMode="none" />
+			
+		    <fragment android:id="@+id/rent_pics"
+		        android:layout_width="match_parent"
+		        android:layout_height="match_parent"
+		        android:layout_marginTop="10dp"
+		        android:layout_marginLeft="10dp"
+		        android:layout_below="@id/rent_phone"
+		        android:layout_marginRight="10dp"
+		        class="com.personal.rents.fragment.ImageGridFragment"/>
 		    
 		    <Button android:id="@+id/add_rent_btn"
 		        android:layout_width="match_parent"

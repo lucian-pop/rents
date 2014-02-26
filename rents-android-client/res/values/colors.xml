@@ -16,4 +16,8 @@
     <color name="green">#009245</color>
 
     <color name="black">#000000</color>
+    
+    <!-- This two will be removed -->
+    <color name="grid_state_pressed">#BB7dbcd3</color>
+    <color name="grid_state_focused">#777dbcd3</color>
 </resources>

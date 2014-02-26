@@ -6,9 +6,8 @@ import java.util.Date;
 
 import com.personal.rents.R;
 import com.personal.rents.adapter.SpinnerAdapterFactory;
-import com.personal.rents.adapter.ImageArrayAdapter;
+import com.personal.rents.fragment.ImageGridFragment;
 import com.personal.rents.fragment.ProgressBarFragment;
-import com.personal.rents.logic.ImageManager;
 import com.personal.rents.model.Address;
 import com.personal.rents.model.Rent;
 import com.personal.rents.rest.util.NetworkErrorHandler;
@@ -17,10 +16,8 @@ import com.personal.rents.task.AddRentAsyncTask;
 import com.personal.rents.task.listener.OnNetworkTaskFinishListener;
 import com.personal.rents.util.ActivitiesContract;
 import com.personal.rents.util.MediaUtils;
-import com.personal.rents.view.DynamicGridView;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -31,7 +28,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -41,25 +37,19 @@ import android.widget.Toast;
 
 public class AddRentActivity extends AccountActivity {
 	
-	private static final int NO_OF_PICS = 5;
+	private static final int NO_OF_IMAGES = 6;
 
 	private Address address;
 	
-	private int selectedPicPosition;
-	
-	private Bitmap selectedBitmap;
-	
 	private String selectedPicPath;
-
-	private ArrayList<Bitmap> pics;
 	
-	private ArrayList<String> imagesPaths = new ArrayList<String>(NO_OF_PICS);
-	
-	private ImageArrayAdapter imageAdapter;
+	private ArrayList<String> imagesPaths = new ArrayList<String>(NO_OF_IMAGES);
 	
 	private boolean taskInProgress;
 	
 	private ProgressBarFragment progressBarFragment;
+	
+	private ImageGridFragment imagesFragment;
 	
 	/**
 	 * Recycle selectedBitmap and pics on onDestroy().
@@ -89,7 +79,7 @@ public class AddRentActivity extends AccountActivity {
 		
 		setupSpinners();
 		
-		setupPicsGridView();
+		setupImagesFragment();
 	}
 
 	private void setupActionBar() {
@@ -125,22 +115,10 @@ public class AddRentActivity extends AccountActivity {
 		ageSpinner.setAdapter(spinnerAdapter);
 	}
 	
-	private void setupPicsGridView() {
-		DynamicGridView picsGridView = (DynamicGridView) findViewById(R.id.rent_pics);
-		imageAdapter = new ImageArrayAdapter(this, R.layout.add_picture_layout, pics, NO_OF_PICS);
-		picsGridView.setAdapter(imageAdapter);
-		
-		picsGridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-			@Override
-			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, 
-					long id) {
-				selectedPicPosition = position;
-				
-				return false;
-			}
-		});
-		
-		registerForContextMenu(picsGridView);
+	private void setupImagesFragment() {
+		imagesFragment = 
+				(ImageGridFragment) getSupportFragmentManager().findFragmentById(R.id.rent_pics);
+		imagesFragment.setImageURIs(imagesPaths);
 	}
 	
 	private void restoreInstanceState(Bundle bundle) {
@@ -149,14 +127,12 @@ public class AddRentActivity extends AccountActivity {
 		}
 		
 		address = bundle.getParcelable(ActivitiesContract.ADDRESS);
-		selectedPicPosition = bundle.getInt(ActivitiesContract.SELECTED_IMG_POSITION);
 		selectedPicPath = bundle.getString(ActivitiesContract.SELECTED_IMG_PATH);
-		pics = bundle.getParcelableArrayList(ActivitiesContract.SELECTED_IMAGES);
 		imagesPaths = bundle.getStringArrayList(ActivitiesContract.IMAGES_PATHS);
 		taskInProgress = bundle.getBoolean(ActivitiesContract.TASK_IN_PROGRESS, false);
 		
 		if(imagesPaths == null) {
-			imagesPaths = new ArrayList<String>(NO_OF_PICS);
+			imagesPaths = new ArrayList<String>(NO_OF_IMAGES);
 		}
 	}
 	
@@ -173,10 +149,7 @@ public class AddRentActivity extends AccountActivity {
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		outState.putParcelable(ActivitiesContract.ADDRESS, address);
-		outState.putInt(ActivitiesContract.SELECTED_IMG_POSITION, selectedPicPosition);
 		outState.putString(ActivitiesContract.SELECTED_IMG_PATH, selectedPicPath);
-		outState.putParcelableArrayList(ActivitiesContract.SELECTED_IMAGES,
-				imageAdapter.getImages());
 		outState.putStringArrayList(ActivitiesContract.IMAGES_PATHS, imagesPaths);
 		
 		taskInProgress = progressBarFragment.getVisibility() == View.VISIBLE;
@@ -194,6 +167,14 @@ public class AddRentActivity extends AccountActivity {
 		if(progressBarFragment != null) {
 			progressBarFragment.resetTaskFinishListener();
 		}
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		
+		progressBarFragment = null;
+		imagesFragment = null;
 	}
 
 	@Override
@@ -249,18 +230,13 @@ public class AddRentActivity extends AccountActivity {
 				}
 			
 			if(selectedPicPath != null) {
-				if(imagesPaths.size() > selectedPicPosition) {
-					imagesPaths.set(selectedPicPosition, selectedPicPath);
+				if(imagesPaths.size() > imagesFragment.getSelectedPicPosition()) {
+					imagesPaths.set(imagesFragment.getSelectedPicPosition(), selectedPicPath);
 				} else {
 					imagesPaths.add(selectedPicPath);
 				}
 
-				selectedBitmap = ImageManager.resizeImage(this, selectedPicPath, 
-						imageAdapter.getImageMaxSize());
-			}
-			 
-			if(selectedBitmap != null) {
-				imageAdapter.replaceImage(selectedBitmap, selectedPicPosition);
+				imagesFragment.getImageAdapter().notifyDataSetChanged();
 			}
 		}
 	}
@@ -308,7 +284,8 @@ public class AddRentActivity extends AccountActivity {
 	}
 
 	private void deletePicture() {
-		imageAdapter.replaceImage(null, selectedPicPosition);
+		imagesPaths.remove(imagesFragment.getSelectedPicPosition());
+		imagesFragment.getImageAdapter().notifyDataSetChanged();
 	}
 	
 	private void startAddRentAsyncTask(Rent rent) {
@@ -352,7 +329,7 @@ public class AddRentActivity extends AccountActivity {
 		rent.rentPetsAllowed = petsAllowed.isChecked();
 		rent.rentPhone = phone.getText().toString();
 		rent.rentAddDate = new Date();
-		rent.rentImageURIs = new ArrayList<String>(NO_OF_PICS);
+		rent.rentImageURIs = new ArrayList<String>(NO_OF_IMAGES);
 		
 		return rent;
 	}
