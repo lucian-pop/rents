@@ -21,8 +21,6 @@ public class UserAccountPreferencesManagerTest extends AndroidTestCase {
 	}
 	
 	public void testGetSavedAccount() {
-		int accountId = 1;
-
 		SharedPreferences.Editor prefsEditor = UserAccountPreferencesManager
 				.getAccountPrefs(getContext()).edit();
 		prefsEditor.putString(UserAccountPreferencesManager.TOKEN_KEY, TOKEN_KEY);

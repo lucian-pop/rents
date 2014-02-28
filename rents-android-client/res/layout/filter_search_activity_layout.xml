@@ -1,102 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-    
-	<LinearLayout android:id="@+id/search_fixed_part"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-	    android:layout_alignParentBottom="true"
-	    android:orientation="horizontal">
-	
-		<Button android:id="@+id/search_reset_btn"
-			style="@style/BottomButtonsStyle"
-			android:text="@string/reset_btn_text"
-			android:onClick="onSearchResetBtnClick"/>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+	<RelativeLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content">
+	    
+		<LinearLayout android:id="@+id/search_fixed_part"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+		    android:layout_alignParentBottom="true"
+		    android:orientation="horizontal">
 		
-		<Button android:id="@+id/search_submit_btn"
-			style="@style/BottomButtonsStyle"
-			android:layout_marginLeft="1dp"
-			android:text="@string/search_submit_btn_text"
-			android:onClick="onSearchBtnClick"/>
-	</LinearLayout>
-
-	<ScrollView android:id="@+id/search_scrollable_part"
-	  	android:layout_width="match_parent"
-	   	android:layout_height="wrap_content"
-	   	android:layout_alignParentTop="true"
-	   	android:layout_above="@id/search_fixed_part">
-	    	
-	    <LinearLayout
-	   		android:layout_width="match_parent"
-	  		android:layout_height="wrap_content"
-	        android:orientation="vertical">
-		        
-		    <com.personal.rents.view.DelayAutocompleteTextView
-		        android:id="@+id/autocomplete_places_input"
-				style="@style/SearchPageRowStyle"
-	        	android:drawableLeft="@drawable/ic_search"
-	        	android:drawablePadding="5dp"
-	        	android:hint="@string/autocomplete_places_input_text"
-	        	android:inputType="text"
-       			android:imeOptions="actionDone"/>
-		    
-		    <TextView android:id="@+id/rent_price_range"
-		       	style="@style/RangeSelectionStyle"
-		        android:text="@string/rent_price_range_text"/>
-		    
-		    <FrameLayout android:id="@+id/rent_price_chooser"
-		        style="@style/SearchRangeSeekBarStyle"/>
-		
-		    <LinearLayout 
-		        style="@style/SearchPageRowStyle"
-		        android:orientation="horizontal">
-		
-				<Spinner android:id="@+id/rent_party"
-			        style="@style/SpinnerStyle" />
-			    
-			    <Spinner android:id="@+id/rent_type"
-					style="@style/SpinnerStyle"
-			        android:layout_marginLeft="10dp"/>
-		    </LinearLayout>
-		    
-		    <LinearLayout 
-		        style="@style/SearchPageRowStyle"
-		        android:orientation="horizontal">
-		
-				<Spinner android:id="@+id/rent_architecture"
-			        style="@style/SpinnerStyle" />
-			    
-			    <Spinner android:id="@+id/rent_age"
-					style="@style/SpinnerStyle"
-			        android:layout_marginLeft="10dp" />
-		    </LinearLayout>
-		    
-		    <LinearLayout 
-		        style="@style/SearchPageRowStyle"
-		        android:orientation="horizontal">
-		
-				<Spinner android:id="@+id/rent_rooms"
-			        style="@style/SpinnerStyle" />
-			    
-			    <Spinner android:id="@+id/rent_baths"
-					style="@style/SpinnerStyle"
-					android:layout_marginLeft="10dp" />
-		    </LinearLayout>
-		    
-		    <TextView android:id="@+id/rent_surface_range"
-		      	style="@style/RangeSelectionStyle"
-		        android:text="@string/rent_surface_range_text"/>
-		    
-		    <FrameLayout android:id="@+id/rent_surface_chooser"
-		        style="@style/SearchRangeSeekBarStyle"/>
-		    
-		    <CheckBox android:id="@+id/rent_pets_allowed"
-		        style="@style/SearchPageRowStyle"
-		        android:button="@drawable/app_checkbox_selector"
-		        android:textAppearance="?android:attr/textAppearanceMedium"
-		        android:textColor="@color/green"
-		        android:text="@string/pets_allowed_text"/>
+			<Button android:id="@+id/search_reset_btn"
+				style="@style/BottomButtonsStyle"
+				android:text="@string/reset_btn_text"
+				android:onClick="onSearchResetBtnClick"/>
+			
+			<Button android:id="@+id/search_submit_btn"
+				style="@style/BottomButtonsStyle"
+				android:layout_marginLeft="1dp"
+				android:text="@string/search_submit_btn_text"
+				android:onClick="onSearchBtnClick"/>
 		</LinearLayout>
-	</ScrollView>
-</RelativeLayout>
+	
+		<ScrollView android:id="@+id/search_scrollable_part"
+		  	android:layout_width="match_parent"
+		   	android:layout_height="wrap_content"
+		   	android:layout_alignParentTop="true"
+		   	android:layout_above="@id/search_fixed_part">
+		    	
+		    <LinearLayout
+		   		android:layout_width="match_parent"
+		  		android:layout_height="wrap_content"
+		        android:orientation="vertical">
+			        
+			    <com.personal.rents.view.DelayAutocompleteTextView
+			        android:id="@+id/autocomplete_places_input"
+					style="@style/SearchPageRowStyle"
+		        	android:drawableLeft="@drawable/ic_search"
+		        	android:drawablePadding="5dp"
+		        	android:hint="@string/autocomplete_places_input_text"
+		        	android:inputType="text"
+	       			android:imeOptions="actionDone"/>
+			    
+			    <TextView android:id="@+id/rent_price_range"
+			       	style="@style/RangeSelectionStyle"
+			        android:text="@string/rent_price_range_text"/>
+			    
+			    <FrameLayout android:id="@+id/rent_price_chooser"
+			        style="@style/SearchRangeSeekBarStyle"/>
+			
+			    <LinearLayout 
+			        style="@style/SearchPageRowStyle"
+			        android:orientation="horizontal">
+			
+					<Spinner android:id="@+id/rent_party"
+				        style="@style/SpinnerStyle" />
+				    
+				    <Spinner android:id="@+id/rent_type"
+						style="@style/SpinnerStyle"
+				        android:layout_marginLeft="10dp"/>
+			    </LinearLayout>
+			    
+			    <LinearLayout 
+			        style="@style/SearchPageRowStyle"
+			        android:orientation="horizontal">
+			
+					<Spinner android:id="@+id/rent_architecture"
+				        style="@style/SpinnerStyle" />
+				    
+				    <Spinner android:id="@+id/rent_age"
+						style="@style/SpinnerStyle"
+				        android:layout_marginLeft="10dp" />
+			    </LinearLayout>
+			    
+			    <LinearLayout 
+			        style="@style/SearchPageRowStyle"
+			        android:orientation="horizontal">
+			
+					<Spinner android:id="@+id/rent_rooms"
+				        style="@style/SpinnerStyle" />
+				    
+				    <Spinner android:id="@+id/rent_baths"
+						style="@style/SpinnerStyle"
+						android:layout_marginLeft="10dp" />
+			    </LinearLayout>
+			    
+			    <TextView android:id="@+id/rent_surface_range"
+			      	style="@style/RangeSelectionStyle"
+			        android:text="@string/rent_surface_range_text"/>
+			    
+			    <FrameLayout android:id="@+id/rent_surface_chooser"
+			        style="@style/SearchRangeSeekBarStyle"/>
+			    
+			    <CheckBox android:id="@+id/rent_pets_allowed"
+			        style="@style/SearchPageRowStyle"
+			        android:button="@drawable/app_checkbox_selector"
+			        android:textAppearance="?android:attr/textAppearanceMedium"
+			        android:textColor="@color/green"
+			        android:text="@string/pets_allowed_text"/>
+			</LinearLayout>
+		</ScrollView>
+	</RelativeLayout>
+
+	<fragment android:id="@+id/progressBarFragment"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_gravity="center"
+	    class="com.personal.rents.fragment.ProgressBarFragment"/>
+</merge>

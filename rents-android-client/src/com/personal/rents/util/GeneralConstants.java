@@ -2,7 +2,7 @@ package com.personal.rents.util;
 
 public final class GeneralConstants {
 	
-	// Server URL.
+	// Server URL
 	public static final String BASE_URL = "http://192.168.1.5:8080/rents-server";
 
 	// Characters.
@@ -36,7 +36,6 @@ public final class GeneralConstants {
 	public static final int DEST_IMG_SIZE = 800;
 	
 	public static final String IMG_FILE_EXT = ".jpg";
-	
 	
 	// Task delays
 	public static final long LONG_DELAY = 1000L;

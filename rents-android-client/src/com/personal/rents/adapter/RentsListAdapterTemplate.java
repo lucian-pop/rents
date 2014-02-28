@@ -108,8 +108,10 @@ public abstract class RentsListAdapterTemplate<T> extends ArrayAdapter<T> implem
 	
 	protected void populateRentViewHolder(RentViewHolder rentViewHolder, Rent rent) {
 		// Nr. bai etc. will be moved in the layout.
-		rentViewHolder.rentImg.setImageUrl(GeneralConstants.BASE_URL + rent.rentImageURIs.get(0),
-				RentsImageClient.getImageLoader(getContext().getApplicationContext()));
+		if(rent.rentImageURIs.size() > 0) {
+			rentViewHolder.rentImg.setImageUrl(GeneralConstants.BASE_URL + rent.rentImageURIs.get(0),
+					RentsImageClient.getImageLoader(getContext().getApplicationContext()));
+		}
 		rentViewHolder.rentDate.setText(dateFormatter.format(rent.rentAddDate).toString());
 		rentViewHolder.rentPrice.setText(Integer.toString(rent.rentPrice) + " €");
 		rentViewHolder.rentAddress.setText(rent.address.addressStreetName + " Nr. " 

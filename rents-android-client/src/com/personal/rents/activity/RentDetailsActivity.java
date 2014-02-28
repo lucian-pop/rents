@@ -208,7 +208,11 @@ public class RentDetailsActivity extends BaseActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.rent_details_menu, menu);
+		if(fromActivity.equals(UserAddedRentsActivity.class.getSimpleName())) {
+			getMenuInflater().inflate(R.menu.rent_details_menu_with_edit, menu);
+		} else {
+			getMenuInflater().inflate(R.menu.rent_details_menu_with_fav, menu);
+		}
 
 		return true;
 	}
@@ -240,7 +244,11 @@ public class RentDetailsActivity extends BaseActivity {
 			startActivity(intent);
 			
 			return true;
-		} 
+		} else if(item.getItemId() == R.id.edit_rent_action) {
+			Intent intent = new Intent(this, EditRentActivity.class);
+			
+			startActivity(intent);
+		}
 		
 		return false;
 	}
@@ -341,7 +349,7 @@ public class RentDetailsActivity extends BaseActivity {
 		@Override
 		public void onTaskFinish(Object result, RetrofitResponseStatus status) {
 			if(!status.equals(RetrofitResponseStatus.OK)) {
-				NetworkErrorHandler.handleRetrofitError(status, RentDetailsActivity.this);
+				NetworkErrorHandler.handleRetrofitError(status, result, RentDetailsActivity.this);
 
 				return;
 			}
@@ -370,7 +378,7 @@ public class RentDetailsActivity extends BaseActivity {
 			addToFavoritesTaskInProgress = false;
 
 			if(!status.equals(RetrofitResponseStatus.OK)) {
-				NetworkErrorHandler.handleRetrofitError(status, RentDetailsActivity.this);
+				NetworkErrorHandler.handleRetrofitError(status, result, RentDetailsActivity.this);
 
 				return;
 			}

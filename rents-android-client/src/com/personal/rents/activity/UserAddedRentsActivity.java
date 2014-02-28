@@ -9,6 +9,7 @@ import com.personal.rents.task.DeleteUserAddedRentsAsyncTask;
 import com.personal.rents.task.GetUserAddedRentsAsyncTask;
 import com.personal.rents.task.GetUserAddedRentsNextPageAsyncTask;
 import com.personal.rents.task.listener.OnNetworkTaskFinishListener;
+import com.personal.rents.util.ActivitiesContract;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -79,6 +80,7 @@ public class UserAddedRentsActivity extends UserRentsActivity {
 	
 	public void onAddRentBtnClick(View view) {
 		Intent intent = new Intent(this, AddRentActivity.class);
+		intent.putExtra(ActivitiesContract.FROM_ACTIVITY, fromActivity);
 		startActivity(intent);
 	}
 	
@@ -110,7 +112,8 @@ public class UserAddedRentsActivity extends UserRentsActivity {
 		@Override
 		public void onTaskFinish(Object result, RetrofitResponseStatus status) {
 			if(!status.equals(RetrofitResponseStatus.OK)) {
-				NetworkErrorHandler.handleRetrofitError(status, UserAddedRentsActivity.this);
+				NetworkErrorHandler.handleRetrofitError(status, result,
+						UserAddedRentsActivity.this);
 
 				return;
 			}
@@ -137,7 +140,8 @@ public class UserAddedRentsActivity extends UserRentsActivity {
 		@Override
 		public void onTaskFinish(Object result, RetrofitResponseStatus status) {
 			if(!status.equals(RetrofitResponseStatus.OK)) {
-				NetworkErrorHandler.handleRetrofitError(status, UserAddedRentsActivity.this);
+				NetworkErrorHandler.handleRetrofitError(status, result, 
+						UserAddedRentsActivity.this);
 
 				return;
 			}

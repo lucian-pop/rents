@@ -16,37 +16,30 @@ import android.widget.AdapterView;
 
 public class ImageGridFragment extends Fragment {
 	
-//	public final static String[] IMAGE_URIs = new String[] {
-//		"/storage/sdcard0/Bluetooth/20130922_135834.jpg",
-//         "https://lh4.googleusercontent.com/--dq8niRp7W4/URquVgmXvgI/AAAAAAAAAbs/-gnuLQfNnBA/s1024/"
-//        		 + "A%252520Song%252520of%252520Ice%252520and%252520Fire.jpg",
-//         "https://lh5.googleusercontent.com/-7qZeDtRKFKc/URquWZT1gOI/AAAAAAAAAbs/hqWgteyNXsg/s1024/"
-//        		 + "Another%252520Rockaway%252520Sunset.jpg",
-//         "https://lh3.googleusercontent.com/--L0Km39l5J8/URquXHGcdNI/AAAAAAAAAbs/3ZrSJNrSomQ/s1024/"
-//        		 + "Antelope%252520Butte.jpg",
-//         "https://lh6.googleusercontent.com/-8HO-4vIFnlw/URquZnsFgtI/AAAAAAAAAbs/WT8jViTF7vw/s1024/"
-//        		 + "Antelope%252520Hallway.jpg",
-//         "https://lh4.googleusercontent.com/-WIuWgVcU3Qw/URqubRVcj4I/AAAAAAAAAbs/YvbwgGjwdIQ/s1024/"
-//         	+ "Antelope%252520Walls.jpg"};
-	
 	private int selectedPicPosition;
 	
-	private int imageDestSize;
+	private int defaultSize;
 	
 	private List<String> imageURIs;
 	
 	private ImageAdapter imageAdapter;
+	
+	private int imageDestSize;
 
 	public int getSelectedPicPosition() {
 		return selectedPicPosition;
 	}
-
-	public ImageAdapter getImageAdapter() {
-		return imageAdapter;
+	
+	public void setDefaultSize(int defaultSize) {
+		this.defaultSize = defaultSize;
 	}
 
 	public void setImageURIs(List<String> imageURIs) {
 		this.imageURIs = imageURIs;
+	}
+	
+	public ImageAdapter getImageAdapter() {
+		return imageAdapter;
 	}
 
 	@Override
@@ -86,8 +79,8 @@ public class ImageGridFragment extends Fragment {
 		
 		final DynamicGridView imagesGridView = 
 				(DynamicGridView) getActivity().findViewById(R.id.gridview);
-		imageAdapter = new ImageAdapter(getActivity(), R.layout.image_grid_item_layout, imageURIs,
-				imageDestSize);
+		imageAdapter = new ImageAdapter(getActivity(), R.layout.image_grid_item_layout,
+				defaultSize, imageURIs, imageDestSize);
 		imagesGridView.setAdapter(imageAdapter);
 		imagesGridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 			@Override

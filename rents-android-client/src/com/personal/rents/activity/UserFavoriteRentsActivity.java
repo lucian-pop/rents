@@ -106,7 +106,8 @@ public class UserFavoriteRentsActivity extends UserRentsActivity {
 		@Override
 		public void onTaskFinish(Object result, RetrofitResponseStatus status) {
 			if(!status.equals(RetrofitResponseStatus.OK)) {
-				NetworkErrorHandler.handleRetrofitError(status, UserFavoriteRentsActivity.this);
+				NetworkErrorHandler.handleRetrofitError(status, result,
+						UserFavoriteRentsActivity.this);
 
 				return;
 			}
@@ -136,7 +137,8 @@ public class UserFavoriteRentsActivity extends UserRentsActivity {
 		@Override
 		public void onTaskFinish(Object result, RetrofitResponseStatus status) {
 			if(!status.equals(RetrofitResponseStatus.OK)) {
-				NetworkErrorHandler.handleRetrofitError(status, UserFavoriteRentsActivity.this);
+				NetworkErrorHandler.handleRetrofitError(status, result,
+						UserFavoriteRentsActivity.this);
 
 				return;
 			}

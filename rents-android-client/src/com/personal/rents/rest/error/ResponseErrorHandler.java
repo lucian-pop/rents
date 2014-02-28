@@ -11,12 +11,14 @@ public class ResponseErrorHandler implements ErrorHandler {
 	@Override
 	public Throwable handleError(RetrofitError error) {
 		Response response = error.getResponse();
-		if(response != null 
-				&& response.getStatus() == WebserviceResponseStatus.UNAUTHORIZED.getCode()) {
-			return new UnauthorizedException(error);
+		if(response != null) {
+			if(response.getStatus() == WebserviceResponseStatus.UNAUTHORIZED.getCode()) {
+				return new UnauthorizedException(error);
+			} else if(response.getStatus() == WebserviceResponseStatus.OPERATION_FAILED.getCode()) {
+				return new OperationFailedException(error);
+			}
 		}
 		
 		return error;
 	}
-
 }

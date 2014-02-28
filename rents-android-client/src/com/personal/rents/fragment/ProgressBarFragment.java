@@ -7,7 +7,6 @@ import com.personal.rents.task.listener.OnNetworkTaskFinishListener;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +33,10 @@ public class ProgressBarFragment extends Fragment {
 	
 	public int getVisibility() {
 		return visibility;
+	}
+
+	public ProgressBarFragmentAsyncTask<?, ?, ?> getTask() {
+		return task;
 	}
 
 	public void setTask(ProgressBarFragmentAsyncTask<?, ?, ?> task) {
@@ -105,13 +108,10 @@ public class ProgressBarFragment extends Fragment {
 	
     public synchronized void taskFinished(Object result, int taskId, 
     		RetrofitResponseStatus status) {
-    	// ProgressBarFragment is associated with a different task.
     	if(taskId != currentTaskId) {
-    		Log.e("TEST_TAG", "***********DIFFERENT Task ids");
     		return;
     	}
 
-    	Log.e("TEST_TAG", "***********SAME Task ids");
         if (isResumed()) {
             dismiss();
         }
@@ -123,5 +123,4 @@ public class ProgressBarFragment extends Fragment {
         // Tell the fragment(or in our case the activity) that we are done.
         onTaskFinishListener.onTaskFinish(result, status);
     }
-
 }

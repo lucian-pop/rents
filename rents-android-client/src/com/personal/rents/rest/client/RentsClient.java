@@ -24,8 +24,9 @@ import com.personal.rents.rest.api.ILogin;
 import com.personal.rents.rest.api.IMyResource;
 import com.personal.rents.rest.api.ISearchRents;
 import com.personal.rents.rest.api.ISignup;
-import com.personal.rents.rest.api.IUploadImage;
+import com.personal.rents.rest.api.IRentImage;
 import com.personal.rents.rest.api.IUserFavorites;
+import com.personal.rents.rest.error.OperationFailedException;
 import com.personal.rents.rest.error.ResponseErrorHandler;
 import com.personal.rents.rest.error.UnauthorizedException;
 import com.personal.rents.util.DateUtil;
@@ -79,17 +80,17 @@ public class RentsClient {
 		return authorized;
 	}
 	
-	public static String uploadImage(byte[] image, String filename,	String datetime,
-			String tokenKey) throws UnauthorizedException {
+	public static String uploadImage(byte[] image, int rentId, String tokenKey)
+			throws UnauthorizedException, OperationFailedException {
 		TypedByteArray imagePart = new TypedByteArray("application/octet-stream", image);
-		String imageURI = restAdapter.create(IUploadImage.class).uploadImage(imagePart, 
-				new TypedString(filename), new TypedString(datetime),
-				tokenKey);
+		String imageURI = restAdapter.create(IRentImage.class).uploadImage(imagePart, 
+				new TypedString(Integer.toString(rentId)), tokenKey);
 		
 		return imageURI;
 	}
 	
-	public static Rent addRent(Rent rent, String tokenKey) throws UnauthorizedException {
+	public static Rent addRent(Rent rent, String tokenKey) throws UnauthorizedException,
+			OperationFailedException {
 		return restAdapter.create(IAddRent.class).addRent(rent, tokenKey);
 	}
 

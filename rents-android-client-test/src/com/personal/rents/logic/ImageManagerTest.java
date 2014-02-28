@@ -9,12 +9,13 @@ public class ImageManagerTest extends AndroidTestCase {
 	private static final int DEST_SIZE = 800;
 	
 	public void testResizeCompressImage() {
-		byte[] imageBytes;
+		byte[] imageBytes = null;
 		for(int i=0; i < 10; i++) {
 			imageBytes = ImageManager.resizeCompressImage(getContext(), IMAGE_PATH, DEST_SIZE);
 		}
-//		
-//		assertTrue(imageBytes.length > 0);
+		
+		assertNotNull(imageBytes);
+		assertTrue(imageBytes.length > 0);
 	}
 
 }

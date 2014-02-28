@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    
+    <item android:id="@+id/edit_rent_action" 
+        android:title="@string/edit_rent_action_title"
+        app:showAsAction="always"/>
+    
+	<item android:id="@+id/user_account_action"
+		android:icon="@drawable/ic_user_rents"
+	    android:title="@string/user_account_action_title"
+	    app:showAsAction="always"/>
+
+</menu>

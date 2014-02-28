@@ -117,11 +117,4 @@
 	<style name="NoActionBar" parent="Theme.AppCompat.Light">
    		<item name="android:windowNoTitle">true</item>
 	</style>
-	
-	<!-- This style will be removed -->
-	<style name="PhotoGridLayout">
-        <item name="android:drawSelectorOnTop">true</item>
-        <item name="android:listSelector">@drawable/photogrid_list_selector</item>
-    </style>
-	    
 </resources>

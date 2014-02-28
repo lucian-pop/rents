@@ -6,6 +6,8 @@ public final class ActivitiesContract {
 	
 	public static final String TASK_IN_PROGRESS = "TASK_IN_PROGRESS";
 	
+	public static final String TASK_NAME = "TASK_NAME";
+	
 	public static final String CAMERA_POSITION = "CAMERA_POSITION";
 	
 	public static final String PREVIOUS_CAMERA_POSITION = "PREVIOUS_CAMERA_POSITION";
@@ -51,6 +53,10 @@ public final class ActivitiesContract {
 	public static final int LOCATION_SERVICES_REQ_CODE = 101;
 	
 	public static final int RENTS_SEARCH_REQ_CODE = 102;
+	
+	public static final int ADD_LOCATION_REQ_CODE = 103;
+	
+	public static final String ADDRESS_DETAILS_VISIBILITY = "ADDRESS_DETAILS_VISIBILITY";
 	
 	public static final String SELECTED_IMG_POSITION = "SELECTED_IMG_POSITION";
 	

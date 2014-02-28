@@ -18,15 +18,15 @@ import android.widget.BaseAdapter;
 
 public class ImageAdapter extends BaseAdapter {
 	
-	private int defaultSize;
+	private int imageLayoutId;
 	
-	private int imageDestSize;
+	private int defaultSize;
 	
 	private List<String> imageURIs;
 	
-	private int imageLayoutId;
-	
 	private LayoutInflater inflater;
+	
+	private int imageDestSize;
 	
 	private Bitmap imagePlaceholder;
 	
@@ -34,13 +34,13 @@ public class ImageAdapter extends BaseAdapter {
 		NetworkImageView imageView;
 	}
 	
-	public ImageAdapter(Context context, int imageLayoutId, List<String> imageURIs,
+	public ImageAdapter(Context context, int imageLayoutId, int defaultSize, List<String> imageURIs,
 			int imageDestSize) {
 		super();
-		this.imageURIs = imageURIs;
 		this.imageLayoutId = imageLayoutId;
+		this.defaultSize = defaultSize;
+		this.imageURIs = imageURIs;
 		this.imageDestSize = imageDestSize;
-		defaultSize = 6;
 		
 		inflater = LayoutInflater.from(context);
 		imagePlaceholder =  BitmapFactory.decodeResource(context.getResources(), 
@@ -50,7 +50,6 @@ public class ImageAdapter extends BaseAdapter {
 	@Override
 	public int getCount() {
 		return defaultSize;
-		//return imageURIs.size();
 	}
 
 	@Override

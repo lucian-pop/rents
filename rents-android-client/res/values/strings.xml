@@ -5,6 +5,13 @@
     <string name="action_settings">Settings</string>
 	
 	<string name="reset_btn_text">Anuleaza</string>
+		
+	<!--  Dialog messages -->
+	<string name="wait_for_location_msg">Localizare...</string>
+	<string name="enable_location_services_dialog_title">Serviciile de localizare sunt dezactivate</string>
+	<string name="enable_location_services_dialog_message">Rents are nevoie de locatia dumneavoastra.</string>
+	<string name="enable_nt_location_service_dialog_title">Localizarea prin WIFI/Reteaua mobila este dezactivata</string>
+	<string name="enable_nt_location_service_dialog_message">Pentru o localizare mai sigura, va rugam activati.</string>
 	
 	<!-- Country -->
 	<string name="country">Romania</string>
@@ -24,13 +31,6 @@
 	<string name="add_to_favorites_action_title">Salveaza</string>
 	<string name="signout_action_title">Iesire cont</string>
 	
-	<!--  Dialog messages -->
-	<string name="wait_for_location_msg">Localizare...</string>
-	<string name="enable_location_services_dialog_title">Serviciile de localizare sunt dezactivate</string>
-	<string name="enable_location_services_dialog_message">Rents are nevoie de locatia dumneavoastra.</string>
-	<string name="enable_nt_location_service_dialog_title">Localizarea prin WIFI/Reteaua mobila este dezactivata</string>
-	<string name="enable_nt_location_service_dialog_message">Pentru o localizare mai sigura, va rugam activati.</string>
-	
 	<!-- User rents activity menu -->
 	<string name="add_rent_action_title">Adauga chirie</string>
 	<string name="edit_account_action_title">Editeaza cont</string>
@@ -40,6 +40,9 @@
 	<string name="browse_pic_action_title">Incarca poza</string>
 	<string name="take_pic_action_title">Fotografiaza</string>
 	
+	<!-- Rent details activity menu -->
+	<string name="edit_rent_action_title">Edit</string>
+
 	<!-- Rent details activity -->
 	<string name="rent_date_default_text">12 Sep \'13</string>
 	<string name="rent_price_default_text">12500 €</string>
@@ -55,6 +58,9 @@
 	<string name="rent_price_range_text">Pret</string>
 	<string name="rent_surface_range_text">Suprafata</string>
 	<string name="pets_allowed_text">Cu animale</string>
+	
+	<!-- Edit rent activity -->
+	<string name="edit_rent_btn_text">Salveaza</string>
 	
 	<string-array name="rent_parties">
 	    <item>Tert</item>

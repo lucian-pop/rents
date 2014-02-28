@@ -7,10 +7,5 @@
     <!-- Add picture layout -->
     <dimen name="add_picture_width">85dp</dimen>
     <dimen name="add_picture_height">65dp</dimen>
-    
-    <!-- This three will be removed -->
-	<dimen name="image_thumbnail_size">100dp</dimen>
-    <dimen name="image_thumbnail_spacing">2dp</dimen>
-    <dimen name="image_detail_pager_margin">80dp</dimen>
 
 </resources>

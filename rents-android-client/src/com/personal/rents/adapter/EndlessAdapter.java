@@ -229,7 +229,7 @@ public class EndlessAdapter<T> extends AdapterWrapper {
 
 			if(!status.equals(RetrofitResponseStatus.OK)) {
 				loadError = true;
-				NetworkErrorHandler.handleRetrofitError(status, context);
+				NetworkErrorHandler.handleRetrofitError(status, nextPageItems, (Activity) context);
 				onDataReady();
 
 				return;
@@ -251,6 +251,5 @@ public class EndlessAdapter<T> extends AdapterWrapper {
 			
 			onDataReady();
 		}
-		
 	}
 }

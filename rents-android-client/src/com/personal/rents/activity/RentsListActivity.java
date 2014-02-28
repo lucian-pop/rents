@@ -225,7 +225,7 @@ public class RentsListActivity extends BaseActivity {
 			startRentsSearch = false;
 
 			if(!status.equals(RetrofitResponseStatus.OK)) {
-				NetworkErrorHandler.handleRetrofitError(status, RentsListActivity.this);
+				NetworkErrorHandler.handleRetrofitError(status, result, RentsListActivity.this);
 
 				return;
 			}

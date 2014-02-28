@@ -565,7 +565,7 @@ public class RentsMapActivity extends LocationActivity implements OnInfoWindowCl
 		public void onTaskFinish(Object result, RetrofitResponseStatus status) {
 			Log.e("TEST_TAG", "************On task FINISH called**************");
 			if(!status.equals(RetrofitResponseStatus.OK)) {
-				NetworkErrorHandler.handleRetrofitError(status, RentsMapActivity.this);
+				NetworkErrorHandler.handleRetrofitError(status, result, RentsMapActivity.this);
 
 				return;
 			}

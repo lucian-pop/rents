@@ -8,6 +8,7 @@ import com.personal.rents.R;
 import com.personal.rents.adapter.SpinnerAdapterFactory;
 import com.personal.rents.adapter.PlacesSuggestionsAdapter;
 import com.personal.rents.fragment.EnableLocationServicesDialogFragment;
+import com.personal.rents.fragment.ProgressBarFragment;
 import com.personal.rents.logic.UserPreferencesManager;
 import com.personal.rents.model.Address;
 import com.personal.rents.model.Rent;
@@ -17,8 +18,10 @@ import com.personal.rents.model.RentParty;
 import com.personal.rents.model.RentSearch;
 import com.personal.rents.model.RentStatus;
 import com.personal.rents.model.RentType;
+import com.personal.rents.rest.util.NetworkErrorHandler;
+import com.personal.rents.rest.util.RetrofitResponseStatus;
 import com.personal.rents.task.GetGeolocationFromAddressAsyncTask;
-import com.personal.rents.task.listener.OnGetGeolocationTaskFinishListener;
+import com.personal.rents.task.listener.OnNetworkTaskFinishListener;
 import com.personal.rents.util.ActivitiesContract;
 import com.personal.rents.util.GeneralConstants;
 import com.personal.rents.util.LocationUtil;
@@ -60,8 +63,6 @@ public class FilterSearchActivity extends LocationActivity {
 	
 	private boolean taskInProgress;
 	
-	private GetGeolocationFromAddressAsyncTask getPlaceLocationFromAddressTask;
-	
 	private int minPrice;
 	
 	private int maxPrice = Integer.MAX_VALUE;
@@ -69,6 +70,8 @@ public class FilterSearchActivity extends LocationActivity {
 	private int minSurface;
 	
 	private int maxSurface = Integer.MAX_VALUE;
+	
+	private ProgressBarFragment progressBarFragment;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -106,7 +109,7 @@ public class FilterSearchActivity extends LocationActivity {
 	protected void onStart() {
 		super.onStart();
 		
-		Log.e("TEST_TAG", "***********Filter search: On START called***********");	
+		Log.e("TEST_TAG", "***********Filter search: On START called***********");
 		if(taskInProgress) {
 			startGetPlaceLocationFromAddressTask(placeDescription);
 		}
@@ -165,13 +168,15 @@ public class FilterSearchActivity extends LocationActivity {
 		
 		Log.e("TEST_TAG", "***********Filter search: On STOP called***********");	
 		
-		resetGetPlaceLocationFromAddressTask();
+		if(progressBarFragment !=  null) {
+			progressBarFragment.reset();
+		}
+
 		resetProgressDialogFragment();
 		if(locationClient != null) {
 			locationClient.reset();
 		}
 		
-		getPlaceLocationFromAddressTask = null;
 		locationManager = null;
 		locationClient = null;
 	}
@@ -205,6 +210,8 @@ public class FilterSearchActivity extends LocationActivity {
 
 	private void init() {
 		setupActionBar();
+		
+		setupProgressBarFragment();
 		
 		setupPlacesAutocomplete();
 
@@ -324,33 +331,24 @@ public class FilterSearchActivity extends LocationActivity {
 		bathsSpinner.setAdapter(spinnerAdapter);
 	}
 	
-	private void startGetPlaceLocationFromAddressTask(String placeDescription) {
-		resetGetPlaceLocationFromAddressTask();
-		
-		taskInProgress = true;
-		getPlaceLocationFromAddressTask = new GetGeolocationFromAddressAsyncTask(
-				new OnGetGeolocationTaskFinishListener() {
-					@Override
-					public void onGetGeolocationTaskFinish(Address address) {
-						taskInProgress = false;
-						if(address == null) {
-							return;
-						}
-
-						placeLatitude = address.addressLatitude;
-						placeLongitude = address.addressLongitude;
-						Toast.makeText(FilterSearchActivity.this, "Latitude: " + placeLatitude 
-								+ ", Longitude: " + placeLongitude, Toast.LENGTH_LONG).show();
-						
-					}
-				});
-		getPlaceLocationFromAddressTask.execute(placeDescription);
+	protected void setupProgressBarFragment() {
+		if(progressBarFragment == null) {
+			progressBarFragment = (ProgressBarFragment) getSupportFragmentManager()
+					.findFragmentById(R.id.progressBarFragment);
+		}
 	}
 	
-	private void resetGetPlaceLocationFromAddressTask() {
-		if(getPlaceLocationFromAddressTask != null) {
-			getPlaceLocationFromAddressTask.cancel(true);
-		}
+	private void startGetPlaceLocationFromAddressTask(String placeDescription) {
+		progressBarFragment.cancelCurrentlyAssociatedTask();
+		progressBarFragment.show();
+		
+		taskInProgress = true;
+		GetGeolocationFromAddressAsyncTask getPlaceLocationFromAddressTask
+			= new GetGeolocationFromAddressAsyncTask();
+		progressBarFragment.setTask(getPlaceLocationFromAddressTask);
+		progressBarFragment.setOnTaskFinishListener(
+				new OnGetGeolocationFromAddressTaskFinishListener());
+		getPlaceLocationFromAddressTask.execute(placeDescription);
 	}
 	
 	private void getCurrentLocation() {
@@ -557,6 +555,31 @@ public class FilterSearchActivity extends LocationActivity {
 		rentSearch.sortBy = 0;
 		
 		return rentSearch;
+	}
+	
+	private class OnGetGeolocationFromAddressTaskFinishListener implements OnNetworkTaskFinishListener {
+
+		private static final String NO_RESULT_MSG = "Adresa specificata nu a putut fi localizata";
+		
+		@Override
+		public void onTaskFinish(Object result, RetrofitResponseStatus status) {
+			taskInProgress = false;
+			if(!status.equals(RetrofitResponseStatus.OK)) {
+				NetworkErrorHandler.handleRetrofitError(status, result, FilterSearchActivity.this);
+
+				return;
+			}
+			
+			if(result == null) {
+				Toast.makeText(FilterSearchActivity.this, NO_RESULT_MSG, Toast.LENGTH_LONG).show();
+				
+				return;
+			}
+			
+			Address address = (Address) result;
+			placeLatitude = address.addressLatitude;
+			placeLongitude = address.addressLongitude;
+		}
 	}
 	
     private class LocationListenerImpl implements LocationListener{
