@@ -108,8 +108,8 @@ public abstract class RentsListAdapterTemplate<T> extends ArrayAdapter<T> implem
 	
 	protected void populateRentViewHolder(RentViewHolder rentViewHolder, Rent rent) {
 		// Nr. bai etc. will be moved in the layout.
-		if(rent.rentImageURIs.size() > 0) {
-			rentViewHolder.rentImg.setImageUrl(GeneralConstants.BASE_URL + rent.rentImageURIs.get(0),
+		if(rent.rentImages.size() > 0) {
+			rentViewHolder.rentImg.setImageUrl(rent.rentImages.get(0).rentImageURI,
 					RentsImageClient.getImageLoader(getContext().getApplicationContext()));
 		}
 		rentViewHolder.rentDate.setText(dateFormatter.format(rent.rentAddDate).toString());
@@ -119,7 +119,7 @@ public abstract class RentsListAdapterTemplate<T> extends ArrayAdapter<T> implem
 		rentViewHolder.rentSpecs.setText(rent.rentRooms + " cam., " + rent.rentBaths + " bai, "
 				+ rent.rentSurface + " " + GeneralConstants.SQUARE_METERS);
 		rentViewHolder.rentTypeDesc.setText(RentInfoBuilder.buildRentTypeDesc(getContext(),
-				 rent.rentType, rent.rentAge));
+				 rent.rentType + 1, rent.rentAge + 1));
 		
 		if(rentViewHolder.rentStatus != null) {
 			if(rent.rentStatus == RentStatus.NOT_AVAILABLE.getStatus()) {

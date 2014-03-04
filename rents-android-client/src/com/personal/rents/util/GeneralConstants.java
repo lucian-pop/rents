@@ -3,7 +3,7 @@ package com.personal.rents.util;
 public final class GeneralConstants {
 	
 	// Server URL
-	public static final String BASE_URL = "http://192.168.1.5:8080/rents-server";
+	public static final String BASE_URL = "http://192.168.1.3:8080/rents-server";
 
 	// Characters.
 	public static final String SPACE = " ";
@@ -53,8 +53,6 @@ public final class GeneralConstants {
 	public static final String RO_DATE_FORMAT = "d MMM yyyy";
 	
 	// Address
-	
-	public static final int UNSPECIFIED_FLOOR_VALUE = -2;
 
 	private GeneralConstants() {}	
 	

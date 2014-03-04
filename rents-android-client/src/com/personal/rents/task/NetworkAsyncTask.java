@@ -5,7 +5,6 @@ import retrofit.RetrofitError;
 import com.personal.rents.rest.util.RetrofitResponseStatus;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 public abstract class NetworkAsyncTask<Params, Progress, Result> 
 	extends AsyncTask<Params, Progress, Result> {
@@ -18,8 +17,6 @@ public abstract class NetworkAsyncTask<Params, Progress, Result>
 		} else {
 			status = RetrofitResponseStatus.UKNOWN_ERROR;
 		}
-		
-		Log.e("TEST_TAG", "**********Is Retrofit error");
 	}
 	
 	protected void handleUnauthorizedError() {

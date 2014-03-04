@@ -60,15 +60,11 @@ public final class ActivitiesContract {
 	
 	public static final String SELECTED_IMG_POSITION = "SELECTED_IMG_POSITION";
 	
-	public static final String SELECTED_IMG_PATH = "SELECTED_IMG_PATH";
+	public static final String SELECTED_IMAGE_PATH = "SELECTED_IMAGE_PATH";
 	
-	public static final String SELECTED_IMAGES = "SELECTED_IMAGES";
+	public static final String IMAGE = "IMAGE";
 	
-	public static final String IMAGES_PATHS = "IMAGES_PATHS";
-	
-	public static final String IMAGE_URI = "IMAGE_URI";
-	
-	public static final String IMAGE_URIS = "IMAGE_URIS";
+	public static final String IMAGES = "IMAGES";
 	
 	public static final String FROM_ACTIVITY = "FROM_ACTIVITY";
 	

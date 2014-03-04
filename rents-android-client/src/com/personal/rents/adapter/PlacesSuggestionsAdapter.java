@@ -1,7 +1,7 @@
 package com.personal.rents.adapter;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.personal.rents.R;
 import com.personal.rents.model.Place;
@@ -19,7 +19,7 @@ import android.widget.TextView;
 
 public class PlacesSuggestionsAdapter extends ArrayAdapter<String> implements Filterable {
 	
-	private List<Place> places= new ArrayList<Place>();
+	private CopyOnWriteArrayList<Place> places= new CopyOnWriteArrayList<Place>();
 	
 	private int layoutId;
 
@@ -63,7 +63,7 @@ public class PlacesSuggestionsAdapter extends ArrayAdapter<String> implements Fi
 
 	@Override
 	public String getItem(int position) {
-		return places.get(position).description;
+		return places.size() > position ? places.get(position).description : null;
 	}
 
 	@Override

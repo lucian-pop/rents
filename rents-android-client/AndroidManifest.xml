@@ -78,9 +78,9 @@
 		    android:launchMode="singleTop"/>
         
 		<activity android:name="com.personal.rents.activity.EditUserAccountActivity"/>
-        
+
 		<activity android:name="com.personal.rents.activity.AddRentActivity"
-		    android:configChanges="orientation|screenSize"
+			android:configChanges="orientation|screenSize"
 		    android:launchMode="singleTop">
 
             <meta-data

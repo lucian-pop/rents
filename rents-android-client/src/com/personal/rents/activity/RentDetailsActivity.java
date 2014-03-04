@@ -8,6 +8,7 @@ import com.personal.rents.fragment.ProgressBarFragment;
 import com.personal.rents.logic.UserAccountManager;
 import com.personal.rents.model.Account;
 import com.personal.rents.model.Rent;
+import com.personal.rents.model.RentImage;
 import com.personal.rents.rest.util.GoogleMapsUtil;
 import com.personal.rents.rest.util.NetworkErrorHandler;
 import com.personal.rents.rest.util.RetrofitResponseStatus;
@@ -83,7 +84,7 @@ public class RentDetailsActivity extends BaseActivity {
 	private void setupImagePager() {
 		final ViewPager rentImagePager = (ViewPager) findViewById(R.id.rent_image_pager);
 		rentImagePager.setAdapter(new ImageViewPagerAdapter(getSupportFragmentManager(),
-				rent.rentImageURIs));
+				rent.rentImages));
 		final GestureDetectorCompat gestureDetector = new GestureDetectorCompat(
 				RentDetailsActivity.this, new GestureDetector.SimpleOnGestureListener() {
 					  @Override
@@ -92,8 +93,8 @@ public class RentDetailsActivity extends BaseActivity {
 				        			RentImageFullScreenActivity.class);
 				        	intent.putExtra(ActivitiesContract.SELECTED_IMG_POSITION,
 				        			rentImagePager.getCurrentItem());
-				        	intent.putStringArrayListExtra(ActivitiesContract.IMAGE_URIS,
-				        			(ArrayList<String>)rent.rentImageURIs);
+				        	intent.putParcelableArrayListExtra(ActivitiesContract.IMAGES,
+				        			(ArrayList<RentImage>) rent.rentImages);
 				        	startActivity(intent);
 
 				        	return true;
@@ -246,7 +247,9 @@ public class RentDetailsActivity extends BaseActivity {
 			return true;
 		} else if(item.getItemId() == R.id.edit_rent_action) {
 			Intent intent = new Intent(this, EditRentActivity.class);
-			
+			intent.putExtra(ActivitiesContract.RENT_ID, rentId);
+			intent.putExtra(ActivitiesContract.FROM_ACTIVITY, fromActivity);
+
 			startActivity(intent);
 		}
 		

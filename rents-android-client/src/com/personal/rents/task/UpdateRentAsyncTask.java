@@ -1,7 +1,5 @@
 package com.personal.rents.task;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import retrofit.RetrofitError;
 
 import com.personal.rents.model.Rent;
@@ -9,27 +7,24 @@ import com.personal.rents.rest.client.RentsClient;
 import com.personal.rents.rest.error.OperationFailedException;
 import com.personal.rents.rest.error.UnauthorizedException;
 
-public class AddRentAsyncTask extends ProgressBarFragmentAsyncTask<Object, Void, Rent> {
-
-	public static AtomicBoolean completed;
+public class UpdateRentAsyncTask extends ProgressBarFragmentAsyncTask<Object, Void, Integer>{
 
 	@Override
-	protected Rent doInBackground(Object... params) {
+	protected Integer doInBackground(Object... params) {
 		Rent rent = (Rent) params[0];
 		String tokenKey = (String) params[1];
 		
-		Rent addedRent = null;
+		int updatesCount = -1;
 		try {
-			addedRent = RentsClient.addRent(rent, tokenKey);
-			completed = new AtomicBoolean(true);
+			updatesCount = RentsClient.updateRent(rent, tokenKey);
 		} catch(RetrofitError error) {
 			handleError(error);
-		} catch(UnauthorizedException unauthorizedError) {
+		} catch (UnauthorizedException unauthorizedError) {
 			handleUnauthorizedError();
-		} catch(OperationFailedException operationFailedError) {
+		} catch (OperationFailedException operationFailedError) {
 			handleOperationFailedError();
 		}
-
-		return addedRent;
+		
+		return updatesCount;
 	}
 }

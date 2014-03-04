@@ -41,7 +41,7 @@ public class Rent implements Parcelable {
 	
 	public byte rentStatus;
 	
-	public List<String> rentImageURIs;
+	public List<RentImage> rentImages;
 	
 	public static final Parcelable.Creator<Rent> CREATOR;
     
@@ -77,8 +77,8 @@ public class Rent implements Parcelable {
 		rentPhone = source.readString();
 		rentAddDate = new Date(source.readLong());
 		rentStatus = source.readByte();
-		rentImageURIs = new ArrayList<String>();
-		source.readStringList(rentImageURIs);
+		rentImages = new ArrayList<RentImage>();
+		source.readList(rentImages, RentImage.class.getClassLoader());
 	}
 
 	@Override
@@ -99,7 +99,7 @@ public class Rent implements Parcelable {
 		dest.writeString(rentPhone);
 		dest.writeLong(rentAddDate.getTime());
 		dest.writeByte(rentStatus);
-		dest.writeStringList(rentImageURIs);
+		dest.writeList(rentImages);
 	}
 	
 	@Override

@@ -3,8 +3,8 @@ package com.personal.rents.rest.client;
 import java.util.Date;
 import java.util.List;
 
+import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
-import retrofit.client.Response;
 import retrofit.mime.TypedByteArray;
 import retrofit.mime.TypedString;
 
@@ -12,16 +12,15 @@ import com.personal.rents.dto.RentFavoriteViewsCounter;
 import com.personal.rents.dto.RentsCounter;
 import com.personal.rents.model.Account;
 import com.personal.rents.model.Rent;
+import com.personal.rents.model.RentImage;
 import com.personal.rents.model.RentSearch;
 import com.personal.rents.model.view.RentFavoriteView;
-import com.personal.rents.rest.api.IAddRent;
-import com.personal.rents.rest.api.IAuthorization;
+import com.personal.rents.rest.api.IRent;
 import com.personal.rents.rest.api.IChangePassword;
 import com.personal.rents.rest.api.IGetRent;
 import com.personal.rents.rest.api.IGetRents;
 import com.personal.rents.rest.api.IUserAddedRents;
 import com.personal.rents.rest.api.ILogin;
-import com.personal.rents.rest.api.IMyResource;
 import com.personal.rents.rest.api.ISearchRents;
 import com.personal.rents.rest.api.ISignup;
 import com.personal.rents.rest.api.IRentImage;
@@ -31,23 +30,28 @@ import com.personal.rents.rest.error.ResponseErrorHandler;
 import com.personal.rents.rest.error.UnauthorizedException;
 import com.personal.rents.util.DateUtil;
 import com.personal.rents.util.GeneralConstants;
-import com.personal.rents.webservice.response.WebserviceResponseStatus;
 
 public class RentsClient {
+	
+	private static final String VERSION_HEADER_NAME = "version";
+	
+	private static final String VERSION_HEADER_VALUE = "1";
 	
 	private static final String BASE_URL = GeneralConstants.BASE_URL + "/ws";
 
 	private static final RestAdapter restAdapter;
 
 	static {
-		restAdapter = new RestAdapter.Builder().setServer(BASE_URL)
-				.setErrorHandler(new ResponseErrorHandler()).build();
-	}
-	
-	public static String getResource() {
-		String resource = restAdapter.create(IMyResource.class).getIt();
-		
-		return resource;
+		restAdapter = new RestAdapter.Builder()
+				.setRequestInterceptor(new RequestInterceptor() {
+					@Override
+					public void intercept(RequestFacade request) {
+						request.addHeader(VERSION_HEADER_NAME, VERSION_HEADER_VALUE);
+					}
+				})
+				.setServer(BASE_URL)
+				.setErrorHandler(new ResponseErrorHandler())
+				.build();
 	}
 
 	public static  Account signup(Account account) {
@@ -69,29 +73,37 @@ public class RentsClient {
 		return tokenKey;
 	}
 	
-	public static boolean isAuthorized(String tokenKey)	throws UnauthorizedException {
-		boolean authorized = true;
-		Response response = restAdapter.create(IAuthorization.class).authorize(tokenKey);
-
-		if(response.getStatus() != WebserviceResponseStatus.OK.getCode()) {
-			authorized = false;
-		}
-
-		return authorized;
-	}
-	
-	public static String uploadImage(byte[] image, int rentId, String tokenKey)
+	public static RentImage uploadRentImage(byte[] image, int rentId, String tokenKey)
 			throws UnauthorizedException, OperationFailedException {
 		TypedByteArray imagePart = new TypedByteArray("application/octet-stream", image);
-		String imageURI = restAdapter.create(IRentImage.class).uploadImage(imagePart, 
+		RentImage rentImage = restAdapter.create(IRentImage.class).uploadRentImage(imagePart,
 				new TypedString(Integer.toString(rentId)), tokenKey);
 		
-		return imageURI;
+		return rentImage;
+	}
+	
+	public static RentImage replaceRentImage(byte[] imageData, RentImage rentImage, String tokenKey) 
+			throws UnauthorizedException, OperationFailedException {
+		TypedByteArray imagePart = new TypedByteArray("application/octet-stream", imageData);
+		
+		return restAdapter.create(IRentImage.class).replaceRentImage(imagePart,
+				new TypedString(Integer.toString(rentImage.rentImageId)), rentImage.rentImageURI, 
+				new TypedString(Integer.toString(rentImage.rentId)), tokenKey);
+	}
+	
+	public static void deleteRentImage(int rentImageId, String tokenKey) 
+			throws UnauthorizedException, OperationFailedException {
+		restAdapter.create(IRentImage.class).deleteRentImage(rentImageId, tokenKey);
 	}
 	
 	public static Rent addRent(Rent rent, String tokenKey) throws UnauthorizedException,
 			OperationFailedException {
-		return restAdapter.create(IAddRent.class).addRent(rent, tokenKey);
+		return restAdapter.create(IRent.class).addRent(rent, tokenKey);
+	}
+
+	public static int updateRent(Rent rent, String tokenKey) throws UnauthorizedException,
+			OperationFailedException {
+		return restAdapter.create(IRent.class).updateRent(rent, tokenKey);
 	}
 
 	public static RentsCounter getRentsByMapBoundaries(double minLatitude, double maxLatitude,

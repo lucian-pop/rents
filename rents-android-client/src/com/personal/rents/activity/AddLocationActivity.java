@@ -24,7 +24,6 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,10 +38,6 @@ public class AddLocationActivity extends ActionBarActivity {
 	public GoogleMap map;
 	
 	private LocationManagerWrapper locationHelper;
-
-	private double placeLatitude;
-	
-	private double placeLongitude;
 	
 	private Marker droppedPin;
 	
@@ -94,80 +89,7 @@ public class AddLocationActivity extends ActionBarActivity {
 		addressDetailsVisibility = bundle.getInt(ActivitiesContract.ADDRESS_DETAILS_VISIBILITY,
 				View.GONE);
 	}
-
-	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-		outState.putParcelable(ActivitiesContract.ADDRESS, address);
-		outState.putString(ActivitiesContract.FROM_ACTIVITY, fromActivity);
-		
-		addressDetailsVisibility = addressDetailsPanel.getVisibility();
-		outState.putInt(ActivitiesContract.ADDRESS_DETAILS_VISIBILITY, addressDetailsVisibility);
-		super.onSaveInstanceState(outState);
-	}
-
 	
-	@Override
-	protected void onStop() {
-		super.onStop();
-		
-		if(progressBarFragment != null) {
-			progressBarFragment.reset();
-		}
-	}
-
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		
-		progressBarFragment = null;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		if(item.getItemId() == android.R.id.home) {
-			Intent intent;
-			if(fromActivity.equals(AddRentActivity.class.getSimpleName())) {
-				intent = new Intent(this, AddRentActivity.class);
-			} else {
-				intent = new Intent(this, EditRentActivity.class);
-			}
-
-			NavUtils.navigateUpTo(this, intent);
-			
-			return true;
-		}
-		
-		return false;
-	}
-
-	public void onResetBtnClick(View view) {
-		address = new Address();
-		populateAddLocationDetailsPanel(address);
-		addressDetailsPanel.setVisibility(View.INVISIBLE);
-		
-		removeDroppedPin();
-	}
-
-	public void onSaveBtnClick(View view) {
-		updateAddress();
-
-		Intent intent = new Intent(this, AddRentActivity.class);
-		intent.putExtra(ActivitiesContract.ADDRESS, address);
-		setResult(RESULT_OK, intent);
-		
-		finish();
-	}
-	
-	private void updateAddress() {
-		// Show a toast message which specifies to fill the red input fields.
-		// Turn color text of unfilled input fields in red.
-		address.addressStreetName = streetNameEditText.getText().toString();
-		address.addressStreetNo = streetNumberEditText.getText().toString();
-		address.addressNeighbourhood = neighborhoohEditText.getText().toString();
-		address.addressLocality = localityEditText.getText().toString();
-		address.addressAdmAreaL1 = admAreaEditText.getText().toString();
-	}
-
 	private void init() {
 		setUpMap();
 		
@@ -224,18 +146,60 @@ public class AddLocationActivity extends ActionBarActivity {
 	}
 	
 	private void moveToLastKnownLocation() {
-		if(address != null) {
-			placeLatitude = address.addressLatitude;
-			placeLongitude = address.addressLongitude;
-			dropPin(new LatLng(placeLatitude, placeLongitude));
-		} else {
+		if(address.addressLatitude == 0 && address.addressLongitude == 0) {
 			Location lastKnownLocation = locationHelper.getLastKnownLocation();
 	        if(lastKnownLocation != null) {
-	        	placeLatitude = lastKnownLocation.getLatitude();
-	        	placeLongitude = lastKnownLocation.getLongitude();
+	        	address.addressLatitude = lastKnownLocation.getLatitude();
+	        	address.addressLongitude = lastKnownLocation.getLongitude();
 	        	LocationUtil.moveToLocation(lastKnownLocation, map);
 	        }
+		} else {
+			dropPin(new LatLng(address.addressLatitude, address.addressLongitude));
 		}
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		outState.putParcelable(ActivitiesContract.ADDRESS, address);
+		outState.putString(ActivitiesContract.FROM_ACTIVITY, fromActivity);
+		addressDetailsVisibility = addressDetailsPanel.getVisibility();
+		outState.putInt(ActivitiesContract.ADDRESS_DETAILS_VISIBILITY, addressDetailsVisibility);
+
+		super.onSaveInstanceState(outState);
+	}
+	
+	@Override
+	protected void onStop() {
+		super.onStop();
+		
+		if(progressBarFragment != null) {
+			progressBarFragment.reset();
+		}
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		
+		progressBarFragment = null;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if(item.getItemId() == android.R.id.home) {
+			Intent intent;
+			if(fromActivity.equals(AddRentActivity.class.getSimpleName())) {
+				intent = new Intent(this, AddRentActivity.class);
+			} else {
+				intent = new Intent(this, EditRentActivity.class);
+			}
+
+			NavUtils.navigateUpTo(this, intent);
+			
+			return true;
+		}
+		
+		return false;
 	}
 	
 	private void setupActionBar() {
@@ -256,7 +220,9 @@ public class AddLocationActivity extends ActionBarActivity {
 		placesAutocompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				startGetGeolocationFromAddressAsyncTask(placesAdapter.getItem(position));
+				if(placesAdapter.getItem(position) != null) {
+					startGetGeolocationFromAddressAsyncTask(placesAdapter.getItem(position));
+				}
 			}
 		});
 	}
@@ -281,6 +247,41 @@ public class AddLocationActivity extends ActionBarActivity {
 			progressBarFragment = (ProgressBarFragment) getSupportFragmentManager()
 					.findFragmentById(R.id.progressBarFragment);
 		}
+	}
+	
+	private void setupAddress(Address result) {
+		int addressId = address.addressId;
+		address = result;
+		address.addressId = addressId;
+		address.addressFloor = Address.ADDRESS_FLOOR_DEFAULT_VALUE;
+	}
+	
+	private void updateAddress() {
+		// Show a toast message which specifies to fill the red input fields.
+		// Turn color text of unfilled input fields in red.
+		address.addressStreetName = streetNameEditText.getText().toString();
+		address.addressStreetNo = streetNumberEditText.getText().toString();
+		address.addressNeighbourhood = neighborhoohEditText.getText().toString();
+		address.addressLocality = localityEditText.getText().toString();
+		address.addressAdmAreaL1 = admAreaEditText.getText().toString();
+	}
+
+	public void onResetBtnClick(View view) {
+		address = new Address();
+		populateAddLocationDetailsPanel(address);
+		addressDetailsPanel.setVisibility(View.INVISIBLE);
+		
+		removeDroppedPin();
+	}
+
+	public void onSaveBtnClick(View view) {
+		updateAddress();
+
+		Intent intent = new Intent(this, AddRentActivity.class);
+		intent.putExtra(ActivitiesContract.ADDRESS, address);
+		setResult(RESULT_OK, intent);
+		
+		finish();
 	}
 	
 	private void startGetGeolocationFromLocationAsyncTask(double latitude, double longitude) {
@@ -311,9 +312,7 @@ public class AddLocationActivity extends ActionBarActivity {
 	private void populateAddLocationDetailsPanel(Address address) {
 		addressDetailsPanel.setVisibility(View.VISIBLE);
 		streetNameEditText.setText(address.addressStreetName);
-
 		streetNumberEditText.setText(address.addressStreetNo);
-
 		neighborhoohEditText.setText(address.addressNeighbourhood);
 		localityEditText.setText(address.addressLocality);
 		admAreaEditText.setText(address.addressAdmAreaL1);
@@ -324,7 +323,6 @@ public class AddLocationActivity extends ActionBarActivity {
 
 		droppedPin = map.addMarker(new MarkerOptions().position(position));
 		LocationUtil.moveToLocation(position, map);
-		Log.e("TEST_TAG", "LATITUDE: " + position.latitude + " LONGITUDE: " + position.longitude);
 	}
 	
 	private void removeDroppedPin() {
@@ -352,10 +350,9 @@ public class AddLocationActivity extends ActionBarActivity {
 				return;
 			}
 			
-			address = (Address) result;
-			placeLatitude = address.addressLatitude;
-			placeLongitude = address.addressLongitude;
-			dropPin(new LatLng(placeLatitude, placeLongitude));
+			setupAddress((Address) result);
+
+			dropPin(new LatLng(address.addressLatitude, address.addressLongitude));
 			populateAddLocationDetailsPanel(address);
 		}
 	}
@@ -378,7 +375,7 @@ public class AddLocationActivity extends ActionBarActivity {
 				return;
 			}
 			
-			address = (Address) result;
+			setupAddress((Address) result);
 			populateAddLocationDetailsPanel(address);
 		}
 	}

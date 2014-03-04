@@ -1,6 +1,5 @@
 package com.personal.rents.task;
 
-import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import retrofit.RetrofitError;
@@ -10,20 +9,15 @@ import android.content.Context;
 import com.personal.rents.logic.ImageManager;
 import com.personal.rents.model.Account;
 import com.personal.rents.model.Rent;
+import com.personal.rents.model.RentImage;
 import com.personal.rents.rest.client.RentsClient;
 import com.personal.rents.rest.error.OperationFailedException;
 import com.personal.rents.rest.error.UnauthorizedException;
 import com.personal.rents.util.GeneralConstants;
 
-public class UploadImagesAsyncTask extends ProgressBarFragmentAsyncTask<Object, Void, Rent>{
+public class UploadImagesAsyncTask extends ProgressBarFragmentAsyncTask<Object, Void, Rent> {
 	
 	public static AtomicBoolean completed;
-	
-	private List<String> imagesPaths;
-	
-	public UploadImagesAsyncTask(List<String> imagesPaths) {
-		this.imagesPaths = imagesPaths;
-	}
 
 	@Override
 	protected Rent doInBackground(Object... params) {
@@ -48,14 +42,18 @@ public class UploadImagesAsyncTask extends ProgressBarFragmentAsyncTask<Object, 
 	private void uploadImages(Rent rent, Account account, Context context) 
 			throws UnauthorizedException, OperationFailedException {
 		byte[] imageBytes = null;
-		for(String imagePath : imagesPaths)  {
-			imageBytes = ImageManager.resizeCompressImage(context, imagePath, 
+		int i = 0;
+		for(RentImage image : rent.rentImages)  {
+			imageBytes = ImageManager.resizeCompressImage(context, image.rentImageURI, 
 					GeneralConstants.DEST_IMG_SIZE);
-			String imageURI = RentsClient.uploadImage(imageBytes, rent.rentId, account.tokenKey);
+			RentImage uploadedImage = RentsClient.uploadRentImage(imageBytes, rent.rentId,
+					account.tokenKey);
 
-			if(imageURI != null) {
-				rent.rentImageURIs.add(imageURI);
+			if(uploadedImage != null) {
+				rent.rentImages.set(i, uploadedImage);
 			}
+			
+			++i;
 		}
 	}
 }

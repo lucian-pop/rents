@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.android.volley.toolbox.NetworkImageView;
 import com.personal.rents.R;
+import com.personal.rents.model.RentImage;
 import com.personal.rents.rest.client.RentsImageClient;
 import com.personal.rents.task.LoadLocalImageTask;
 import com.personal.rents.util.NetworkUtil;
@@ -22,7 +23,7 @@ public class ImageAdapter extends BaseAdapter {
 	
 	private int defaultSize;
 	
-	private List<String> imageURIs;
+	private List<RentImage> images;
 	
 	private LayoutInflater inflater;
 	
@@ -34,12 +35,12 @@ public class ImageAdapter extends BaseAdapter {
 		NetworkImageView imageView;
 	}
 	
-	public ImageAdapter(Context context, int imageLayoutId, int defaultSize, List<String> imageURIs,
+	public ImageAdapter(Context context, int imageLayoutId, int defaultSize, List<RentImage> images,
 			int imageDestSize) {
 		super();
 		this.imageLayoutId = imageLayoutId;
 		this.defaultSize = defaultSize;
-		this.imageURIs = imageURIs;
+		this.images = images;
 		this.imageDestSize = imageDestSize;
 		
 		inflater = LayoutInflater.from(context);
@@ -54,7 +55,7 @@ public class ImageAdapter extends BaseAdapter {
 
 	@Override
 	public Object getItem(int position) {
-		return imageURIs.size() > position ? imageURIs.get(position) : null;
+		return images.size() > position ? images.get(position) : null;
 	}
 
 	@Override
@@ -75,11 +76,20 @@ public class ImageAdapter extends BaseAdapter {
 		}
 
 		imageViewHolder.imageView.setImageBitmap(imagePlaceholder);
-		if(imageURIs == null || imageURIs.size() <= position) {
+		if(images == null || images.size() <= position) {
 			return convertView;
 		}
 
-		String imageURI = imageURIs.get(position);
+		String imageURI = images.get(position).rentImageURI;
+		if(imageURI != null) {
+			setupImageViewBitmap(imageViewHolder, imageURI, parent);
+		}
+
+        return convertView;
+	}
+	
+	private void setupImageViewBitmap(ImageViewHolder imageViewHolder, String imageURI, 
+			ViewGroup parent) {
 		if(NetworkUtil.isValidURI(imageURI)) {
 	        imageViewHolder.imageView.setImageUrl(imageURI, 
 	        		RentsImageClient.getImageLoader(parent.getContext().getApplicationContext()));
@@ -88,7 +98,5 @@ public class ImageAdapter extends BaseAdapter {
 					new LoadLocalImageTask(imageURI, imageDestSize)
 					.execute(parent.getContext()));
 		}
-
-        return convertView;
 	}
 }

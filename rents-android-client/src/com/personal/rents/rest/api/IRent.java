@@ -8,9 +8,13 @@ import com.personal.rents.model.Rent;
 import com.personal.rents.rest.error.OperationFailedException;
 import com.personal.rents.rest.error.UnauthorizedException;
 
-public interface IAddRent {
+public interface IRent {
 
-	@POST("/addrent")
+	@POST("/rent/add")
 	public Rent addRent(@Body Rent rent, @Header("tokenKey") String tokenKey) 
+			throws UnauthorizedException, OperationFailedException;
+	
+	@POST("/rent/update")
+	public int updateRent(@Body Rent rent, @Header("tokenKey") String tokenKey) 
 			throws UnauthorizedException, OperationFailedException;
 }

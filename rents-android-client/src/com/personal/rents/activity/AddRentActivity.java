@@ -36,7 +36,13 @@ public class AddRentActivity extends ManageRentActivity {
 
 		init();
 	}
-	
+
+	@Override
+	protected void setupActionBar() {
+		super.setupActionBar();
+		getSupportActionBar().setTitle("Adaugare chirie");
+	}
+
 	@Override
 	protected void onStart() {
 		super.onStart();
@@ -57,7 +63,7 @@ public class AddRentActivity extends ManageRentActivity {
 	@Override
 	public void onLocateRentBtnClick(View view) {
 		Intent intent = new Intent(this, AddLocationActivity.class);
-		intent.putExtra(ActivitiesContract.ADDRESS, address);
+		intent.putExtra(ActivitiesContract.ADDRESS, rent.address);
 		intent.putExtra(ActivitiesContract.FROM_ACTIVITY, AddRentActivity.class.getSimpleName());
 
 		startActivityForResult(intent, ActivitiesContract.ADD_LOCATION_REQ_CODE);
@@ -65,10 +71,8 @@ public class AddRentActivity extends ManageRentActivity {
 	
 	@Override
 	public void onConfirmBtnClick(View view) {
-		Rent rent = new Rent();
-		updateRentValues(rent);
+		super.onConfirmBtnClick(view);
 
-		setupProgressBarFragment();
 		startAddRentAsyncTask(rent);
 	}
 	
@@ -79,23 +83,17 @@ public class AddRentActivity extends ManageRentActivity {
 		AddRentAsyncTask addRentTask = new AddRentAsyncTask();
 		progressBarFragment.setTask(addRentTask);
 		progressBarFragment.setOnTaskFinishListener(new OnAddRentTaskFinishListener());
-		addRentTask.execute(rent, account);
+		addRentTask.execute(rent, account.tokenKey);
 	}
 	
 	private void startUploadImagesAsyncTask(Rent rent) {
 		progressBarFragment.cancelCurrentlyAssociatedTask();
 		progressBarFragment.show();
 
-		UploadImagesAsyncTask uploadImagesTask = new UploadImagesAsyncTask(imagesPaths);
+		UploadImagesAsyncTask uploadImagesTask = new UploadImagesAsyncTask();
 		progressBarFragment.setTask(uploadImagesTask);
 		progressBarFragment.setOnTaskFinishListener(new OnUploadImagesTaskFinishListener());
 		uploadImagesTask.execute(rent, account, this.getApplicationContext());
-	}
-	
-	private void redirectToUserAddedRents() {
-		Intent intent = new Intent(this, UserAddedRentsActivity.class);
-		intent.putExtra(ActivitiesContract.FROM_ACTIVITY, fromActivity);
-		startActivity(intent);
 	}
 	
 	private class OnAddRentTaskFinishListener implements OnNetworkTaskFinishListener {

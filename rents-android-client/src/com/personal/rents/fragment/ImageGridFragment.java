@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.personal.rents.R;
 import com.personal.rents.adapter.ImageAdapter;
+import com.personal.rents.model.RentImage;
 import com.personal.rents.util.ActivitiesContract;
 import com.personal.rents.view.DynamicGridView;
 
@@ -20,7 +21,7 @@ public class ImageGridFragment extends Fragment {
 	
 	private int defaultSize;
 	
-	private List<String> imageURIs;
+	private List<RentImage> images;
 	
 	private ImageAdapter imageAdapter;
 	
@@ -34,12 +35,8 @@ public class ImageGridFragment extends Fragment {
 		this.defaultSize = defaultSize;
 	}
 
-	public void setImageURIs(List<String> imageURIs) {
-		this.imageURIs = imageURIs;
-	}
-	
-	public ImageAdapter getImageAdapter() {
-		return imageAdapter;
+	public void setImageURIs(List<RentImage> images) {
+		this.images = images;
 	}
 
 	@Override
@@ -72,6 +69,14 @@ public class ImageGridFragment extends Fragment {
 		selectedPicPosition = bundle.getInt(ActivitiesContract.SELECTED_IMG_POSITION);
 	}
 	
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		outState.putInt(ActivitiesContract.SELECTED_IMG_POSITION, selectedPicPosition);
+
+		super.onSaveInstanceState(outState);
+	}
+	
 	private void setupGridView() {
 		float imageWidth = getResources().getDimension(R.dimen.add_picture_width);
 		float imageHeight = getResources().getDimension(R.dimen.add_picture_height);
@@ -80,7 +85,7 @@ public class ImageGridFragment extends Fragment {
 		final DynamicGridView imagesGridView = 
 				(DynamicGridView) getActivity().findViewById(R.id.gridview);
 		imageAdapter = new ImageAdapter(getActivity(), R.layout.image_grid_item_layout,
-				defaultSize, imageURIs, imageDestSize);
+				defaultSize, images, imageDestSize);
 		imagesGridView.setAdapter(imageAdapter);
 		imagesGridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 			@Override
@@ -94,11 +99,13 @@ public class ImageGridFragment extends Fragment {
 		
 		registerForContextMenu(imagesGridView);
 	}
-
-	@Override
-	public void onSaveInstanceState(Bundle outState) {
-		outState.putInt(ActivitiesContract.SELECTED_IMG_POSITION, selectedPicPosition);
-
-		super.onSaveInstanceState(outState);
+	
+	public void setupGridView(List<RentImage> images) {
+		this.images = images;
+		setupGridView();
+	}
+	
+	public void notifyDataSetChanged() {
+		imageAdapter.notifyDataSetChanged();
 	}
 }

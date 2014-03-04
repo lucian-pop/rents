@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.personal.rents.R;
 import com.personal.rents.adapter.ImageViewPagerAdapter;
+import com.personal.rents.model.RentImage;
 import com.personal.rents.util.ActivitiesContract;
 
 import android.os.Bundle;
@@ -17,7 +18,7 @@ public class RentImageFullScreenActivity extends FragmentActivity {
 	
 	private int selectedImagePosition;
 	
-	private List<String> imageURIs;
+	private List<RentImage> images;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,13 +43,12 @@ public class RentImageFullScreenActivity extends FragmentActivity {
 		}
 		
 		selectedImagePosition = bundle.getInt(ActivitiesContract.SELECTED_IMG_POSITION);
-		imageURIs = bundle.getStringArrayList(ActivitiesContract.IMAGE_URIS);
+		images = bundle.getParcelableArrayList(ActivitiesContract.IMAGES);
 	}
 	
 	private void setupImagePager() {
 		ViewPager rentImagePager = (ViewPager) findViewById(R.id.rent_image_pager);
-		rentImagePager.setAdapter(new ImageViewPagerAdapter(getSupportFragmentManager(),
-				imageURIs));
+		rentImagePager.setAdapter(new ImageViewPagerAdapter(getSupportFragmentManager(), images));
 		rentImagePager.setOnTouchListener(new View.OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
@@ -62,7 +62,7 @@ public class RentImageFullScreenActivity extends FragmentActivity {
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		outState.putInt(ActivitiesContract.SELECTED_IMG_POSITION, selectedImagePosition);
-		outState.putStringArrayList(ActivitiesContract.IMAGE_URIS, (ArrayList<String>) imageURIs);
+		outState.putParcelableArrayList(ActivitiesContract.IMAGES, (ArrayList<RentImage>) images);
 		
 		super.onSaveInstanceState(outState);
 	}

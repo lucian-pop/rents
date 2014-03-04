@@ -238,6 +238,9 @@ public class FilterSearchActivity extends LocationActivity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				placesAutocompleteTextView.setSelection(0);
+				if(placesSuggestionsAdapter.getItem(position) == null) {
+					return;
+				}
 
 				if(position==0) {
 					placeLatitude = mapCenterLatitude;

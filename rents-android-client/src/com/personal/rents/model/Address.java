@@ -35,6 +35,8 @@ public class Address implements Parcelable {
 	
 	public String addressAp;
 	
+	public static final int ADDRESS_FLOOR_DEFAULT_VALUE = -2;	
+	
 	public static final Parcelable.Creator<Address> CREATOR;
     
     static {
@@ -83,7 +85,7 @@ public class Address implements Parcelable {
 		dest.writeDouble(addressLongitude);
 		dest.writeString(addressBuilding);
 		dest.writeString(addressStaircase);
-		dest.writeInt(addressFloor != null ? addressFloor : -2);
+		dest.writeInt(addressFloor != null ? addressFloor : ADDRESS_FLOOR_DEFAULT_VALUE);
 		dest.writeString(addressAp);
 	}
 
