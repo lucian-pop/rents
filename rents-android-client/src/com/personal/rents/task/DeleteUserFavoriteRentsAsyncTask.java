@@ -6,7 +6,6 @@ import retrofit.RetrofitError;
 
 import com.personal.rents.model.Account;
 import com.personal.rents.rest.client.RentsClient;
-import com.personal.rents.rest.error.UnauthorizedException;
 
 public class DeleteUserFavoriteRentsAsyncTask 
 		extends ProgressBarFragmentAsyncTask<Object, Void, Integer> {
@@ -26,8 +25,6 @@ public class DeleteUserFavoriteRentsAsyncTask
 			deletesCount = RentsClient.deleteUserFavoriteRents(rentIds, account.tokenKey);
 		} catch(RetrofitError error) {
 			handleError(error);
-		} catch (UnauthorizedException unauthorizedError) {
-			handleUnauthorizedError();
 		} 
 
 		return deletesCount;

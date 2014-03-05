@@ -4,7 +4,6 @@ import retrofit.RetrofitError;
 
 import com.personal.rents.model.Account;
 import com.personal.rents.rest.client.RentsClient;
-import com.personal.rents.rest.error.UnauthorizedException;
 
 public class AddRentToFavoritesAsyncTask 
 		extends ProgressBarFragmentAsyncTask<Object, Void, Boolean> {
@@ -18,8 +17,6 @@ public class AddRentToFavoritesAsyncTask
 			added = RentsClient.addRentToFavorites(rentId, account.tokenKey);
 		} catch (RetrofitError error) {
 			handleError(error);
-		} catch (UnauthorizedException unauthorizedError) {
-			handleUnauthorizedError();
 		}
 		
 		return added;

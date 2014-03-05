@@ -6,8 +6,6 @@ import android.content.Context;
 import com.personal.rents.logic.ImageManager;
 import com.personal.rents.model.RentImage;
 import com.personal.rents.rest.client.RentsClient;
-import com.personal.rents.rest.error.OperationFailedException;
-import com.personal.rents.rest.error.UnauthorizedException;
 import com.personal.rents.util.GeneralConstants;
 
 public class AddRentImageAsyncTask 
@@ -27,10 +25,6 @@ public class AddRentImageAsyncTask
 			addedRentImage = RentsClient.uploadRentImage(imageBytes, rentId, tokenKey);
 		} catch(RetrofitError error) {
 			handleError(error);
-		} catch(UnauthorizedException unauthorizedError) {
-			handleUnauthorizedError();
-		} catch (OperationFailedException operationFailedError) {
-			handleOperationFailedError();
 		}
 
 		return addedRentImage;

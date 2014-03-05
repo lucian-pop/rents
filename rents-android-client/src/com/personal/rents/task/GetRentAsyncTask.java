@@ -24,7 +24,7 @@ public class GetRentAsyncTask extends ProgressBarFragmentAsyncTask<Object, Void,
 	@Override
 	protected void onCancelled(Rent result) {
 		if(progressBarFragment != null) {
-			progressBarFragment.taskFinished(null, taskId, status);
+			progressBarFragment.taskFinished(null, taskId, statusReason);
 		}
 	}
 }

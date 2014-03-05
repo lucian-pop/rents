@@ -4,8 +4,6 @@ import java.util.Date;
 
 public class Account {
 	
-	public Integer accountId;
-	
 	public Byte accountType;
 	
 	public String accountExternalId;

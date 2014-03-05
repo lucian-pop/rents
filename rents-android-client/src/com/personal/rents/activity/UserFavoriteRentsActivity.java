@@ -4,11 +4,11 @@ import com.personal.rents.R;
 import com.personal.rents.dto.RentFavoriteViewsCounter;
 import com.personal.rents.fragment.SwipeDismissRentFavoriteViewsListFragment;
 import com.personal.rents.rest.util.NetworkErrorHandler;
-import com.personal.rents.rest.util.RetrofitResponseStatus;
 import com.personal.rents.task.DeleteUserFavoriteRentsAsyncTask;
 import com.personal.rents.task.GetUserFavoriteRentsAsyncTask;
 import com.personal.rents.task.GetUserFavoriteRentsNextPageAsyncTask;
 import com.personal.rents.task.listener.OnNetworkTaskFinishListener;
+import com.personal.rents.webservice.response.ResponseStatusReason;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -104,8 +104,8 @@ public class UserFavoriteRentsActivity extends UserRentsActivity {
 		private static final String NO_RESULTS_FOUND_MSG = "Nu aveti nici o chirie salvata.";
 
 		@Override
-		public void onTaskFinish(Object result, RetrofitResponseStatus status) {
-			if(!status.equals(RetrofitResponseStatus.OK)) {
+		public void onTaskFinish(Object result, ResponseStatusReason status) {
+			if(!status.equals(ResponseStatusReason.OK)) {
 				NetworkErrorHandler.handleRetrofitError(status, result,
 						UserFavoriteRentsActivity.this);
 
@@ -135,8 +135,8 @@ public class UserFavoriteRentsActivity extends UserRentsActivity {
 		private static final String NO_RESULTS_FOUND_MSG = "Chiriile nu au putut fi sterse.";
 		
 		@Override
-		public void onTaskFinish(Object result, RetrofitResponseStatus status) {
-			if(!status.equals(RetrofitResponseStatus.OK)) {
+		public void onTaskFinish(Object result, ResponseStatusReason status) {
+			if(!status.equals(ResponseStatusReason.OK)) {
 				NetworkErrorHandler.handleRetrofitError(status, result,
 						UserFavoriteRentsActivity.this);
 

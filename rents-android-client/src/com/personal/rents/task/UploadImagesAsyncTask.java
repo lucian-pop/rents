@@ -11,8 +11,6 @@ import com.personal.rents.model.Account;
 import com.personal.rents.model.Rent;
 import com.personal.rents.model.RentImage;
 import com.personal.rents.rest.client.RentsClient;
-import com.personal.rents.rest.error.OperationFailedException;
-import com.personal.rents.rest.error.UnauthorizedException;
 import com.personal.rents.util.GeneralConstants;
 
 public class UploadImagesAsyncTask extends ProgressBarFragmentAsyncTask<Object, Void, Rent> {
@@ -30,17 +28,12 @@ public class UploadImagesAsyncTask extends ProgressBarFragmentAsyncTask<Object, 
 			completed = new AtomicBoolean(true);
 		} catch (RetrofitError error) {
 			handleError(error);
-		} catch (UnauthorizedException unauthorizedError) {
-			handleUnauthorizedError();
-		} catch (OperationFailedException e) {
-			handleOperationFailedError();
 		}
 		
 		return rent;
 	}
 
-	private void uploadImages(Rent rent, Account account, Context context) 
-			throws UnauthorizedException, OperationFailedException {
+	private void uploadImages(Rent rent, Account account, Context context) {
 		byte[] imageBytes = null;
 		int i = 0;
 		for(RentImage image : rent.rentImages)  {

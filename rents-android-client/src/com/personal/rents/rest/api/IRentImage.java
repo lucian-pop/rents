@@ -1,8 +1,6 @@
 package com.personal.rents.rest.api;
 
 import com.personal.rents.model.RentImage;
-import com.personal.rents.rest.error.OperationFailedException;
-import com.personal.rents.rest.error.UnauthorizedException;
 
 import retrofit.http.DELETE;
 import retrofit.http.Header;
@@ -19,19 +17,16 @@ public interface IRentImage {
 	@Multipart
 	@POST("/rentimage/upload")
 	public RentImage uploadRentImage(@Part("imageData") TypedByteArray image, 
-			@Part("rentId") TypedString rentId, @Header("tokenKey") String tokenKey)
-					throws UnauthorizedException, OperationFailedException;
+			@Part("rentId") TypedString rentId, @Header("tokenKey") String tokenKey);
 	
 	@Multipart
 	@PUT("/rentimage/replace")
 	public RentImage replaceRentImage(@Part("imageData") TypedByteArray imageData,
 			@Part("rentImageId") TypedString rentImageId,
 			@Part("rentImageURI") String rentImageURI,
-			@Part("rentId") TypedString rentId, @Header("tokenKey") String tokenKey)
-					throws UnauthorizedException, OperationFailedException;
+			@Part("rentId") TypedString rentId, @Header("tokenKey") String tokenKey);
 	
 	@DELETE("/rentimage/delete/{rentImageId}")
 	public int deleteRentImage(@Path("rentImageId") int rentImageId, 
-			@Header("tokenKey") String tokenKey) throws UnauthorizedException,
-				OperationFailedException;
+			@Header("tokenKey") String tokenKey);
 }

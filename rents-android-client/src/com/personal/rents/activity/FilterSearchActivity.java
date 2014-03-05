@@ -19,7 +19,6 @@ import com.personal.rents.model.RentSearch;
 import com.personal.rents.model.RentStatus;
 import com.personal.rents.model.RentType;
 import com.personal.rents.rest.util.NetworkErrorHandler;
-import com.personal.rents.rest.util.RetrofitResponseStatus;
 import com.personal.rents.task.GetGeolocationFromAddressAsyncTask;
 import com.personal.rents.task.listener.OnNetworkTaskFinishListener;
 import com.personal.rents.util.ActivitiesContract;
@@ -28,6 +27,7 @@ import com.personal.rents.util.LocationUtil;
 import com.personal.rents.util.RangeMessageBuilder;
 import com.personal.rents.view.DelayAutocompleteTextView;
 import com.personal.rents.view.RangeSeekBarView;
+import com.personal.rents.webservice.response.ResponseStatusReason;
 
 import android.content.Intent;
 import android.location.Location;
@@ -565,9 +565,9 @@ public class FilterSearchActivity extends LocationActivity {
 		private static final String NO_RESULT_MSG = "Adresa specificata nu a putut fi localizata";
 		
 		@Override
-		public void onTaskFinish(Object result, RetrofitResponseStatus status) {
+		public void onTaskFinish(Object result, ResponseStatusReason status) {
 			taskInProgress = false;
-			if(!status.equals(RetrofitResponseStatus.OK)) {
+			if(!status.equals(ResponseStatusReason.OK)) {
 				NetworkErrorHandler.handleRetrofitError(status, result, FilterSearchActivity.this);
 
 				return;

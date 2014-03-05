@@ -1,57 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView  xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
-	<RelativeLayout
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+	<ScrollView  
 	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content" >
-
-	    <include
-	        android:id="@+id/include1"
-	        layout="@layout/choose_account_radio_group_layout" />
-
-	    <EditText
-	        android:id="@+id/email"
-	        style="@style/CreateAccountInputStyle"
-	        android:layout_below="@id/choose_acc_radio_group"
-	        android:hint="Email"
-	        android:inputType="textEmailAddress" />
-
-	    <EditText
-	        android:id="@+id/password"
-	        style="@style/CreateAccountInputStyle"
-	        android:layout_below="@+id/email"
-	        android:hint="Parola"
-	        android:inputType="textPassword" />
-
-	    <EditText
-	        android:id="@+id/repeat_password"
-	        style="@style/CreateAccountInputStyle"
-	        android:layout_below="@+id/password"
-	        android:hint="Repeta parola"
-	        android:inputType="textPassword" />
-
-	    <EditText
-	        android:id="@+id/phonenumber"
-	        style="@style/CreateAccountInputStyle"
-	        android:layout_below="@+id/repeat_password"
-	        android:layout_marginBottom="10dp"
-	        android:inputType="phone"
-	        android:hint="Telefon"/>
-
-	    <Button
-	        android:id="@+id/signup_btn"
-	        android:layout_width="match_parent"
-	        android:layout_height="48dp"
-	        android:layout_below="@+id/phonenumber"
-	        android:layout_margin="10dp"
-	        android:background="@drawable/app_blue_btn_selector"
-	        android:text="Creeaza cont"
-	        android:textAppearance="?android:attr/textAppearanceMedium"
-	        android:textColor="@color/white"
-	        android:textStyle="bold"
-	        android:onClick="onSignupBtnClick"/>
-	</RelativeLayout>
-
-</ScrollView>
+	    android:layout_height="wrap_content">
+	
+		<RelativeLayout
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content" >
+	
+		    <include
+		        android:id="@+id/include1"
+		        layout="@layout/choose_account_radio_group_layout" />
+	
+		    <EditText
+		        android:id="@+id/email"
+		        style="@style/CreateAccountInputStyle"
+		        android:layout_below="@id/choose_acc_radio_group"
+		        android:hint="Email"
+		        android:inputType="textEmailAddress" />
+	
+		    <EditText
+		        android:id="@+id/password"
+		        style="@style/CreateAccountInputStyle"
+		        android:layout_below="@+id/email"
+		        android:hint="Parola"
+		        android:inputType="textPassword" />
+	
+		    <EditText
+		        android:id="@+id/repeat_password"
+		        style="@style/CreateAccountInputStyle"
+		        android:layout_below="@+id/password"
+		        android:hint="Repeta parola"
+		        android:inputType="textPassword" />
+	
+		    <EditText
+		        android:id="@+id/phonenumber"
+		        style="@style/CreateAccountInputStyle"
+		        android:layout_below="@+id/repeat_password"
+		        android:layout_marginBottom="10dp"
+		        android:inputType="phone"
+		        android:hint="Telefon"/>
+	
+		    <Button
+		        android:id="@+id/signup_btn"
+		        android:layout_width="match_parent"
+		        android:layout_height="48dp"
+		        android:layout_below="@+id/phonenumber"
+		        android:layout_margin="10dp"
+		        android:background="@drawable/app_blue_btn_selector"
+		        android:text="Creeaza cont"
+		        android:textAppearance="?android:attr/textAppearanceMedium"
+		        android:textColor="@color/white"
+		        android:textStyle="bold"
+		        android:onClick="onSignupBtnClick"/>
+		</RelativeLayout>
+	</ScrollView>
+	
+	<fragment android:id="@+id/progressBarFragment"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_gravity="center"
+	    class="com.personal.rents.fragment.ProgressBarFragment"/>
+</merge>

@@ -15,19 +15,14 @@ import com.personal.rents.model.Rent;
 import com.personal.rents.model.RentImage;
 import com.personal.rents.model.RentSearch;
 import com.personal.rents.model.view.RentFavoriteView;
+import com.personal.rents.rest.api.IAccount;
 import com.personal.rents.rest.api.IRent;
-import com.personal.rents.rest.api.IChangePassword;
 import com.personal.rents.rest.api.IGetRent;
 import com.personal.rents.rest.api.IGetRents;
 import com.personal.rents.rest.api.IUserAddedRents;
-import com.personal.rents.rest.api.ILogin;
 import com.personal.rents.rest.api.ISearchRents;
-import com.personal.rents.rest.api.ISignup;
 import com.personal.rents.rest.api.IRentImage;
 import com.personal.rents.rest.api.IUserFavorites;
-import com.personal.rents.rest.error.OperationFailedException;
-import com.personal.rents.rest.error.ResponseErrorHandler;
-import com.personal.rents.rest.error.UnauthorizedException;
 import com.personal.rents.util.DateUtil;
 import com.personal.rents.util.GeneralConstants;
 
@@ -50,31 +45,29 @@ public class RentsClient {
 					}
 				})
 				.setServer(BASE_URL)
-				.setErrorHandler(new ResponseErrorHandler())
 				.build();
 	}
 
 	public static  Account signup(Account account) {
-		account = restAdapter.create(ISignup.class).signup(account);
+		account = restAdapter.create(IAccount.class).signup(account);
 		
 		return account;
 	}
 	
 	public static Account login(String email, String password) {
-		Account account = restAdapter.create(ILogin.class).login(email, password);
+		Account account = restAdapter.create(IAccount.class).login(email, password);
 		
 		return account;
 	}
 	
 	public static String changePassword(String email, String password, String newPassword) {
-		String tokenKey = restAdapter.create(IChangePassword.class).changePassword(email, 
+		String tokenKey = restAdapter.create(IAccount.class).changePassword(email, 
 				password, newPassword);
 		
 		return tokenKey;
 	}
 	
-	public static RentImage uploadRentImage(byte[] image, int rentId, String tokenKey)
-			throws UnauthorizedException, OperationFailedException {
+	public static RentImage uploadRentImage(byte[] image, int rentId, String tokenKey) {
 		TypedByteArray imagePart = new TypedByteArray("application/octet-stream", image);
 		RentImage rentImage = restAdapter.create(IRentImage.class).uploadRentImage(imagePart,
 				new TypedString(Integer.toString(rentId)), tokenKey);
@@ -82,8 +75,8 @@ public class RentsClient {
 		return rentImage;
 	}
 	
-	public static RentImage replaceRentImage(byte[] imageData, RentImage rentImage, String tokenKey) 
-			throws UnauthorizedException, OperationFailedException {
+	public static RentImage replaceRentImage(byte[] imageData, RentImage rentImage, 
+			String tokenKey){
 		TypedByteArray imagePart = new TypedByteArray("application/octet-stream", imageData);
 		
 		return restAdapter.create(IRentImage.class).replaceRentImage(imagePart,
@@ -91,18 +84,15 @@ public class RentsClient {
 				new TypedString(Integer.toString(rentImage.rentId)), tokenKey);
 	}
 	
-	public static void deleteRentImage(int rentImageId, String tokenKey) 
-			throws UnauthorizedException, OperationFailedException {
+	public static void deleteRentImage(int rentImageId, String tokenKey) {
 		restAdapter.create(IRentImage.class).deleteRentImage(rentImageId, tokenKey);
 	}
 	
-	public static Rent addRent(Rent rent, String tokenKey) throws UnauthorizedException,
-			OperationFailedException {
+	public static Rent addRent(Rent rent, String tokenKey) {
 		return restAdapter.create(IRent.class).addRent(rent, tokenKey);
 	}
 
-	public static int updateRent(Rent rent, String tokenKey) throws UnauthorizedException,
-			OperationFailedException {
+	public static int updateRent(Rent rent, String tokenKey) {
 		return restAdapter.create(IRent.class).updateRent(rent, tokenKey);
 	}
 
@@ -132,40 +122,35 @@ public class RentsClient {
 		return restAdapter.create(IGetRent.class).getDetailedRent(rentId);
 	}
 	
-	public static RentsCounter getUserAddedRents(int pageSize, String tokenKey)
-			throws UnauthorizedException {
+	public static RentsCounter getUserAddedRents(int pageSize, String tokenKey) {
 		return restAdapter.create(IUserAddedRents.class).getUserAddedRents(pageSize, tokenKey);
 	}
 	
 	public static List<Rent> getUserAddedRentsNextPage(Date lastRentDate, int lastRentId,
-			int pageSize, String tokenKey) throws UnauthorizedException {
+			int pageSize, String tokenKey) {
 		return restAdapter.create(IUserAddedRents.class).getUserAddedRentsNextPage(
 				DateUtil.standardFormat(lastRentDate), lastRentId, pageSize, tokenKey);
 	}
 	
-	public static int deleteUserAddedRents(List<Integer> rentIds, String tokenKey) 
-			throws UnauthorizedException {
+	public static int deleteUserAddedRents(List<Integer> rentIds, String tokenKey) {
 		return restAdapter.create(IUserAddedRents.class).deleteUserAddedRents(rentIds, tokenKey);
 	}
 	
-	public static boolean addRentToFavorites(int rentId, String tokenKey) 
-			throws UnauthorizedException {
+	public static boolean addRentToFavorites(int rentId, String tokenKey) {
 		return restAdapter.create(IUserFavorites.class).addRentToFavorites(rentId, tokenKey);
 	}
 
-	public static RentFavoriteViewsCounter getUserFavoriteRents(int pageSize, String tokenKey)
-			throws UnauthorizedException {
+	public static RentFavoriteViewsCounter getUserFavoriteRents(int pageSize, String tokenKey) {
 		return restAdapter.create(IUserFavorites.class).getUserFavoriteRents(pageSize, tokenKey);
 	}
 	
 	public static List<RentFavoriteView> getUserFavoriteRentsNextPage(Date lastDate, int pageSize,
-			String tokenKey) throws UnauthorizedException {
+			String tokenKey) {
 		return restAdapter.create(IUserFavorites.class).getUserFavoriteRentsNextPage(
 				DateUtil.standardFormat(lastDate), pageSize, tokenKey);
 	}
 
-	public static int deleteUserFavoriteRents(List<Integer> rentIds, String tokenKey) 
-			throws UnauthorizedException {
+	public static int deleteUserFavoriteRents(List<Integer> rentIds, String tokenKey) {
 		return restAdapter.create(IUserFavorites.class).deleteUserFavoriteRents(rentIds, tokenKey);
 	}
 }

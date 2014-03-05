@@ -21,7 +21,7 @@ public abstract class LoadNextPageAsyncTask<Progress, Result extends List<T>, T>
 
 	@Override
 	protected void onPostExecute(Result result) {
-		onLoadNextPageTaskFinishListener.onTaskFinish(result, status);
+		onLoadNextPageTaskFinishListener.onTaskFinish(result, statusReason);
 	}
 	
 }

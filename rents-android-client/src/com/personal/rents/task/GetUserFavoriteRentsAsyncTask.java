@@ -5,7 +5,6 @@ import retrofit.RetrofitError;
 import com.personal.rents.dto.RentFavoriteViewsCounter;
 import com.personal.rents.model.Account;
 import com.personal.rents.rest.client.RentsClient;
-import com.personal.rents.rest.error.UnauthorizedException;
 import com.personal.rents.util.GeneralConstants;
 
 public class GetUserFavoriteRentsAsyncTask 
@@ -19,8 +18,6 @@ public class GetUserFavoriteRentsAsyncTask
 			result = RentsClient.getUserFavoriteRents(GeneralConstants.PAGE_SIZE, account.tokenKey);
 		} catch(RetrofitError error) {
 			handleError(error);
-		} catch(UnauthorizedException unautorizedError){
-			handleUnauthorizedError();
 		}
 
 		return result;

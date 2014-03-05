@@ -23,14 +23,14 @@ public abstract class ProgressBarFragmentAsyncTask<Params, Progress, Result>
 	protected void onCancelled(Result result) {
 		Log.e("TEST_TAG", "*********On CANCELED Task called");
 		if(progressBarFragment != null) {
-			progressBarFragment.taskFinished(null, taskId, status); 
+			progressBarFragment.taskFinished(null, taskId, statusReason); 
 		}
 	}
 	
 	@Override
 	protected void onPostExecute(Result result) {
 		if(progressBarFragment != null) {
-			progressBarFragment.taskFinished(result, taskId, status); 
+			progressBarFragment.taskFinished(result, taskId, statusReason); 
 		}
 	}
 }

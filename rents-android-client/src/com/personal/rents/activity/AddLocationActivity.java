@@ -11,13 +11,13 @@ import com.personal.rents.fragment.ProgressBarFragment;
 import com.personal.rents.logic.LocationManagerWrapper;
 import com.personal.rents.model.Address;
 import com.personal.rents.rest.util.NetworkErrorHandler;
-import com.personal.rents.rest.util.RetrofitResponseStatus;
 import com.personal.rents.task.GetGeolocationFromAddressAsyncTask;
 import com.personal.rents.task.GetGeolocationFromLocationAsyncTask;
 import com.personal.rents.task.listener.OnNetworkTaskFinishListener;
 import com.personal.rents.util.ActivitiesContract;
 import com.personal.rents.util.LocationUtil;
 import com.personal.rents.view.DelayAutocompleteTextView;
+import com.personal.rents.webservice.response.ResponseStatusReason;
 
 import android.content.Intent;
 import android.location.Location;
@@ -337,8 +337,8 @@ public class AddLocationActivity extends ActionBarActivity {
 		private static final String NO_RESULT_MSG = "Adresa specificata nu a putut fi  localizata";
 		
 		@Override
-		public void onTaskFinish(Object result, RetrofitResponseStatus status) {
-			if(!status.equals(RetrofitResponseStatus.OK)) {
+		public void onTaskFinish(Object result, ResponseStatusReason status) {
+			if(!status.equals(ResponseStatusReason.OK)) {
 				NetworkErrorHandler.handleRetrofitError(status, result, AddLocationActivity.this);
 
 				return;
@@ -361,8 +361,8 @@ public class AddLocationActivity extends ActionBarActivity {
 			implements OnNetworkTaskFinishListener {
 
 		@Override
-		public void onTaskFinish(Object result, RetrofitResponseStatus status) {
-			if(!status.equals(RetrofitResponseStatus.OK)) {
+		public void onTaskFinish(Object result, ResponseStatusReason status) {
+			if(!status.equals(ResponseStatusReason.OK)) {
 				NetworkErrorHandler.handleRetrofitError(status, result, AddLocationActivity.this);
 
 				return;

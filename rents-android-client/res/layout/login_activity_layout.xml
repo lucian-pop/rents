@@ -1,122 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="match_parent"
-	android:layout_height="wrap_content">
-
-	<RelativeLayout 
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content">
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+	<ScrollView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
 	
-	    <include layout="@layout/choose_account_radio_group_layout"/>
-	    
-	    <TextView android:id="@+id/login_with_existing_acc_section"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_below="@id/choose_acc_radio_group"
-	        android:layout_marginTop="10dp"
-	        android:layout_marginLeft="10dp"
-	        android:layout_marginRight="10dp"
-	        android:textAppearance="?android:attr/textAppearanceMedium"
-	        android:textColor="@color/black"
-	        android:text="Autentifica-ma cu:"/>
-	    
-	    <LinearLayout android:id="@+id/existing_acc_btns"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_below="@id/login_with_existing_acc_section"
-	        android:layout_margin="10dp"
-	        android:orientation="horizontal">
-	
-	        <Button android:id="@+id/facebook_login_btn"
-	            android:layout_width="0dp"
-	            android:layout_height="40dp"
-	            android:layout_weight="1"
+		<RelativeLayout 
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content">
+		
+		    <include layout="@layout/choose_account_radio_group_layout"/>
+		    
+		    <TextView android:id="@+id/login_with_existing_acc_section"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_below="@id/choose_acc_radio_group"
+		        android:layout_marginTop="10dp"
+		        android:layout_marginLeft="10dp"
+		        android:layout_marginRight="10dp"
+		        android:textAppearance="?android:attr/textAppearanceMedium"
+		        android:textColor="@color/black"
+		        android:text="Autentifica-ma cu:"/>
+		    
+		    <LinearLayout android:id="@+id/existing_acc_btns"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_below="@id/login_with_existing_acc_section"
+		        android:layout_margin="10dp"
+		        android:orientation="horizontal">
+		
+		        <Button android:id="@+id/facebook_login_btn"
+		            android:layout_width="0dp"
+		            android:layout_height="40dp"
+		            android:layout_weight="1"
+		            android:layout_marginRight="10dp"
+		            android:background="@drawable/app_blue_btn_selector"
+		            android:textAppearance="?android:attr/textAppearanceMedium"
+		            android:textStyle="bold"
+		            android:textColor="@color/white"
+		            android:text="facebook"/>
+		        
+		        <Button android:id="@+id/google_login_btn"
+		            android:layout_width="0dp"
+		            android:layout_height="40dp"
+		            android:layout_weight="1"
+		            android:layout_marginLeft="10dp"
+		            android:background="@drawable/app_burgundi_btn_selector"
+		            android:textAppearance="?android:attr/textAppearanceMedium"
+		            android:textStyle="bold"
+		            android:textColor="@color/white"
+		            android:text="Google"/>
+		    </LinearLayout>
+		    
+		    <TextView android:id="@+id/login_with_reg_acc_section"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_below="@id/existing_acc_btns"
+		        android:layout_marginBottom="10dp"
+		        android:gravity="center"
+		        android:textAppearance="?android:attr/textAppearanceMedium"
+		        android:textColor="@color/black"
+		        android:text="sau"/>
+		
+		    <EditText android:id="@+id/email"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_below="@+id/login_with_reg_acc_section"
+		        android:layout_marginLeft="10dp"
+		        android:layout_marginRight="10dp"
+		        android:textAppearance="?android:attr/textAppearanceMedium"
+		        android:inputType="textEmailAddress"
+		        android:hint="Email"/>
+		
+		    <EditText android:id="@+id/password"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_below="@+id/email"
+		        android:layout_margin="10dp"
+		        android:textAppearance="?android:attr/textAppearanceMedium"
+		        android:inputType="textPassword"
+		        android:hint="Parola"/>
+		    
+		    <Button android:id="@+id/login_btn"
+	            android:layout_width="match_parent"
+	            android:layout_height="48dp"
+	            android:layout_below="@+id/password"
+	            android:layout_marginTop="10dp"
+	            android:layout_marginLeft="10dp"
 	            android:layout_marginRight="10dp"
 	            android:background="@drawable/app_blue_btn_selector"
 	            android:textAppearance="?android:attr/textAppearanceMedium"
 	            android:textStyle="bold"
 	            android:textColor="@color/white"
-	            android:text="facebook"/>
-	        
-	        <Button android:id="@+id/google_login_btn"
-	            android:layout_width="0dp"
-	            android:layout_height="40dp"
-	            android:layout_weight="1"
-	            android:layout_marginLeft="10dp"
+	            android:text="Login"
+	            android:onClick="onLoginBtnClick"/>
+		    
+		    <TextView android:id="@+id/forgot_password_btn"
+		  		android:layout_width="wrap_content"
+		 		android:layout_height="32dp"
+		 		android:layout_below="@id/login_btn"
+		 		android:layout_marginLeft="10dp"
+		 		android:layout_marginBottom="10dp"
+		 		android:gravity="center_vertical"
+				android:background="@drawable/app_text_btn_selector"
+				android:textAppearance="?android:attr/textAppearanceMedium"
+				android:textColor="@color/blue"
+		 		android:text="Mi-am uitat parola"
+		 		android:clickable="true"/>
+		    
+		    <Button android:id="@+id/create_acc_btn"
+	            android:layout_width="match_parent"
+	            android:layout_height="48dp"
+	            android:layout_below="@id/forgot_password_btn"
+	            android:layout_margin="10dp"
 	            android:background="@drawable/app_burgundi_btn_selector"
 	            android:textAppearance="?android:attr/textAppearanceMedium"
 	            android:textStyle="bold"
 	            android:textColor="@color/white"
-	            android:text="Google"/>
-	    </LinearLayout>
-	    
-	    <TextView android:id="@+id/login_with_reg_acc_section"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_below="@id/existing_acc_btns"
-	        android:layout_marginBottom="10dp"
-	        android:gravity="center"
-	        android:textAppearance="?android:attr/textAppearanceMedium"
-	        android:textColor="@color/black"
-	        android:text="sau"/>
-	
-	    <EditText android:id="@+id/email"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_below="@+id/login_with_reg_acc_section"
-	        android:layout_marginLeft="10dp"
-	        android:layout_marginRight="10dp"
-	        android:textAppearance="?android:attr/textAppearanceMedium"
-	        android:inputType="textEmailAddress"
-	        android:hint="Email"/>
-	
-	    <EditText android:id="@+id/password"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_below="@+id/email"
-	        android:layout_margin="10dp"
-	        android:textAppearance="?android:attr/textAppearanceMedium"
-	        android:inputType="textPassword"
-	        android:hint="Parola"/>
-	    
-	    <Button android:id="@+id/login_btn"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_below="@+id/password"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/app_blue_btn_selector"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            android:text="Login"
-            android:onClick="onLoginBtnClick"/>
-	    
-	    <TextView android:id="@+id/forgot_password_btn"
-	  		android:layout_width="wrap_content"
-	 		android:layout_height="32dp"
-	 		android:layout_below="@id/login_btn"
-	 		android:layout_marginLeft="10dp"
-	 		android:layout_marginBottom="10dp"
-	 		android:gravity="center_vertical"
-			android:background="@drawable/app_text_btn_selector"
-			android:textAppearance="?android:attr/textAppearanceMedium"
-			android:textColor="@color/blue"
-	 		android:text="Mi-am uitat parola"
-	 		android:clickable="true"/>
-	    
-	    <Button android:id="@+id/create_acc_btn"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_below="@id/forgot_password_btn"
-            android:layout_margin="10dp"
-            android:background="@drawable/app_burgundi_btn_selector"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            android:text="Creaza cont"
-            android:onClick="onCreateAccBtnClick"/>
-	
-	</RelativeLayout>
-</ScrollView>
+	            android:text="Creaza cont"
+	            android:onClick="onCreateAccBtnClick"/>
+		
+		</RelativeLayout>
+	</ScrollView>
+
+	<fragment android:id="@+id/progressBarFragment"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_gravity="center"
+	    class="com.personal.rents.fragment.ProgressBarFragment"/>
+</merge>

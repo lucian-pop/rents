@@ -4,8 +4,6 @@ import retrofit.RetrofitError;
 
 import com.personal.rents.model.Rent;
 import com.personal.rents.rest.client.RentsClient;
-import com.personal.rents.rest.error.OperationFailedException;
-import com.personal.rents.rest.error.UnauthorizedException;
 
 public class UpdateRentAsyncTask extends ProgressBarFragmentAsyncTask<Object, Void, Integer>{
 
@@ -19,10 +17,6 @@ public class UpdateRentAsyncTask extends ProgressBarFragmentAsyncTask<Object, Vo
 			updatesCount = RentsClient.updateRent(rent, tokenKey);
 		} catch(RetrofitError error) {
 			handleError(error);
-		} catch (UnauthorizedException unauthorizedError) {
-			handleUnauthorizedError();
-		} catch (OperationFailedException operationFailedError) {
-			handleOperationFailedError();
 		}
 		
 		return updatesCount;

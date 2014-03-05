@@ -5,11 +5,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import com.personal.rents.R;
 import com.personal.rents.model.Rent;
 import com.personal.rents.rest.util.NetworkErrorHandler;
-import com.personal.rents.rest.util.RetrofitResponseStatus;
 import com.personal.rents.task.AddRentAsyncTask;
 import com.personal.rents.task.UploadImagesAsyncTask;
 import com.personal.rents.task.listener.OnNetworkTaskFinishListener;
 import com.personal.rents.util.ActivitiesContract;
+import com.personal.rents.webservice.response.ResponseStatusReason;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -104,9 +104,9 @@ public class AddRentActivity extends ManageRentActivity {
 				+ " incercati din nou.";
 
 		@Override
-		public void onTaskFinish(Object result, RetrofitResponseStatus status) {
+		public void onTaskFinish(Object result, ResponseStatusReason status) {
 			taskInProgress = false;
-			if(!status.equals(RetrofitResponseStatus.OK)) {
+			if(!status.equals(ResponseStatusReason.OK)) {
 				NetworkErrorHandler.handleRetrofitError(status, result, AddRentActivity.this);
 
 				return;
@@ -128,9 +128,9 @@ public class AddRentActivity extends ManageRentActivity {
 		private static final String SUCCESS_MSG = "Finished uploading images";
 
 		@Override
-		public void onTaskFinish(Object result, RetrofitResponseStatus status) {
+		public void onTaskFinish(Object result, ResponseStatusReason status) {
 			taskInProgress = false;
-			if(!status.equals(RetrofitResponseStatus.OK)) {
+			if(!status.equals(ResponseStatusReason.OK)) {
 				NetworkErrorHandler.handleRetrofitError(status, result, AddRentActivity.this);
 				
 				Intent intent = new Intent(AddRentActivity.this, EditRentActivity.class);

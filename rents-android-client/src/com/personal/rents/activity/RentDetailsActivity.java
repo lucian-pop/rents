@@ -11,12 +11,12 @@ import com.personal.rents.model.Rent;
 import com.personal.rents.model.RentImage;
 import com.personal.rents.rest.util.GoogleMapsUtil;
 import com.personal.rents.rest.util.NetworkErrorHandler;
-import com.personal.rents.rest.util.RetrofitResponseStatus;
 import com.personal.rents.task.AddRentToFavoritesAsyncTask;
 import com.personal.rents.task.GetRentAsyncTask;
 import com.personal.rents.task.listener.OnNetworkTaskFinishListener;
 import com.personal.rents.util.ActivitiesContract;
 import com.personal.rents.util.GeneralConstants;
+import com.personal.rents.webservice.response.ResponseStatusReason;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -350,8 +350,8 @@ public class RentDetailsActivity extends BaseActivity {
 	
 	private class OnGetRentTaskFinishListener implements OnNetworkTaskFinishListener {
 		@Override
-		public void onTaskFinish(Object result, RetrofitResponseStatus status) {
-			if(!status.equals(RetrofitResponseStatus.OK)) {
+		public void onTaskFinish(Object result, ResponseStatusReason status) {
+			if(!status.equals(ResponseStatusReason.OK)) {
 				NetworkErrorHandler.handleRetrofitError(status, result, RentDetailsActivity.this);
 
 				return;
@@ -377,10 +377,10 @@ public class RentDetailsActivity extends BaseActivity {
 		private static final String ALREADY_ADDED_MSG = "Chiria este deja salvata";
 
 		@Override
-		public void onTaskFinish(Object result, RetrofitResponseStatus status) {
+		public void onTaskFinish(Object result, ResponseStatusReason status) {
 			addToFavoritesTaskInProgress = false;
 
-			if(!status.equals(RetrofitResponseStatus.OK)) {
+			if(!status.equals(ResponseStatusReason.OK)) {
 				NetworkErrorHandler.handleRetrofitError(status, result, RentDetailsActivity.this);
 
 				return;

@@ -5,7 +5,6 @@ import retrofit.RetrofitError;
 import com.personal.rents.dto.RentsCounter;
 import com.personal.rents.model.Account;
 import com.personal.rents.rest.client.RentsClient;
-import com.personal.rents.rest.error.UnauthorizedException;
 import com.personal.rents.util.GeneralConstants;
 
 public class GetUserAddedRentsAsyncTask 
@@ -20,8 +19,6 @@ public class GetUserAddedRentsAsyncTask
 					account.tokenKey);
 		} catch(RetrofitError error) {
 			handleError(error);
-		} catch(UnauthorizedException unautorizedError){
-			handleUnauthorizedError();
 		}
 
 		return rentsCounter;

@@ -1,7 +1,7 @@
 package com.personal.rents.webservice.response;
 
 /**
- * Status codes that are used to construct web service responses
+ * Status codes that are used to construct/verify web service responses
  */
 public enum WebserviceResponseStatus {
 	OK(200),
@@ -11,8 +11,10 @@ public enum WebserviceResponseStatus {
 	UNAUTHORIZED(401),
 	FORBIDDEN(403),
 	INVALID_DATA(420),
-	OPERATION_FAILED(421),
-	SERVER_ERROR(500);
+	ACCOUNT_CONFLICT(421),
+	BAD_CREDENTIALS(422),
+	SERVER_ERROR(500),
+	OPERATION_FAILED(510);
 	
 	private int code;
 	

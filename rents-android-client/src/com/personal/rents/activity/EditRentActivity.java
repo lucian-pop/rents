@@ -11,7 +11,6 @@ import com.personal.rents.R;
 import com.personal.rents.model.Rent;
 import com.personal.rents.model.RentImage;
 import com.personal.rents.rest.util.NetworkErrorHandler;
-import com.personal.rents.rest.util.RetrofitResponseStatus;
 import com.personal.rents.task.AddRentImageAsyncTask;
 import com.personal.rents.task.DeleteRentImageAsyncTask;
 import com.personal.rents.task.GetRentAsyncTask;
@@ -19,6 +18,7 @@ import com.personal.rents.task.ReplaceImageAsyncTask;
 import com.personal.rents.task.UpdateRentAsyncTask;
 import com.personal.rents.task.listener.OnNetworkTaskFinishListener;
 import com.personal.rents.util.ActivitiesContract;
+import com.personal.rents.webservice.response.ResponseStatusReason;
 
 public class EditRentActivity extends ManageRentActivity {
 
@@ -235,8 +235,8 @@ public class EditRentActivity extends ManageRentActivity {
 	
 	private class OnGetRentTaskFinishListener implements OnNetworkTaskFinishListener {
 		@Override
-		public void onTaskFinish(Object result, RetrofitResponseStatus status) {
-			if(!status.equals(RetrofitResponseStatus.OK)) {
+		public void onTaskFinish(Object result, ResponseStatusReason status) {
+			if(!status.equals(ResponseStatusReason.OK)) {
 				NetworkErrorHandler.handleRetrofitError(status, result, EditRentActivity.this);
 
 				return;
@@ -260,8 +260,8 @@ public class EditRentActivity extends ManageRentActivity {
 				" Va rugam incercati din nou.";
 
 		@Override
-		public void onTaskFinish(Object result, RetrofitResponseStatus status) {
-			if(!status.equals(RetrofitResponseStatus.OK)) {
+		public void onTaskFinish(Object result, ResponseStatusReason status) {
+			if(!status.equals(ResponseStatusReason.OK)) {
 				NetworkErrorHandler.handleRetrofitError(status, result, EditRentActivity.this);
 
 				return;
@@ -289,8 +289,8 @@ public class EditRentActivity extends ManageRentActivity {
 				" Va rugam incercati din nou";
 
 		@Override
-		public void onTaskFinish(Object result, RetrofitResponseStatus status) {
-			if(!status.equals(RetrofitResponseStatus.OK)) {
+		public void onTaskFinish(Object result, ResponseStatusReason status) {
+			if(!status.equals(ResponseStatusReason.OK)) {
 				NetworkErrorHandler.handleRetrofitError(status, result, EditRentActivity.this);
 
 				return;
@@ -313,8 +313,8 @@ public class EditRentActivity extends ManageRentActivity {
 		private static final String SUCCESS_MSG = "Imaginea a fost stearsa cu success";
 
 		@Override
-		public void onTaskFinish(Object result, RetrofitResponseStatus status) {
-			if(!status.equals(RetrofitResponseStatus.OK)) {
+		public void onTaskFinish(Object result, ResponseStatusReason status) {
+			if(!status.equals(ResponseStatusReason.OK)) {
 				NetworkErrorHandler.handleRetrofitError(status, result, EditRentActivity.this);
 
 				return;
@@ -335,8 +335,8 @@ public class EditRentActivity extends ManageRentActivity {
 		private static final String SUCCESS_MSG = "Chiria a fost salvata cu succes.";
 
 		@Override
-		public void onTaskFinish(Object result, RetrofitResponseStatus status) {
-			if(!status.equals(RetrofitResponseStatus.OK)) {
+		public void onTaskFinish(Object result, ResponseStatusReason status) {
+			if(!status.equals(ResponseStatusReason.OK)) {
 				NetworkErrorHandler.handleRetrofitError(status, result, EditRentActivity.this);
 
 				return;

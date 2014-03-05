@@ -24,7 +24,6 @@ import com.personal.rents.logic.UserPreferencesManager;
 import com.personal.rents.model.Rent;
 import com.personal.rents.model.RentSearch;
 import com.personal.rents.rest.util.NetworkErrorHandler;
-import com.personal.rents.rest.util.RetrofitResponseStatus;
 import com.personal.rents.task.AddMarkersTask;
 import com.personal.rents.task.GetRentsByMapBoundariesAsyncTask;
 import com.personal.rents.task.RentsSearchAsyncTask;
@@ -34,6 +33,7 @@ import com.personal.rents.util.GeneralConstants;
 import com.personal.rents.util.GoogleServicesUtil;
 import com.personal.rents.util.LocationUtil;
 import com.personal.rents.view.TouchableMapView;
+import com.personal.rents.webservice.response.ResponseStatusReason;
 
 import android.content.Context;
 import android.content.Intent;
@@ -562,9 +562,9 @@ public class RentsMapActivity extends LocationActivity implements OnInfoWindowCl
     			"Nu a fost gasita nici o chirie in aceasta zona.";
     	
 		@Override
-		public void onTaskFinish(Object result, RetrofitResponseStatus status) {
+		public void onTaskFinish(Object result, ResponseStatusReason status) {
 			Log.e("TEST_TAG", "************On task FINISH called**************");
-			if(!status.equals(RetrofitResponseStatus.OK)) {
+			if(!status.equals(ResponseStatusReason.OK)) {
 				NetworkErrorHandler.handleRetrofitError(status, result, RentsMapActivity.this);
 
 				return;

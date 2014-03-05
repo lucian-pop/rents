@@ -4,9 +4,9 @@ import java.util.List;
 
 import com.commonsware.cwac.adapter.AdapterWrapper;
 import com.personal.rents.rest.util.NetworkErrorHandler;
-import com.personal.rents.rest.util.RetrofitResponseStatus;
 import com.personal.rents.task.LoadNextPageAsyncTask;
 import com.personal.rents.task.listener.OnLoadNextPageTaskFinishListener;
+import com.personal.rents.webservice.response.ResponseStatusReason;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -45,7 +45,7 @@ public class EndlessAdapter<T> extends AdapterWrapper {
 	private OnLoadNextPageTaskFinishListener<T> dummyTaskFinishListener = 
 			new OnLoadNextPageTaskFinishListener<T>() {
 				@Override
-				public void onTaskFinish(List<T> nextPageItems, RetrofitResponseStatus status) {
+				public void onTaskFinish(List<T> nextPageItems, ResponseStatusReason status) {
 				}
 	};
 
@@ -224,10 +224,10 @@ public class EndlessAdapter<T> extends AdapterWrapper {
 			implements OnLoadNextPageTaskFinishListener<T> {
 
 		@Override
-		public void onTaskFinish(List<T> nextPageItems, RetrofitResponseStatus status) {
+		public void onTaskFinish(List<T> nextPageItems, ResponseStatusReason status) {
 			loading = false;
 
-			if(!status.equals(RetrofitResponseStatus.OK)) {
+			if(!status.equals(ResponseStatusReason.OK)) {
 				loadError = true;
 				NetworkErrorHandler.handleRetrofitError(status, nextPageItems, (Activity) context);
 				onDataReady();

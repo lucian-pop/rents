@@ -1,9 +1,9 @@
 package com.personal.rents.fragment;
 
 import com.personal.rents.R;
-import com.personal.rents.rest.util.RetrofitResponseStatus;
 import com.personal.rents.task.ProgressBarFragmentAsyncTask;
 import com.personal.rents.task.listener.OnNetworkTaskFinishListener;
+import com.personal.rents.webservice.response.ResponseStatusReason;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -27,7 +27,7 @@ public class ProgressBarFragment extends Fragment {
 	private static OnNetworkTaskFinishListener dummyTaskFinishListener =
 			new OnNetworkTaskFinishListener() {
 		@Override
-		public void onTaskFinish(Object result, RetrofitResponseStatus status) {
+		public void onTaskFinish(Object result, ResponseStatusReason status) {
 		}
 	};
 	
@@ -107,7 +107,7 @@ public class ProgressBarFragment extends Fragment {
 	}
 	
     public synchronized void taskFinished(Object result, int taskId, 
-    		RetrofitResponseStatus status) {
+    		ResponseStatusReason status) {
     	if(taskId != currentTaskId) {
     		return;
     	}

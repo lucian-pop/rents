@@ -104,7 +104,7 @@ public abstract class UserRentsActivity extends AccountActivity {
 			
 			return true;
 		} else if(item.getItemId() == R.id.edit_account_action) {
-			Intent intent = new Intent(this, EditUserAccountActivity.class);
+			Intent intent = new Intent(this, EditAccountActivity.class);
 			intent.putExtra(ActivitiesContract.FROM_ACTIVITY, this.getClass().getSimpleName());
 			startActivity(intent);
 			

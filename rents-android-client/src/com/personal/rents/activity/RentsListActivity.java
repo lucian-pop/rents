@@ -7,12 +7,12 @@ import com.personal.rents.fragment.ProgressBarFragment;
 import com.personal.rents.fragment.RentsListFragment;
 import com.personal.rents.model.RentSearch;
 import com.personal.rents.rest.util.NetworkErrorHandler;
-import com.personal.rents.rest.util.RetrofitResponseStatus;
 import com.personal.rents.task.GetRentsNextPageByMapBoundariesAsyncTask;
 import com.personal.rents.task.RentsSearchAsyncTask;
 import com.personal.rents.task.RentsSearchNextPageAsyncTask;
 import com.personal.rents.task.listener.OnNetworkTaskFinishListener;
 import com.personal.rents.util.ActivitiesContract;
+import com.personal.rents.webservice.response.ResponseStatusReason;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -221,10 +221,10 @@ public class RentsListActivity extends BaseActivity {
 		private static final String NO_RENTS_FOUND_MSG = 
 				"Nu am gasit chirii corespunzatoare cautarii dvs.";
 		@Override
-		public void onTaskFinish(Object result, RetrofitResponseStatus status) {
+		public void onTaskFinish(Object result, ResponseStatusReason status) {
 			startRentsSearch = false;
 
-			if(!status.equals(RetrofitResponseStatus.OK)) {
+			if(!status.equals(ResponseStatusReason.OK)) {
 				NetworkErrorHandler.handleRetrofitError(status, result, RentsListActivity.this);
 
 				return;

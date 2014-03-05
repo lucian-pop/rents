@@ -7,7 +7,6 @@ import retrofit.RetrofitError;
 import com.personal.rents.model.Account;
 import com.personal.rents.model.Rent;
 import com.personal.rents.rest.client.RentsClient;
-import com.personal.rents.rest.error.UnauthorizedException;
 import com.personal.rents.task.listener.OnLoadNextPageTaskFinishListener;
 import com.personal.rents.util.GeneralConstants;
 
@@ -39,8 +38,6 @@ public class GetUserAddedRentsNextPageAsyncTask
 					GeneralConstants.PAGE_SIZE, account.tokenKey);
 		} catch(RetrofitError error) {
 			handleError(error);
-		} catch(UnauthorizedException unauthorizedError) {
-			handleUnauthorizedError();
 		}
 
 		return result;

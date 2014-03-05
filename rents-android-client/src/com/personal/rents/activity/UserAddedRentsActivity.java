@@ -4,12 +4,12 @@ import com.personal.rents.R;
 import com.personal.rents.dto.RentsCounter;
 import com.personal.rents.fragment.SwipeDismissRentsListFragment;
 import com.personal.rents.rest.util.NetworkErrorHandler;
-import com.personal.rents.rest.util.RetrofitResponseStatus;
 import com.personal.rents.task.DeleteUserAddedRentsAsyncTask;
 import com.personal.rents.task.GetUserAddedRentsAsyncTask;
 import com.personal.rents.task.GetUserAddedRentsNextPageAsyncTask;
 import com.personal.rents.task.listener.OnNetworkTaskFinishListener;
 import com.personal.rents.util.ActivitiesContract;
+import com.personal.rents.webservice.response.ResponseStatusReason;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -110,8 +110,8 @@ public class UserAddedRentsActivity extends UserRentsActivity {
 		private static final String NO_RESULTS_FOUND_MSG = "Nu aveti nici o chirie adaugata.";
 
 		@Override
-		public void onTaskFinish(Object result, RetrofitResponseStatus status) {
-			if(!status.equals(RetrofitResponseStatus.OK)) {
+		public void onTaskFinish(Object result, ResponseStatusReason status) {
+			if(!status.equals(ResponseStatusReason.OK)) {
 				NetworkErrorHandler.handleRetrofitError(status, result,
 						UserAddedRentsActivity.this);
 
@@ -138,8 +138,8 @@ public class UserAddedRentsActivity extends UserRentsActivity {
 		private static final String NO_RESULTS_FOUND_MSG = "Chiriile nu au putut fi sterse.";
 		
 		@Override
-		public void onTaskFinish(Object result, RetrofitResponseStatus status) {
-			if(!status.equals(RetrofitResponseStatus.OK)) {
+		public void onTaskFinish(Object result, ResponseStatusReason status) {
+			if(!status.equals(ResponseStatusReason.OK)) {
 				NetworkErrorHandler.handleRetrofitError(status, result, 
 						UserAddedRentsActivity.this);
 

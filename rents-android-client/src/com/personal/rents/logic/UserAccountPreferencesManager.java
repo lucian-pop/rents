@@ -13,16 +13,14 @@ public class UserAccountPreferencesManager {
 	
 	protected static final String EMAIL = "email";
 	
-	protected static final String FIRSTNAME = "firstname";
-	
-	protected static final String LASTNAME = "lastname";
-	
 	protected static final String PHONE = "phone";
 	
 	protected static final String TOKEN_KEY = "tokenKey";
 	
 	public static void addAccount(Account account, Context context) {
 		SharedPreferences.Editor prefsEditor = getAccountPrefs(context).edit();
+		prefsEditor.putString(EMAIL, account.accountEmail);
+		prefsEditor.putString(PHONE, account.accountPhone);
 		prefsEditor.putString(TOKEN_KEY, account.tokenKey);
 		prefsEditor.commit();
 	}
@@ -36,6 +34,8 @@ public class UserAccountPreferencesManager {
 		
 		Account account = new Account();
 		account.tokenKey = prefs.getString(TOKEN_KEY, null);
+		account.accountEmail = prefs.getString(EMAIL, null);
+		account.accountPhone = prefs.getString(PHONE, null);
 		
 		return account;
 	}

@@ -5,16 +5,12 @@ import retrofit.http.Header;
 import retrofit.http.POST;
 
 import com.personal.rents.model.Rent;
-import com.personal.rents.rest.error.OperationFailedException;
-import com.personal.rents.rest.error.UnauthorizedException;
 
 public interface IRent {
 
 	@POST("/rent/add")
-	public Rent addRent(@Body Rent rent, @Header("tokenKey") String tokenKey) 
-			throws UnauthorizedException, OperationFailedException;
+	public Rent addRent(@Body Rent rent, @Header("tokenKey") String tokenKey);
 	
 	@POST("/rent/update")
-	public int updateRent(@Body Rent rent, @Header("tokenKey") String tokenKey) 
-			throws UnauthorizedException, OperationFailedException;
+	public int updateRent(@Body Rent rent, @Header("tokenKey") String tokenKey);
 }
