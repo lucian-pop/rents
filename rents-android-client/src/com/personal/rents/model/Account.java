@@ -6,8 +6,6 @@ public class Account {
 	
 	public Byte accountType;
 	
-	public String accountExternalId;
-	
 	public String accountEmail;
 	
 	public String accountPassword;

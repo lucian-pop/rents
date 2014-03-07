@@ -2,6 +2,7 @@ package com.personal.rents.activity;
 
 import java.util.ArrayList;
 
+import com.android.volley.toolbox.NetworkImageView;
 import com.personal.rents.R;
 import com.personal.rents.adapter.ImageViewPagerAdapter;
 import com.personal.rents.fragment.ProgressBarFragment;
@@ -20,8 +21,10 @@ import com.personal.rents.webservice.response.ResponseStatusReason;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore.Images;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.ViewPager;
@@ -331,6 +334,31 @@ public class RentDetailsActivity extends BaseActivity {
 		
 		CheckBox rentPetsAllowed = (CheckBox) findViewById(R.id.rent_pets_allowed);
 		rentPetsAllowed.setChecked(rent.rentPetsAllowed);
+	}
+	
+	public void onShareBtnClick(View view) {
+		NetworkImageView imageView = (NetworkImageView) findViewById(R.id.rent_img);
+		BitmapDrawable bmpDrawable = (BitmapDrawable) imageView.getDrawable();
+		
+		// Store the image in the media store
+		String url = Images.Media.insertImage(this.getContentResolver(), bmpDrawable.getBitmap(),
+				"Image to delete", "Some description");
+
+		Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+		Uri uri = Uri.parse(url);
+		sharingIntent.setType("*/*");
+		sharingIntent.putExtra(Intent.EXTRA_STREAM, uri);
+		sharingIntent.putExtra(Intent.EXTRA_TITLE, "Photo title");
+		sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "Photo Subject");
+		sharingIntent.putExtra(Intent.EXTRA_TEXT, "Photo text");
+		startActivityForResult(Intent.createChooser(sharingIntent, "Share image using"), 9999);
+		
+		// Delete the image onActivityResult based on title.
+		// An async task could be started to start the deletion let's say after 5 seconds.
+		
+		// Also tweak it to get the best visual results
+		
+		/****Another alternative would be to use the Facebook Share API*****/
 	}
 	
 	public void onDirectionsBtnClick(View view) {

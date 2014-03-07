@@ -25,7 +25,8 @@
 			    	android:layout_marginTop="10dp"
 			    	android:layout_marginRight="10dp"
 			    	android:layout_gravity="top|right"
-			    	android:background="@drawable/app_share_btn_selector"/>
+			    	android:background="@drawable/app_share_btn_selector"
+			    	android:onClick="onShareBtnClick"/>
 		
 			</FrameLayout>
 			
