@@ -3,7 +3,6 @@
 
     <string name="app_name">Rents</string>
     <string name="action_settings">Settings</string>
-	
 	<string name="reset_btn_text">Anuleaza</string>
 		
 	<!--  Dialog messages -->
@@ -106,5 +105,9 @@
     
 	<string name="rent_status_available">Disponibila</string>
 	<string name="rent_status_unavailable">Indisponibila</string>
+	
+	<!-- UpgradeAppActivity -->
+	<string name="upgrade_app_message">Versiunea curenta nu mai este suportata. Va rugam upgradati.</string>
+	<string name="upgrade_app">Upgradeaza</string>
 
 </resources>

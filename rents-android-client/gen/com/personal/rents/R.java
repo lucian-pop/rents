@@ -1246,18 +1246,18 @@ containing a value of this type.
         public static final int action_mode_bar=0x7f060032;
         public static final int action_mode_bar_stub=0x7f060031;
         public static final int action_mode_close_button=0x7f060025;
-        public static final int action_settings=0x7f0600cc;
+        public static final int action_settings=0x7f0600ce;
         public static final int activity_chooser_view_content=0x7f060026;
         public static final int add_location_details=0x7f060047;
-        public static final int add_rent_btn=0x7f0600c6;
-        public static final int add_to_favorites_action=0x7f0600d2;
+        public static final int add_rent_btn=0x7f0600c8;
+        public static final int add_to_favorites_action=0x7f0600d4;
         public static final int adm_area=0x7f06004e;
         public static final int always=0x7f06000f;
         public static final int ap=0x7f0600a3;
         public static final int autocomplete_places_input=0x7f060052;
         public static final int baths_label=0x7f0600aa;
         public static final int beginning=0x7f060014;
-        public static final int browse_pic_action=0x7f0600ce;
+        public static final int browse_pic_action=0x7f0600d0;
         public static final int building=0x7f06009f;
         public static final int building_staircase=0x7f06009e;
         public static final int cancel_btn=0x7f060059;
@@ -1267,19 +1267,19 @@ containing a value of this type.
         public static final int close_image_btn=0x7f060094;
         public static final int collapseActionView=0x7f060011;
         public static final int confirm_btn=0x7f060054;
-        public static final int confirm_del_btn=0x7f0600ca;
+        public static final int confirm_del_btn=0x7f0600cc;
         public static final int confirm_edit_btn=0x7f06005c;
         public static final int create_acc_btn=0x7f06007c;
         public static final int default_activity_button=0x7f060029;
-        public static final int delete_confirmation_btns=0x7f0600c7;
-        public static final int delete_pic_action=0x7f0600cd;
+        public static final int delete_confirmation_btns=0x7f0600c9;
+        public static final int delete_pic_action=0x7f0600cf;
         public static final int dialog=0x7f060012;
         public static final int disableHome=0x7f06000c;
         public static final int dropdown=0x7f060013;
-        public static final int edit_account_action=0x7f0600d5;
+        public static final int edit_account_action=0x7f0600d7;
         public static final int edit_confirmation_btns=0x7f06005a;
         public static final int edit_query=0x7f060039;
-        public static final int edit_rent_action=0x7f0600d0;
+        public static final int edit_rent_action=0x7f0600d2;
         public static final int email=0x7f06005e;
         public static final int end=0x7f060016;
         public static final int existing_acc_btns=0x7f060076;
@@ -1302,7 +1302,7 @@ containing a value of this type.
         public static final int less_desc=0x7f060092;
         public static final int listMode=0x7f060005;
         public static final int list_item=0x7f06002a;
-        public static final int list_rents_action=0x7f0600d4;
+        public static final int list_rents_action=0x7f0600d6;
         public static final int locality=0x7f06004d;
         public static final int locality_adm_area=0x7f06004c;
         public static final int locate_rent_btn=0x7f06009d;
@@ -1315,7 +1315,7 @@ containing a value of this type.
         public static final int neighbourhood=0x7f06004b;
         public static final int never=0x7f06000d;
         public static final int new_password=0x7f060061;
-        public static final int no_of_del_rents=0x7f0600c8;
+        public static final int no_of_del_rents=0x7f0600ca;
         public static final int none=0x7f060000;
         public static final int normal=0x7f060001;
         public static final int offerer_acc_btn=0x7f060057;
@@ -1402,7 +1402,7 @@ containing a value of this type.
         public static final int rooms_label=0x7f0600a9;
         public static final int satellite=0x7f060002;
         public static final int save_btn=0x7f060051;
-        public static final int search_action=0x7f0600d3;
+        public static final int search_action=0x7f0600d5;
         public static final int search_badge=0x7f06003b;
         public static final int search_bar=0x7f06003a;
         public static final int search_button=0x7f06003c;
@@ -1423,7 +1423,7 @@ containing a value of this type.
         public static final int showCustom=0x7f06000b;
         public static final int showHome=0x7f060008;
         public static final int showTitle=0x7f06000a;
-        public static final int signout_action=0x7f0600cb;
+        public static final int signout_action=0x7f0600cd;
         public static final int signup_btn=0x7f0600c1;
         public static final int split_action_bar=0x7f06001f;
         public static final int square_metrics=0x7f0600a7;
@@ -1433,18 +1433,20 @@ containing a value of this type.
         public static final int street_no=0x7f06004a;
         public static final int submit_area=0x7f060042;
         public static final int tabMode=0x7f060006;
-        public static final int take_pic_action=0x7f0600cf;
+        public static final int take_pic_action=0x7f0600d1;
         public static final int tenant_acc_btn=0x7f060056;
         public static final int terrain=0x7f060003;
         public static final int title=0x7f06002c;
         public static final int title_container=0x7f060033;
         public static final int top_action_bar=0x7f060021;
-        public static final int undo_del_btn=0x7f0600c9;
+        public static final int undo_del_btn=0x7f0600cb;
         public static final int undo_edit_btn=0x7f06005b;
         public static final int up=0x7f060022;
+        public static final int upgrade_app_btn=0x7f0600c6;
+        public static final int upgrade_app_message=0x7f0600c5;
         public static final int useLogo=0x7f060007;
-        public static final int user_account_action=0x7f0600d1;
-        public static final int user_added_rents=0x7f0600c5;
+        public static final int user_account_action=0x7f0600d3;
+        public static final int user_added_rents=0x7f0600c7;
         public static final int user_editable_details=0x7f06005d;
         public static final int withText=0x7f060010;
     }
@@ -1529,8 +1531,9 @@ containing a value of this type.
         public static final int support_simple_spinner_dropdown_item=0x7f030034;
         public static final int swype_list_view=0x7f030035;
         public static final int test_layout=0x7f030036;
-        public static final int user_added_rents_activity_layout=0x7f030037;
-        public static final int user_favorite_rents_activity_layout=0x7f030038;
+        public static final int upgrade_app_activity_layout=0x7f030037;
+        public static final int user_added_rents_activity_layout=0x7f030038;
+        public static final int user_favorite_rents_activity_layout=0x7f030039;
     }
     public static final class menu {
         public static final int edit_user_menu=0x7f0d0000;
@@ -1732,6 +1735,10 @@ containing a value of this type.
         public static final int signout_action_title=0x7f070037;
         public static final int square_meters=0x7f070030;
         public static final int take_pic_action_title=0x7f07003c;
+        public static final int upgrade_app=0x7f07004e;
+        /**  UpgradeAppActivity 
+         */
+        public static final int upgrade_app_message=0x7f07004d;
         public static final int user_account_action_title=0x7f070035;
         /**   Dialog messages 
          */

@@ -1,6 +1,7 @@
 package com.personal.rents.rest.util;
 
 import com.personal.rents.activity.LoginActivity;
+import com.personal.rents.activity.UpgradeAppActivity;
 import com.personal.rents.util.ConnectionDetector;
 import com.personal.rents.webservice.response.ResponseStatusReason;
 
@@ -54,6 +55,12 @@ public final class NetworkErrorHandler {
 			case BAD_CREDENTIALS_ERROR:
 				Toast.makeText(activity, "Emailul sau parola sunt gresite. Va rugam incercati din nou.",
 						Toast.LENGTH_LONG).show();
+				
+				break;
+			
+			case VERSION_OUTDATED_ERROR:
+				intent = new Intent(activity, UpgradeAppActivity.class);
+				activity.startActivity(intent);
 				
 				break;
 

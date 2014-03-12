@@ -9,7 +9,7 @@ import com.personal.rents.webservice.response.WebserviceResponseStatus;
 import android.os.AsyncTask;
 
 public abstract class NetworkAsyncTask<Params, Progress, Result> 
-	extends AsyncTask<Params, Progress, Result> {
+		extends AsyncTask<Params, Progress, Result> {
 	
 	protected ResponseStatusReason statusReason = ResponseStatusReason.OK;
 
@@ -36,6 +36,8 @@ public abstract class NetworkAsyncTask<Params, Progress, Result>
 			statusReason = ResponseStatusReason.ACCOUNT_CONFLICT_ERROR;
 		} else if(status == WebserviceResponseStatus.BAD_CREDENTIALS.getCode()) {
 			statusReason = ResponseStatusReason.BAD_CREDENTIALS_ERROR;
+		} else if(status == WebserviceResponseStatus.VERSION_OUTDATED.getCode()){
+			statusReason = ResponseStatusReason.VERSION_OUTDATED_ERROR;
 		} else {
 			statusReason = ResponseStatusReason.UNKNOWN_ERROR;
 		}

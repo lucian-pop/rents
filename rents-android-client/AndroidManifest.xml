@@ -108,6 +108,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
             	android:value="com.personal.rents.activity.UserAddedRentsActivity"/>
 		</activity>
+		
+		<activity android:name="com.personal.rents.activity.UpgradeAppActivity"/>
 
         <meta-data
 		    android:name="com.google.android.maps.v2.API_KEY"
